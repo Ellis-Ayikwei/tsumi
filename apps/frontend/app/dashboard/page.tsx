@@ -12,6 +12,7 @@ import {
   Shield,
   CheckCircle,
   Wallet,
+  User,
 } from "lucide-react";
 import { Navigation } from "@/components/navigation";
 
