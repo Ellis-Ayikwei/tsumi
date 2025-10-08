@@ -1,0 +1,32 @@
+# Django & DRF
+Django==5.1.7
+djangorestframework==3.15.2
+django-cors-headers==4.6.0
+djangorestframework-simplejwt==5.4.0
+drf-spectacular==0.28.0
+
+# Database
+psycopg2-binary==2.9.10
+redis==5.2.1
+django-redis==5.4.0
+
+# Celery for async tasks
+celery==5.4.0
+kombu==5.4.2
+
+# Payments
+requests==2.32.3
+
+# Environment
+python-dotenv==1.0.1
+
+# Utils
+pillow==11.1.0
+python-dateutil==2.9.0.post0
+pytz==2024.2
+
+# Dev
+black==24.10.0
+flake8==7.1.1
+
+

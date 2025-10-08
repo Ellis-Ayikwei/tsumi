@@ -1,0 +1,94 @@
+[
+  {
+    "model": "trust.trustbadge",
+    "pk": "00000000-0000-0000-0000-000000000001",
+    "fields": {
+      "name": "Verified ID",
+      "description": "ID and face match confirmed through KYC verification",
+      "icon": "🪪",
+      "category": "verification",
+      "min_errands": 0,
+      "min_rating": 0.0,
+      "requires_kyc": true,
+      "requires_admin_approval": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "trust.trustbadge",
+    "pk": "00000000-0000-0000-0000-000000000002",
+    "fields": {
+      "name": "Reliable Runner",
+      "description": "Completed 10+ errands with 4.5+ star rating",
+      "icon": "🚗",
+      "category": "experience",
+      "min_errands": 10,
+      "min_rating": 4.5,
+      "requires_kyc": false,
+      "requires_admin_approval": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "trust.trustbadge",
+    "pk": "00000000-0000-0000-0000-000000000003",
+    "fields": {
+      "name": "Great Communicator",
+      "description": "Consistently receives positive feedback for communication",
+      "icon": "💬",
+      "category": "performance",
+      "min_errands": 5,
+      "min_rating": 4.0,
+      "requires_kyc": false,
+      "requires_admin_approval": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "trust.trustbadge",
+    "pk": "00000000-0000-0000-0000-000000000004",
+    "fields": {
+      "name": "Pro Runner",
+      "description": "Admin-verified and professionally trained agent",
+      "icon": "🧾",
+      "category": "experience",
+      "min_errands": 0,
+      "min_rating": 0.0,
+      "requires_kyc": true,
+      "requires_admin_approval": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "trust.trustbadge",
+    "pk": "00000000-0000-0000-0000-000000000005",
+    "fields": {
+      "name": "Community Favorite",
+      "description": "Preferred by 10+ repeat customers",
+      "icon": "🛡️",
+      "category": "performance",
+      "min_errands": 20,
+      "min_rating": 4.7,
+      "requires_kyc": false,
+      "requires_admin_approval": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "trust.trustbadge",
+    "pk": "00000000-0000-0000-0000-000000000006",
+    "fields": {
+      "name": "Elite Tsumi Agent",
+      "description": "Top-tier performer with exceptional ratings and service",
+      "icon": "👑",
+      "category": "elite",
+      "min_errands": 50,
+      "min_rating": 4.9,
+      "requires_kyc": true,
+      "requires_admin_approval": true,
+      "is_active": true
+    }
+  }
+]
+
+
