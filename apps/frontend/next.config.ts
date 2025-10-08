@@ -2,8 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
 eslint: {
-    ignoreDuringBuilds: true, // ✅ Prevent ESLint from failing the build
-  },
+    ignoreDuringBuilds: true,
   reactStrictMode: true,
   transpilePackages: ["@tsumi/shared"],
   env: {
