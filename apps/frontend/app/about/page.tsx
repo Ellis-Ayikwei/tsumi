@@ -10,7 +10,7 @@ import {
   TrendingUp,
   Award,
   MapPin,
-  Sparkles,
+  Star,
 } from "lucide-react";
 
 export default function AboutPage() {
@@ -31,7 +31,7 @@ export default function AboutPage() {
       description: "We help everyday Ghanaians earn dignified income on their terms",
     },
     {
-      icon: Sparkles,
+      icon: Star,
       title: "Simple & Beautiful",
       description: "World-class technology that feels intuitive and delightful",
     },
@@ -74,7 +74,7 @@ export default function AboutPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           {/* Hero */}
           <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-950 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-950 mb-6">
               <Heart className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">
                 Our Story

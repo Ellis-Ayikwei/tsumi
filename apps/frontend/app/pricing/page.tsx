@@ -2,13 +2,13 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Check, Sparkles, TrendingUp, Shield, Zap } from "lucide-react";
+import { Check, DollarSign, TrendingUp, Shield, Zap } from "lucide-react";
 
 export default function PricingPage() {
   const plans = [
     {
       name: "Pay As You Go",
-      icon: Sparkles,
+      icon: DollarSign,
       price: "Free",
       description: "Perfect for occasional errands",
       features: [

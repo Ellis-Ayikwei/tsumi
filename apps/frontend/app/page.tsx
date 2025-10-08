@@ -7,7 +7,6 @@ import {
   MapPin,
   CheckCircle,
   ArrowRight,
-  Sparkles,
   Users,
   Wallet,
   Clock,
@@ -138,7 +137,6 @@ export default function Home() {
             className="mb-8"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-950 mb-6">
-              <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">
                 Trusted by thousands in Ghana
               </span>
@@ -173,7 +171,7 @@ export default function Home() {
             </Link>
             <Link
               href="/become-agent"
-              className="group px-8 py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-800 font-medium transition-all duration-200 hover:border-gray-900 dark:hover:border-white hover:scale-105"
+              className="group flex px-8 py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-800 font-medium transition-all duration-200 hover:border-gray-900 dark:hover:border-white hover:scale-105"
             >
               Become an Agent
               <TrendingUp className="w-4 h-4 ml-2 group-hover:translate-y-[-2px] transition-transform" />

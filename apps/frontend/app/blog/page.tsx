@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Calendar, Clock, ArrowRight, TrendingUp, Sparkles } from "lucide-react";
+import { Calendar, Clock, ArrowRight, TrendingUp, BookOpen } from "lucide-react";
 
 export default function BlogPage() {
   const posts = [
@@ -93,8 +93,8 @@ export default function BlogPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           {/* Hero */}
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 dark:bg-purple-950 rounded-full mb-6">
-              <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 dark:bg-purple-950 mb-6">
+              <BookOpen className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               <span className="text-sm text-purple-600 dark:text-purple-400 font-medium">
                 Tsumi Blog
               </span>
