@@ -1,6 +1,7 @@
 """
 Django settings for Tsumi project.
 """
+
 from pathlib import Path
 import os
 from datetime import timedelta
@@ -10,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv(
     "DJANGO_SECRET_KEY",
-    "django-insecure-dev-key-change-in-production-please-use-strong-secret"
+    "django-insecure-dev-key-change-in-production-please-use-strong-secret",
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -29,13 +30,18 @@ INSTALLED_APPS = [
     # Third-party
     "rest_framework",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
-    "drf_spectacular",
+    # "drf_spectacular",  # Temporarily disabled for migration
+    "django_otp",
+    "django_otp.plugins.otp_email",
     # Local apps
     "users",
     "errands",
     "wallet",
     "trust",
+    "authentication",
+    "notifications",
 ]
 
 MIDDLEWARE = [
@@ -142,8 +148,7 @@ SIMPLE_JWT = {
 
 # CORS Settings
 CORS_ALLOWED_ORIGINS = os.getenv(
-    "CORS_ALLOWED_ORIGINS",
-    "http://localhost:3000,http://localhost:3001"
+    "CORS_ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3001"
 ).split(",")
 
 CORS_ALLOW_CREDENTIALS = True
@@ -155,7 +160,7 @@ CACHES = {
         "LOCATION": os.getenv("REDIS_URL", "redis://localhost:6379/1"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
+        },
     }
 }
 
@@ -177,11 +182,26 @@ PAYSTACK_PUBLIC_KEY = os.getenv("PAYSTACK_PUBLIC_KEY", "pk_test_xxxxxxxxxxxxx")
 PAYSTACK_BASE_URL = "https://api.paystack.co"
 
 # API Documentation
-SPECTACULAR_SETTINGS = {
-    "TITLE": "Tsumi API",
-    "DESCRIPTION": "Premium Errand & Delivery Platform API",
-    "VERSION": "1.0.0",
-    "SERVE_INCLUDE_SCHEMA": False,
-}
+# SPECTACULAR_SETTINGS = {
+#     "TITLE": "Tsumi API",
+#     "DESCRIPTION": "Premium Errand & Delivery Platform API",
+#     "VERSION": "1.0.0",
+#     "SERVE_INCLUDE_SCHEMA": False,
+# }
 
+# Email Configuration
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@tsumi.com")
 
+# Frontend URL for password reset links
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+
+# OTP Configuration
+OTP_EMAIL_SUBJECT = "Tsumi Verification Code"
+OTP_EMAIL_BODY_TEMPLATE = "Your Tsumi verification code is: {token}"
+OTP_EMAIL_TOKEN_VALIDITY = 600  # 10 minutes

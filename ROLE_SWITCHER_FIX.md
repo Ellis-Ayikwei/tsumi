@@ -267,3 +267,4 @@ npm run dev
 - [ ] Implement job filtering (distance, payment, type)
 - [ ] Add "Go Online/Offline" toggle for agents
 
+

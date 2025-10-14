@@ -373,3 +373,4 @@ export default function KYCReviewPage({ params }: { params: { id: string } }) {
   );
 }
 
+
