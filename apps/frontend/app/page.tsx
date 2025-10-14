@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import type { Metadata } from "next";
 import {
   Shield,
   MapPin,
@@ -30,18 +29,7 @@ import {
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 
-export const metadata: Metadata = {
-  title: "Errands & Delivery in Ghana | Tsumi",
-  description:
-    "Request errands, track live, and pay securely via escrow. Tsumi connects you with verified agents across Ghana.",
-  alternates: { canonical: "/" },
-  openGraph: {
-    title: "Tsumi - Premium Errands & Delivery in Ghana",
-    description:
-      "Get errands done with verified agents. Real-time tracking and escrow payments.",
-    type: "website",
-  },
-};
+
 
 function JsonLd() {
   const jsonLd = {
