@@ -100,8 +100,6 @@ export default function SignupPage() {
   );
 }
 
-"use client";
-
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
