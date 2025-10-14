@@ -15,7 +15,7 @@ import {
   MessageSquare,
   Settings,
   Filter,
-  MarkAsRead,
+  CheckCheck,
   Trash2,
 } from "lucide-react";
 import { Navigation } from "@/components/navigation";
@@ -178,7 +178,7 @@ export default function NotificationsPage() {
                   onClick={markAllAsRead}
                   className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
                 >
-                  <MarkAsRead className="w-4 h-4" />
+                  <CheckCheck className="w-4 h-4" />
                   Mark All Read
                 </button>
               )}
@@ -352,7 +352,7 @@ export default function NotificationsPage() {
                 onClick={markAllAsRead}
                 className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors text-sm"
               >
-                <MarkAsRead className="w-4 h-4" />
+                <CheckCheck className="w-4 h-4" />
                 Mark All as Read
               </button>
             </div>
