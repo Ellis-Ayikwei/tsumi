@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     default: "Tsumi - Send Me. Safely.",
     template: "%s | Tsumi",
   },
-  description: "Premium errand and delivery platform built for trust and speed",
+  description: "Request errands, track live, and pay securely via escrow. Tsumi connects you with verified agents across Ghana",
   keywords: [
     "delivery",
     "errands",
