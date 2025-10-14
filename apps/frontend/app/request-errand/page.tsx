@@ -4,11 +4,6 @@ import type { Metadata } from "next";
 import { useState } from "react";
 import { ErrandsAPI } from "@/lib/api";
 
-export const metadata: Metadata = {
-  title: "Request an Errand",
-  description: "Create a new errand request with pickup and delivery details.",
-  alternates: { canonical: "/request-errand" },
-};
 
 export default function RequestErrandPage() {
   const [form, setForm] = useState({
