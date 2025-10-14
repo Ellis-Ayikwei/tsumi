@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   Shield,
   MapPin,
@@ -28,6 +29,53 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+
+export const metadata: Metadata = {
+  title: "Errands & Delivery in Ghana | Tsumi",
+  description:
+    "Request errands, track live, and pay securely via escrow. Tsumi connects you with verified agents across Ghana.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Tsumi - Premium Errands & Delivery in Ghana",
+    description:
+      "Get errands done with verified agents. Real-time tracking and escrow payments.",
+    type: "website",
+  },
+};
+
+function JsonLd() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Tsumi",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+    logo: "/favicon.ico",
+    sameAs: [
+      "https://twitter.com/tsumi",
+      "https://facebook.com/tsumi",
+      "https://instagram.com/tsumi",
+    ],
+    description:
+      "Premium errand and delivery platform in Ghana. Verified agents, escrow payments, live tracking.",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Accra",
+      addressCountry: "GH",
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email: "support@tsumi.gh",
+      telephone: "+233248138722",
+    },
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  );
+}
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -558,6 +606,8 @@ export default function Home() {
         </div>
       </footer>
     </div>
+    {/* JSON-LD */}
+    <JsonLd />
   );
 }
 
