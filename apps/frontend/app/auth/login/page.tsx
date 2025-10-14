@@ -6,11 +6,6 @@ import { useRouter } from "next/navigation";
 import type { Metadata } from "next";
 import { AuthAPI, setAuthTokens } from "@/lib/api";
 
-export const metadata: Metadata = {
-  title: "Sign in",
-  description: "Sign in to your Tsumi account to manage errands and payments.",
-  alternates: { canonical: "/auth/login" },
-};
 
 export default function LoginPage() {
   const router = useRouter();
