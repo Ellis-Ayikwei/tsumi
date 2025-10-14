@@ -3,6 +3,13 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Errands & Delivery in Ghana | Tsumi",
+  description: "Request errands, track live, and pay securely via escrow. Tsumi connects you with verified agents across Ghana.",
+};
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
