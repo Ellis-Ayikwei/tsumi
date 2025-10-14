@@ -1,5 +1,5 @@
-import KYCReviewClient from "@/components/KYCReviewClient";
+import KYCReviewClient from "./components/KYCReviewClient";
 
-export default function KYCReviewPage({ params }: { params: { id: string } }) {
+export default function KYCReviewPage({ params }: { params: any }) {
   return <KYCReviewClient id={params.id} />;
 }
