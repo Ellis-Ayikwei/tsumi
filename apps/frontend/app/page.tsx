@@ -605,9 +605,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
-    </div>
-    {/* JSON-LD */}
+{/* JSON-LD */}
     <JsonLd />
+    </div>
   );
 }
 
