@@ -3,20 +3,6 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Errands & Delivery in Ghana | Tsumi",
-  description:
-    "Request errands, track live, and pay securely via escrow. Tsumi connects you with verified agents across Ghana.",
-  alternates: { canonical: "/" },
-  openGraph: {
-    title: "Tsumi - Premium Errands & Delivery in Ghana",
-    description:
-      "Get errands done with verified agents. Real-time tracking and escrow payments.",
-    type: "website",
-  },
-};
 
 const inter = Inter({
   subsets: ["latin"],
