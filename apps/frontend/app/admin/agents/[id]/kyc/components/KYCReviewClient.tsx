@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-export default function KYCReviewPage({ params }: { params: { id: string } }) {
+export default function KYCReviewClient({ id }: { id: string }) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [decision, setDecision] = useState<"approve" | "reject" | null>(null);
   const [notes, setNotes] = useState("");
@@ -27,7 +27,7 @@ export default function KYCReviewPage({ params }: { params: { id: string } }) {
 
   // Mock data
   const agent = {
-    id: params.id,
+    id,
     name: "Ama Serwaa",
     email: "ama@example.com",
     phone: "+233 24 234 5678",
