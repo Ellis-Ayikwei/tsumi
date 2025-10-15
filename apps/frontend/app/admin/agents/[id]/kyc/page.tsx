@@ -1,5 +1,6 @@
 import KYCReviewClient from "./components/KYCReviewClient";
 
-export default function KYCReviewPage({ params }: { params: any }) {
-  return <KYCReviewClient id={params.id} />;
+export default async function KYCReviewPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <KYCReviewClient id={id} />;
 }
