@@ -124,8 +124,11 @@ export default function ReviewsPage() {
     return tagColors[tag] || "bg-gray-100 text-gray-800 dark:bg-gray-950 dark:text-gray-200";
   };
 
-  const filteredReviews = (activeTab === "received" ? receivedReviews : givenReviews).filter(
-    review => filterRating === "all" || review.rating.toString() === filterRating
+  const receivedFiltered = receivedReviews.filter(
+    (review) => filterRating === "all" || review.rating.toString() === filterRating
+  );
+  const givenFiltered = givenReviews.filter(
+    (review) => filterRating === "all" || review.rating.toString() === filterRating
   );
 
   const averageRating = receivedReviews.reduce((sum, review) => sum + review.rating, 0) / receivedReviews.length;
@@ -304,8 +307,8 @@ export default function ReviewsPage() {
                       </div>
                     </div>
                   ))
-                ) : (
-                  filteredReviews.map((review) => (
+                ) : activeTab === "received" ? (
+                  receivedFiltered.map((review) => (
                     <div
                       key={review.id}
                       className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
@@ -318,7 +321,60 @@ export default function ReviewsPage() {
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
                               <h4 className="font-medium text-gray-900 dark:text-white">
-                                {activeTab === "received" ? review.reviewer : review.reviewee}
+                                {review.reviewer}
+                              </h4>
+                              <div className="flex items-center gap-1">
+                                {getRatingStars(review.rating)}
+                              </div>
+                              <span className="text-sm text-gray-500 dark:text-gray-400">
+                                {new Date(review.date).toLocaleDateString()}
+                              </span>
+                            </div>
+                            <p className="text-gray-700 dark:text-gray-300 mb-3">
+                              {review.comment}
+                            </p>
+                            <div className="flex items-center gap-2 mb-2">
+                              <Package className="w-4 h-4 text-gray-400" />
+                              <span className="text-sm text-gray-600 dark:text-gray-400">
+                                {review.errandTitle}
+                              </span>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {review.tags.map((tag) => (
+                                <span
+                                  key={tag}
+                                  className={`px-2 py-1 rounded-full text-xs font-medium ${getTagColor(tag)}`}
+                                >
+                                  {tag.replace(/_/g, " ")}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <Link
+                          href={`/errands/${review.errandId}`}
+                          className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                        >
+                          View Errand
+                        </Link>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  givenFiltered.map((review) => (
+                    <div
+                      key={review.id}
+                      className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-4">
+                          <div className="p-3 bg-blue-100 dark:bg-blue-950 rounded-lg">
+                            <MessageSquare className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h4 className="font-medium text-gray-900 dark:text-white">
+                                {review.reviewee}
                               </h4>
                               <div className="flex items-center gap-1">
                                 {getRatingStars(review.rating)}
@@ -360,7 +416,7 @@ export default function ReviewsPage() {
                 )}
               </div>
 
-              {filteredReviews.length === 0 && activeTab !== "pending" && (
+              {(activeTab === "received" ? receivedFiltered.length : givenFiltered.length) === 0 && activeTab !== "pending" && (
                 <div className="text-center py-8">
                   <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">

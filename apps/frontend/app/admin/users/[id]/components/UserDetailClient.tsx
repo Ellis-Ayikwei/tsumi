@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Mail, Phone, Calendar, MapPin, Shield, Wallet, Star, Package, Ban, CheckCircle, Edit, MoreVertical, Clock, TrendingUp, AlertCircle, MessageSquare, User } from "lucide-react";
+import { ArrowLeft, Mail, Phone, Calendar, MapPin, Shield, Wallet, Star, Package, Ban, CheckCircle, Edit, MoreVertical, Clock, TrendingUp, AlertCircle, MessageSquare, User, XCircle } from "lucide-react";
 
 interface UserDetailClientProps {
   id: string;
