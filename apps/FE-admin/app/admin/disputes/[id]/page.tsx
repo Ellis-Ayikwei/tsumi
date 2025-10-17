@@ -17,15 +17,23 @@ import {
   Scale,
   Send,
 } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 
-export default function AdminDisputeDetailPage({ params }: { params: { id: string } }) {
+export default function AdminDisputeDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const [resolution, setResolution] = useState("");
   const [message, setMessage] = useState("");
+  const [disputeId, setDisputeId] = useState<string>("");
+
+  // Resolve params when component mounts
+  React.useEffect(() => {
+    params.then((resolvedParams) => {
+      setDisputeId(resolvedParams.id);
+    });
+  }, [params]);
 
   // Mock data - will be replaced with API call
   const dispute = {
-    id: params.id,
+    id: disputeId,
     errandId: "ERR-12349",
     title: "Payment not received",
     category: "payment",

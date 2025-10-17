@@ -94,13 +94,16 @@ export default function PreferencesPage() {
   };
 
   const updateNestedPreference = (parentKey: string, childKey: string, value: any) => {
-    setPreferences(prev => ({
-      ...prev,
-      [parentKey]: {
-        ...prev[parentKey as keyof typeof prev],
-        [childKey]: value,
-      },
-    }));
+    setPreferences((prev) => {
+      const parent: any = (prev as any)[parentKey] ?? {};
+      return {
+        ...prev,
+        [parentKey]: {
+          ...parent,
+          [childKey]: value,
+        },
+      };
+    });
   };
 
   const toggleErrandType = (typeId: string) => {

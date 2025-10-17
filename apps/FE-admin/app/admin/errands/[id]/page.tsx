@@ -21,11 +21,21 @@ import {
   Ban,
   RefreshCw,
 } from "lucide-react";
+import React, { useState } from "react";
 
-export default function AdminErrandDetailPage({ params }: { params: { id: string } }) {
+export default function AdminErrandDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const [errandId, setErrandId] = useState<string>("");
+
+  // Resolve params when component mounts
+  React.useEffect(() => {
+    params.then((resolvedParams) => {
+      setErrandId(resolvedParams.id);
+    });
+  }, [params]);
+
   // Mock data - will be replaced with API call
   const errand = {
-    id: params.id,
+    id: errandId,
     title: "Pick up documents from Ridge office",
     description: "Need someone to pick up important business documents from my office in Ridge and deliver to my home in East Legon. Documents are in a sealed envelope at reception.",
     type: "pickup",

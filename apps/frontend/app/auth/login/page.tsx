@@ -17,8 +17,8 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await AuthAPI.login(emailOrPhone, password);
-      if (res.access) setAuthTokens(res.access, (res as any).refresh);
+      // const res = await AuthAPI.login(emailOrPhone, password);
+      // if (res.access) setAuthTokens(res.access, (res as any).refresh);
       router.push("/dashboard");
     } catch (err) {
       setError("Invalid credentials");

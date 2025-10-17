@@ -309,7 +309,7 @@ export default function TrustPage() {
                               </p>
                               <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
                                 <CheckCircle className="w-3 h-3 text-green-600" />
-                                Earned {new Date(badge.earnedAt).toLocaleDateString()}
+                                Earned {badge.earnedAt ? new Date(badge.earnedAt).toLocaleDateString() : 'Recently'}
                               </div>
                             </div>
                           </div>

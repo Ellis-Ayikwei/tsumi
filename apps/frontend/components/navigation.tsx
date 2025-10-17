@@ -44,13 +44,6 @@ export function Navigation({ currentPage, userName = "User", currentRole = "cust
       description: "Complete errands",
       color: "text-green-600 dark:text-green-400",
     },
-    {
-      value: "admin",
-      label: "Admin",
-      icon: Shield,
-      description: "Manage platform",
-      color: "text-purple-600 dark:text-purple-400",
-    },
   ];
 
   const currentRoleInfo = roles.find((r) => r.value === currentRole) || roles[0];
@@ -66,9 +59,6 @@ export function Navigation({ currentPage, userName = "User", currentRole = "cust
         break;
       case "agent":
         router.push("/agent");
-        break;
-      case "admin":
-        router.push("/admin");
         break;
       default:
         router.push("/dashboard");
@@ -168,7 +158,7 @@ export function Navigation({ currentPage, userName = "User", currentRole = "cust
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-4 py-2 font-medium transition-all ${
+                  className={`px-4 py-2 font-medium transition-all rounded-lg ${
                     isActive
                       ? "text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800"
                       : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"

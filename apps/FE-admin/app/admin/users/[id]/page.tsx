@@ -22,11 +22,21 @@ import {
   MessageSquare,
   User,
 } from "lucide-react";
+import React, { useState } from "react";
 
-export default function UserDetailPage({ params }: { params: { id: string } }) {
+export default function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const [userId, setUserId] = useState<string>("");
+
+  // Resolve params when component mounts
+  React.useEffect(() => {
+    params.then((resolvedParams) => {
+      setUserId(resolvedParams.id);
+    });
+  }, [params]);
+
   // Mock data - will be replaced with API call
   const user = {
-    id: params.id,
+    id: userId,
     name: "Kwame Mensah",
     email: "kwame@example.com",
     phone: "+233 24 123 4567",

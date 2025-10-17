@@ -21,11 +21,21 @@ import {
   XCircle,
   Image as ImageIcon,
 } from "lucide-react";
+import React, { useState } from "react";
 
-export default function AgentDetailPage({ params }: { params: { id: string } }) {
+export default function AgentDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const [agentId, setAgentId] = useState<string>("");
+
+  // Resolve params when component mounts
+  React.useEffect(() => {
+    params.then((resolvedParams) => {
+      setAgentId(resolvedParams.id);
+    });
+  }, [params]);
+
   // Mock data
   const agent = {
-    id: params.id,
+    id: agentId,
     name: "Ama Serwaa",
     email: "ama@example.com",
     phone: "+233 24 234 5678",

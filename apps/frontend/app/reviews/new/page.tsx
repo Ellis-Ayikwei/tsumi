@@ -1,7 +1,8 @@
 "use client";
+export const dynamic = "force-dynamic";
 
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -18,7 +19,7 @@ import {
 } from "lucide-react";
 import { Navigation } from "@/components/navigation";
 
-export default function NewReviewPage() {
+function NewReviewPageContent() {
   const searchParams = useSearchParams();
   const errandId = searchParams.get("errandId");
   
@@ -271,5 +272,13 @@ export default function NewReviewPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function NewReviewPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 dark:bg-gray-950" />}> 
+      <NewReviewPageContent />
+    </Suspense>
   );
 }
