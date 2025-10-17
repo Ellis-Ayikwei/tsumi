@@ -10,7 +10,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+       sans: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
       },
       borderRadius: {
         DEFAULT: "0.375rem", // 6px - default rounded
