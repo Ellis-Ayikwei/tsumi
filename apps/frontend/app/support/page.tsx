@@ -76,7 +76,7 @@ export default function SupportPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Tsumi</h1>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Campus Ride</h1>
             </Link>
             <Link
               href="/dashboard"
@@ -170,7 +170,7 @@ export default function SupportPage() {
               </div>
               <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Email Us</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                support@tsumi.gh
+                support@campusride.gh
               </p>
               <button className="px-6 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-800 rounded-lg hover:border-gray-900 dark:hover:border-white transition-all">
                 Send Email

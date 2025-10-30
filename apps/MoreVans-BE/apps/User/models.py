@@ -56,7 +56,8 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     USER_TYPE_CHOICES = (
         ("customer", "Customer"),
-        ("provider", "Service Provider"),
+        ("provider", "Service Provider"),  # legacy key retained for compatibility
+        ("driver", "Driver"),
         ("admin", "Admin"),
         ("super_admin", "Super Admin"),
     )

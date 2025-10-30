@@ -9,32 +9,32 @@ export default function TermsPage() {
     {
       title: "1. Acceptance of Terms",
       content:
-        "By accessing and using Tsumi's platform, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by these terms, please do not use this service.",
+        "By accessing and using Campus Ride, you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to abide by these terms, please do not use this service.",
     },
     {
       title: "2. Description of Service",
       content:
-        "Tsumi provides a platform connecting customers who need errands completed with verified service providers (Tsumi Agents). We are a technology platform and not a courier service. All errands are performed by independent contractors.",
+        "Campus Ride connects riders (students) with verified campus drivers for on-campus transportation. We are a technology platform and not a transportation carrier. All trips are performed by independent drivers.",
     },
     {
       title: "3. User Accounts",
       content:
-        "You must register for an account to use Tsumi. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You must immediately notify us of any unauthorized use of your account.",
+        "You must register for an account to use Campus Ride. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You must immediately notify us of any unauthorized use of your account.",
     },
     {
       title: "4. KYC Verification for Agents",
       content:
-        "All Tsumi Agents must complete Know Your Customer (KYC) verification including submission of valid Ghana Card, selfie verification, and background checks. Tsumi reserves the right to reject or suspend any agent who fails verification or violates our standards.",
+        "All Campus Ride drivers must complete verification including valid campus ID, driver’s license, vehicle documents, and safety checks. Campus Ride reserves the right to reject or suspend any driver who fails verification or violates our standards.",
     },
     {
       title: "5. Payment Terms",
       content:
-        "Customers agree to pay all fees associated with errands. Payment is processed through TsumiSafe Escrow and held until errand completion. Platform fees range from 8-15% depending on user tier. All payments are in Ghana Cedis (GHS). Agents receive payouts after successful errand completion.",
+        "Riders agree to pay all fares associated with trips. Payments are processed securely via supported methods. Platform commission ranges from 15–20% per ride. Drivers receive weekly payouts of completed trip earnings.",
     },
     {
       title: "6. TsumiSafe Escrow",
       content:
-        "Tsumi holds customer payments in escrow until errand completion is confirmed. Funds are released to agents upon successful delivery or completion. In case of disputes, Tsumi may investigate and determine appropriate fund distribution at its discretion.",
+        "For certain payment methods, funds may be held until trip completion is confirmed. In case of disputes, Campus Ride may investigate and determine appropriate fund distribution at its discretion.",
     },
     {
       title: "7. Cancellation & Refunds",
@@ -44,27 +44,27 @@ export default function TermsPage() {
     {
       title: "8. User Conduct",
       content:
-        "Users must not use Tsumi for illegal activities, harassment, fraud, or any prohibited purposes. Agents must complete errands professionally and safely. Customers must provide accurate information and treat agents with respect. Violation may result in account suspension or termination.",
+        "Users must not use Campus Ride for illegal activities, harassment, fraud, or any prohibited purposes. Drivers must complete trips professionally and safely. Riders must provide accurate information and treat drivers with respect. Violation may result in account suspension or termination.",
     },
     {
       title: "9. Prohibited Items",
       content:
-        "The following items are prohibited on Tsumi: illegal drugs, weapons, explosives, hazardous materials, counterfeit goods, stolen property, and any illegal items. Agents should refuse any errand involving prohibited items.",
+        "The following activities are prohibited on Campus Ride: transporting illegal substances, weapons, hazardous materials, or engaging in unsafe behavior. Drivers should refuse any ride that violates laws or safety policies.",
     },
     {
       title: "10. Liability & Disclaimers",
       content:
-        "Tsumi is not liable for actions of agents or customers. We provide the platform but do not guarantee errand outcomes. Users agree to hold Tsumi harmless from any claims arising from platform use. Service is provided 'as is' without warranties.",
+        "Campus Ride is not liable for actions of drivers or riders. We provide the platform but do not guarantee trip outcomes. Users agree to hold Campus Ride harmless from any claims arising from platform use. Service is provided 'as is' without warranties.",
     },
     {
       title: "11. Dispute Resolution",
       content:
-        "In case of disputes between customers and agents, contact Tsumi support. We will mediate fairly but reserve the right to make final decisions on fund distribution and account status. For legal disputes, parties agree to arbitration in Accra, Ghana.",
+        "In case of disputes between riders and drivers, contact Campus Ride support. We will mediate fairly but reserve the right to make final decisions on fund distribution and account status. For legal disputes, parties agree to arbitration in Accra, Ghana.",
     },
     {
       title: "12. Changes to Terms",
       content:
-        "Tsumi reserves the right to modify these terms at any time. Users will be notified of significant changes. Continued use of the platform after changes constitutes acceptance of new terms.",
+        "Campus Ride reserves the right to modify these terms at any time. Users will be notified of significant changes. Continued use of the platform after changes constitutes acceptance of new terms.",
     },
   ];
 
@@ -75,7 +75,7 @@ export default function TermsPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Tsumi</h1>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Campus Ride</h1>
             </Link>
             <Link
               href="/"
@@ -111,7 +111,7 @@ export default function TermsPage() {
                 <div>
                   <p className="text-blue-900 dark:text-blue-100 text-sm leading-relaxed">
                     <strong>Important:</strong> Please read these terms carefully before using
-                    Tsumi. By using our platform, you agree to these terms. If you disagree with
+                    Campus Ride. By using our platform, you agree to these terms. If you disagree with
                     any part, please do not use our services.
                   </p>
                 </div>
@@ -142,7 +142,7 @@ export default function TermsPage() {
                 Questions About These Terms?
               </h3>
               <p className="text-gray-300 dark:text-gray-600 mb-6">
-                Contact our legal team at legal@tsumi.gh
+                Contact our legal team at legal@campusride.gh
               </p>
               <Link
                 href="/contact"
