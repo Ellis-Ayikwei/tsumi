@@ -4,19 +4,19 @@ type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export function getAuthToken() {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem("tsumi_access_token");
+  return localStorage.getItem("campusride_access_token");
 }
 
 export function setAuthTokens(access: string, refresh?: string) {
   if (typeof window === "undefined") return;
-  localStorage.setItem("tsumi_access_token", access);
-  if (refresh) localStorage.setItem("tsumi_refresh_token", refresh);
+  localStorage.setItem("campusride_access_token", access);
+  if (refresh) localStorage.setItem("campusride_refresh_token", refresh);
 }
 
 export function clearAuthTokens() {
   if (typeof window === "undefined") return;
-  localStorage.removeItem("tsumi_access_token");
-  localStorage.removeItem("tsumi_refresh_token");
+  localStorage.removeItem("campusride_access_token");
+  localStorage.removeItem("campusride_refresh_token");
 }
 
 export async function apiFetch<T = any>(

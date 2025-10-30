@@ -19,10 +19,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Tsumi - Send Me. Safely.",
-    template: "%s | Tsumi",
+    default: "Campus Ride - Safe Campus Transport",
+    template: "%s | Campus Ride",
   },
-  description: "Request errands, track live, and pay securely via escrow. Tsumi connects you with verified agents across Ghana",
+  description: "Campus ride-hailing: request rides, track live, and pay securely within your campus community.",
   keywords: [
     "delivery",
     "errands",
@@ -39,28 +39,28 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: siteUrl,
-    title: "Tsumi - Send Me. Safely.",
+    title: "Campus Ride - Safe Campus Transport",
     description:
-      "Premium errand and delivery platform built for trust and speed",
-    siteName: "Tsumi",
+      "Ride-hailing built for campuses: safety, affordability, transparency",
+    siteName: "Campus Ride",
     images: [
       {
         url:
           "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1200&auto=format&fit=crop",
         width: 1200,
         height: 630,
-        alt: "Tsumi - Errand & Delivery",
+        alt: "Campus Ride",
       },
     ],
     locale: "en_GB",
   },
   twitter: {
     card: "summary_large_image",
-    site: "@tsumi",
-    creator: "@tsumi",
-    title: "Tsumi - Send Me. Safely.",
+    site: "@campusride",
+    creator: "@campusride",
+    title: "Campus Ride - Safe Campus Transport",
     description:
-      "Premium errand and delivery platform built for trust and speed",
+      "Ride-hailing built for campuses: safety, affordability, transparency",
     images: [
       "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1200&auto=format&fit=crop",
     ],
