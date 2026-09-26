@@ -61,7 +61,7 @@ export default function BlogPage() {
       category: "Community",
       title: "Meet Our First 100 Runners",
       excerpt:
-        "Celebrating the incredible people who make Tsumi possible—our verified runners across Accra.",
+        "Celebrating the incredible people who make Tsumi possible: our verified runners across Accra.",
       date: "Dec 15, 2024",
       readTime: "4 min read",
       featured: false,
