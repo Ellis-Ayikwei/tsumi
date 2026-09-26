@@ -50,7 +50,8 @@ class HomeScreen extends ConsumerWidget {
             ],
             onRefresh: () async {
               ref.invalidate(walletProvider);
-              await ref.refresh(errandsProvider(_activeQuery).future);
+              ref.invalidate(errandsProvider(_activeQuery));
+        await ref.read(errandsProvider(_activeQuery).future);
             },
             children: [
               HeroCard(

@@ -244,7 +244,7 @@ export default function Home() {
                   transition={{ delay: 0.4 }}
                   className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-lg"
                 >
-                  Ghana's premium errand platform. Verified agents, secure payments, real-time tracking. 
+                  Ghana&apos;s premium errand platform. Verified agents, secure payments, real-time tracking. 
                   <span className="font-semibold text-gray-900 dark:text-white">Get it done today.</span>
                 </motion.p>
               </div>
@@ -707,7 +707,7 @@ export default function Home() {
                  ))}
                </div>
                <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                 "Tsumi saved me so much time! I needed documents picked up from Ridge and delivered to my office in Osu. The agent was professional, tracked the whole journey, and delivered in under 2 hours."
+                 &quot;Tsumi saved me so much time! I needed documents picked up from Ridge and delivered to my office in Osu. The agent was professional, tracked the whole journey, and delivered in under 2 hours.&quot;
                </p>
                <div className="flex items-center gap-3">
                  <div className="w-10 h-10 bg-gray-600 dark:bg-gray-500 rounded-full flex items-center justify-center">
@@ -734,7 +734,7 @@ export default function Home() {
                  ))}
                </div>
                <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                 "As a busy professional, I use Tsumi weekly for grocery shopping and pharmacy runs. The agents are always reliable, and the payment system is so secure. I never worry about my money."
+                 &quot;As a busy professional, I use Tsumi weekly for grocery shopping and pharmacy runs. The agents are always reliable, and the payment system is so secure. I never worry about my money.&quot;
                </p>
                <div className="flex items-center gap-3">
                  <div className="w-10 h-10 bg-gray-600 dark:bg-gray-500 rounded-full flex items-center justify-center">
@@ -761,7 +761,7 @@ export default function Home() {
                  ))}
                </div>
                <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                 "I've been using Tsumi for 6 months now. The real-time tracking feature is amazing - I can see exactly where my agent is. The customer service is also top-notch when I have questions."
+                 &quot;I&apos;ve been using Tsumi for 6 months now. The real-time tracking feature is amazing - I can see exactly where my agent is. The customer service is also top-notch when I have questions.&quot;
                </p>
                <div className="flex items-center gap-3">
                  <div className="w-10 h-10 bg-gray-600 dark:bg-gray-500 rounded-full flex items-center justify-center">
@@ -908,7 +908,7 @@ export default function Home() {
             <div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Tsumi</h3>
               <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                Ghana's trusted errand and delivery platform. Send Me. Safely.
+                Ghana&apos;s trusted errand and delivery platform. Send Me. Safely.
               </p>
               <div className="flex gap-3">
                  <a

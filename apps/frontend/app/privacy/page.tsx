@@ -82,7 +82,7 @@ export default function PrivacyPage() {
                   <p className="text-green-900 dark:text-green-100 text-sm leading-relaxed">
                     <strong>Your Privacy Matters:</strong> At Tsumi, we take your privacy seriously.
                     This policy explains how we collect, use, and protect your personal information.
-                    We're committed to transparency and giving you control over your data.
+                    We&apos;re committed to transparency and giving you control over your data.
                   </p>
                 </div>
               </div>
@@ -143,10 +143,10 @@ export default function PrivacyPage() {
               </div>
 
               <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
-                <h3 className="font-bold text-gray-900 dark:text-white mb-3">Children's Privacy</h3>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-3">Children&apos;s Privacy</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                   Tsumi is not intended for users under 18. We do not knowingly collect data from
-                  children. If you're a parent and believe your child has provided us data, contact
+                  children. If you&apos;re a parent and believe your child has provided us data, contact
                   us.
                 </p>
               </div>
@@ -158,7 +158,7 @@ export default function PrivacyPage() {
                 Ghana Data Protection Act (DPA) Compliance
               </h3>
               <p className="text-blue-900 dark:text-blue-100 text-sm leading-relaxed mb-4">
-                Tsumi complies with Ghana's Data Protection Act, 2012 (Act 843). We are registered
+                Tsumi complies with Ghana&apos;s Data Protection Act, 2012 (Act 843). We are registered
                 with the Data Protection Commission and adhere to all local data protection
                 requirements.
               </p>

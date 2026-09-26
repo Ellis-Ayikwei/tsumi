@@ -23,7 +23,8 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
       title: 'Wallet',
       onRefresh: () async {
         ref.invalidate(walletProvider);
-        await ref.refresh(ledgerProvider(_page).future);
+        ref.invalidate(ledgerProvider(_page));
+        await ref.read(ledgerProvider(_page).future);
       },
       children: [
         HeroCard(

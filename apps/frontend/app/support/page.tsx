@@ -96,7 +96,7 @@ export default function SupportPage() {
               How Can We Help?
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
-              Get quick answers or reach out to our support team. We're here 24/7 to help you.
+              Get quick answers or reach out to our support team. We&apos;re here 24/7 to help you.
             </p>
 
             {/* Search */}

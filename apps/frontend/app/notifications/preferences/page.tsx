@@ -385,7 +385,7 @@ export default function NotificationPreferencesPage() {
                   Quiet Hours
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Set times when you don't want to receive notifications
+                  Set times when you don&apos;t want to receive notifications
                 </p>
               </div>
               <div className="ml-auto">

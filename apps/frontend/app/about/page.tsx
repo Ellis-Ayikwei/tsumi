@@ -99,7 +99,7 @@ export default function AboutPage() {
                   <h3 className="text-3xl font-bold text-gray-900 dark:text-white">Our Mission</h3>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
-                  To become Africa's most trusted errand and delivery platform—where customers get
+                  To become Africa&apos;s most trusted errand and delivery platform—where customers get
                   peace of mind and agents earn dignified income.
                 </p>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
@@ -228,8 +228,8 @@ export default function AboutPage() {
               Join Us on This Journey
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
-              Whether you're a customer looking for reliable errand services or someone looking to
-              earn as a Tsumi Agent, we'd love to have you.
+              Whether you&apos;re a customer looking for reliable errand services or someone looking to
+              earn as a Tsumi Agent, we&apos;d love to have you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
