@@ -289,18 +289,32 @@ into my commit, and a checkout or stash can wipe hours of work.
 # Project facts: Tsumi
 
 - Errand and delivery marketplace for Ghana: customers post errands, verified
-  agents (runners) run them, payment is held in escrow (TsumiSafe) until
-  completion.
-- Turborepo monorepo: `apps/frontend` (Next.js 15, customer and agent web),
-  `apps/FE-admin` (Next.js 15 admin, served under `/admin`), `apps/backend-py`
-  (Django REST API), `apps/backend-node` (Express + Socket.io realtime),
-  `apps/mobile` (Flutter), `shared/` (TypeScript types).
-- Backend structure target: mirror ScrubiMail-BE (`backend/` config package,
-  `apps/<Module>/` domain apps, `Basemodel` with UUID ids, single error
-  envelope, `backend/test_settings.py` on SQLite).
-- Money: currency GHS. Store and transmit integer pesewas (minor units),
-  named `*_pesewas`. Rates in basis points (`*_bps`).
-- Commands: `npm run dev|build|lint` at the root (Turborepo);
-  `docker-compose up -d` for Postgres, Redis, APIs and the Celery worker.
-- `apps/MoreVans-BE` is an unrelated project copied into this repo; do not
-  build on it.
+  agents (runners) run them, payment is held in escrow (TsumiSafe) until the
+  customer confirms.
+- Turborepo monorepo:
+  - `apps/Tsumi-BE`: Django REST API (current backend). Layout mirrors
+    ScrubiMail-BE: `backend/` config package, `apps/<Module>/` domain apps,
+    `Basemodel` with UUID ids, single error envelope, `backend/test_settings.py`.
+  - `apps/Tsumi-Admin-FE`: admin console, Next.js 15 + shadcn/ui (Radix,
+    Tailwind 3), served under `/admin`, port 3002.
+  - `apps/frontend`: customer and agent web (Next.js 15), port 3000.
+  - `apps/backend-node`: Express + Socket.io realtime; `JWT_SECRET` must equal
+    the API's `JWT_SIGNING_KEY`.
+  - `apps/mobile`: Flutter.
+  - `apps/backend-py` and `apps/FE-admin`: superseded by the two apps above,
+    kept until the owner deletes them. Do not build on them.
+  - `apps/MoreVans-BE`: unrelated project copied into this repo; do not build on it.
+- API prefix `/tsumi/api/v1/`. Errors: `{"success": false, "error": {"code",
+  "message", "details", "meta"}}`.
+- Public endpoints (the only exceptions to "authenticated by default"):
+  `auth/register/`, `auth/login/`, `auth/refresh_token/`,
+  `wallet/paystack/webhook/` (HMAC-signed), `/`, `/health/`.
+- Money: currency GHS. Store and transmit integer pesewas, named `*_pesewas`.
+  Rates in basis points (`*_bps`). Balances change only in
+  `apps/wallet/services.py` (transfer / post_external), which writes a ledger
+  line in the same transaction.
+- Errand status edges live in `LEGAL_TRANSITIONS` in `apps/errand/services.py`.
+- Commands:
+  - Backend tests: `cd apps/Tsumi-BE && python manage.py test --settings=backend.test_settings`
+  - Admin: `cd apps/Tsumi-Admin-FE && npm run typecheck && npm run build`
+  - Everything: `docker-compose up -d` (Postgres, Redis, API, worker, beat, node).

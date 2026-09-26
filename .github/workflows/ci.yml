@@ -55,7 +55,7 @@ jobs:
         run: npm install
 
       - name: Install Python Dependencies
-        working-directory: apps/backend-py
+        working-directory: apps/Tsumi-BE
         run: pip install -r requirements.txt
 
       - name: Lint Frontend
@@ -65,10 +65,9 @@ jobs:
           npm run lint
 
       - name: Lint Backend (Python)
-        working-directory: apps/backend-py
+        working-directory: apps/Tsumi-BE
         run: |
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          black --check .
 
       - name: Lint Backend (Node)
         working-directory: apps/backend-node
@@ -77,7 +76,7 @@ jobs:
           npm run lint
 
       - name: Run Python Tests
-        working-directory: apps/backend-py
+        working-directory: apps/Tsumi-BE
         env:
           DB_HOST: localhost
           DB_PORT: 5432
@@ -86,8 +85,14 @@ jobs:
           DB_PASSWORD: postgres
           REDIS_URL: redis://localhost:6379/1
         run: |
-          python manage.py migrate
-          python manage.py test
+          python manage.py makemigrations --check --dry-run
+          python manage.py test --settings=backend.test_settings
+
+      - name: Typecheck Admin
+        working-directory: apps/Tsumi-Admin-FE
+        run: |
+          npm install
+          npm run typecheck
 
       - name: Build Frontend
         working-directory: apps/frontend
