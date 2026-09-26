@@ -308,7 +308,12 @@ into my commit, and a checkout or stash can wipe hours of work.
   - `apps/frontend`: marketing site and older customer/agent pages (Next.js 15), port 3000.
   - `apps/backend-node`: Express + Socket.io realtime; `JWT_SECRET` must equal
     the API's `JWT_SIGNING_KEY`.
-  - `apps/mobile`: Flutter.
+  - `apps/mobile_customer` and `apps/mobile_agent`: Flutter apps (Riverpod,
+    go_router) built only from `packages/tsumi_kit` (theme tokens matching
+    `packages/ui`, API client, models, widgets). Platform folders come from
+    `flutter create`; see `packages/tsumi_kit/README.md`. API origin via
+    `--dart-define=API_URL=...`.
+  - `apps/mobile`: superseded Flutter scaffold; do not build on it.
   - `apps/backend-py` and `apps/FE-admin`: superseded by the two apps above,
     kept until the owner deletes them. Do not build on them.
   - `apps/MoreVans-BE`: unrelated project copied into this repo; do not build on it.
@@ -326,4 +331,5 @@ into my commit, and a checkout or stash can wipe hours of work.
   - Backend tests: `cd apps/Tsumi-BE && python manage.py test --settings=backend.test_settings`
   - Admin: `cd apps/Tsumi-Admin-FE && npm run typecheck && npm run build`
   - Customer / agent apps: `cd apps/Tsumi-Customer-FE` (or `Tsumi-Agent-FE`) `&& npm run typecheck && npm run build`
+  - Flutter: `cd packages/tsumi_kit` (or `apps/mobile_customer`, `apps/mobile_agent`) `&& flutter pub get && flutter analyze && flutter test`
   - Everything: `docker-compose up -d` (Postgres, Redis, API, worker, beat, node).

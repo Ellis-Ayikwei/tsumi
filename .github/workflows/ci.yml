@@ -114,6 +114,27 @@ jobs:
         working-directory: apps/backend-node
         run: npm run build
 
+  flutter:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [packages/tsumi_kit, apps/mobile_customer, apps/mobile_agent]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Analyze and test
+        working-directory: ${{ matrix.package }}
+        run: |
+          flutter pub get
+          flutter analyze
+          if [ -d test ] && ls test/*_test.dart >/dev/null 2>&1; then flutter test; fi
+
   docker-build:
     runs-on: ubuntu-latest
     needs: lint-and-test
