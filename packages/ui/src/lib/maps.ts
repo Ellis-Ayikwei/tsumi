@@ -38,6 +38,12 @@ export interface GMap {
   fitBounds(bounds: { north: number; south: number; east: number; west: number }, padding?: number): void;
   addListener(event: string, handler: () => void): Listener;
 }
+export interface GMarker {
+  addListener(event: string, handler: () => void): Listener;
+  getPosition(): GLatLng | null | undefined;
+  setPosition(position: LatLng): void;
+  setMap(map: GMap | null): void;
+}
 interface GPlace {
   location?: GLatLng | null;
   formattedAddress?: string | null;
@@ -50,7 +56,7 @@ export interface PlacePrediction {
 }
 export interface GoogleMaps {
   importLibrary(name: "maps"): Promise<{ Map: new (el: HTMLElement, opts: Record<string, unknown>) => GMap }>;
-  importLibrary(name: "marker"): Promise<{ Marker: new (opts: Record<string, unknown>) => unknown }>;
+  importLibrary(name: "marker"): Promise<{ Marker: new (opts: Record<string, unknown>) => GMarker }>;
   importLibrary(name: "geocoding"): Promise<{
     Geocoder: new () => {
       geocode(req: { location: LatLng }): Promise<{ results: { formatted_address: string }[] }>;
@@ -100,6 +106,21 @@ export function loadGoogleMaps(): Promise<GoogleMaps> {
     });
   }
   return loading;
+}
+
+/**
+ * Street address for a point, or null when Google has none or is unreachable.
+ * Billed per call: run it on a deliberate move (drag end, "use my location"),
+ * never on every map frame.
+ */
+export async function reverseGeocode(maps: GoogleMaps, location: LatLng): Promise<string | null> {
+  try {
+    const { Geocoder } = await maps.importLibrary("geocoding");
+    const { results } = await new Geocoder().geocode({ location });
+    return results[0]?.formatted_address ?? null;
+  } catch {
+    return null;
+  }
 }
 
 /** API coordinates are 6dp decimal strings (about 10 cm). null unless both parse. */
