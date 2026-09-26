@@ -47,9 +47,9 @@ class AgentStats {
 }
 
 class AgentMe extends AgentProfile {
-  AgentMe.fromJson(Json j)
+  AgentMe.fromJson(super.j)
       : stats = AgentStats.fromJson(j['stats'] as Json),
-        super.fromJson(j);
+        super.fromJson();
 
   final AgentStats stats;
 }
