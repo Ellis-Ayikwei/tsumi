@@ -2,11 +2,13 @@ import { Bricolage_Grotesque } from "next/font/google";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 
+import { HomeErrandForm } from "@/components/home-errand-form";
+
 import styles from "./home.module.css";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
-  axes: ["opsz", "wdth"],
+  axes: ["opsz"],
   display: "swap",
 });
 
@@ -110,29 +112,27 @@ const jsonLd = {
 const brandButton =
   "inline-flex items-center justify-center rounded-xl bg-[var(--brand)] font-semibold text-white transition-colors hover:bg-[var(--brand-ink)]";
 const primaryButton = `${brandButton} h-12 px-6`;
-const secondaryButton =
-  "inline-flex h-12 items-center justify-center rounded-xl border border-black/20 px-6 font-semibold transition-colors hover:border-[var(--ink)]";
 
 export default function Home() {
   return (
     <div className={`${styles.page} ${bricolage.className} min-h-screen`}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <header className="border-b border-[var(--line)]">
+      <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[rgb(246_247_244/0.85)] backdrop-blur-md">
         <nav aria-label="Main" className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-5">
-          <Link href="/" className={`${styles.display} text-3xl font-bold`}>
+          <Link href="/" className="flex min-h-11 items-center text-2xl font-bold tracking-tight">
             Tsumi
           </Link>
-          <div className="hidden items-center gap-8 text-[15px] text-[var(--muted)] md:flex">
-            <a href="#how-it-works" className="hover:text-[var(--ink)]">How it works</a>
-            <a href="#runners" className="hover:text-[var(--ink)]">Runners</a>
-            <a href="#questions" className="hover:text-[var(--ink)]">Questions</a>
+          <div className="hidden items-center gap-2 text-[15px] text-[var(--muted)] md:flex">
+            <a href="#how-it-works" className="flex min-h-11 items-center px-3 hover:text-[var(--ink)]">How it works</a>
+            <a href="#runners" className="flex min-h-11 items-center px-3 hover:text-[var(--ink)]">Become a runner</a>
+            <a href="#questions" className="flex min-h-11 items-center px-3 hover:text-[var(--ink)]">Questions</a>
           </div>
           <div className="flex items-center gap-2">
-            <Link href="/auth/login" className="rounded-lg px-3 py-2 text-[15px] font-medium hover:bg-black/5">
+            <Link href="/auth/login" className="flex h-11 items-center rounded-lg px-3 text-[15px] font-medium hover:bg-black/5">
               Sign in
             </Link>
-            <Link href="/request-errand" className={`${brandButton} h-10 px-4 text-[15px]`}>
+            <Link href="/request-errand" className={`${brandButton} h-11 px-4 text-[15px]`}>
               Post an errand
             </Link>
           </div>
@@ -142,22 +142,17 @@ export default function Home() {
       <main>
         <section className="mx-auto grid max-w-6xl gap-12 px-5 pb-20 pt-14 md:pt-20 lg:grid-cols-12 lg:items-center lg:gap-10">
           <div className="lg:col-span-7">
-            <h1 className={`${styles.display} text-balance text-[3.25rem] font-extrabold sm:text-7xl lg:text-[5.5rem]`}>
+            <h1 className={`${styles.display} text-balance`}>
               Send someone. Pay when it&apos;s done.
             </h1>
-            <p className="mt-6 max-w-[34rem] text-lg leading-relaxed text-[var(--muted)]">
+            <p className={`${styles.body} mt-5 max-w-[34rem] text-[var(--muted)]`}>
               Tsumi runners pick up, shop, queue and deliver for you across Ghana. Your payment waits with TsumiSafe,
               and the runner is paid only after you confirm the job is done.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href="/request-errand" className={primaryButton}>
-                Post an errand
-              </Link>
-              <Link href="/become-a-runner" className={secondaryButton}>
-                Become a runner
-              </Link>
-            </div>
-            <p className="mt-5 text-sm text-[var(--muted)]">Pay with mobile money or card through Paystack.</p>
+            <HomeErrandForm />
+            <p className={`${styles.caption} mt-4 text-[var(--muted)]`}>
+              You set the price on the next step. Pay with mobile money or card through Paystack.
+            </p>
           </div>
 
           <figure className="lg:col-span-5" aria-label="Example errand showing where the money is held">
@@ -221,7 +216,7 @@ export default function Home() {
         <section id="how-it-works" className="border-t border-[var(--line)] bg-white">
           <div className="mx-auto grid max-w-6xl gap-12 px-5 py-20 lg:grid-cols-12">
             <div className="lg:col-span-4">
-              <h2 className={`${styles.display} text-5xl font-bold`}>Where your money is at every step</h2>
+              <h2 className={styles.title}>Where your money is at every step</h2>
               <div className="mt-8 border-l-2 border-[var(--gold)] pl-5">
                 <p className="font-semibold">If something goes wrong</p>
                 <p className="mt-2 leading-relaxed text-[var(--muted)]">
@@ -233,12 +228,12 @@ export default function Home() {
             <ol className="divide-y divide-[var(--line)] border-y border-[var(--line)] lg:col-span-7 lg:col-start-6">
               {HOW.map((step, i) => (
                 <li key={step.title} className="grid grid-cols-[3rem_1fr] gap-2 py-7">
-                  <span className={`${styles.display} ${styles.money} text-4xl font-bold text-[var(--brand)]`} aria-hidden>
+                  <span className={`${styles.title} ${styles.money} text-[var(--brand)]`} aria-hidden>
                     {i + 1}
                   </span>
                   <div>
-                    <h3 className="text-xl font-semibold">{step.title}</h3>
-                    <p className="mt-1.5 max-w-[36rem] leading-relaxed text-[var(--muted)]">{step.body}</p>
+                    <h3 className={styles.headline}>{step.title}</h3>
+                    <p className={`${styles.body} mt-1.5 max-w-[36rem] text-[var(--muted)]`}>{step.body}</p>
                   </div>
                 </li>
               ))}
@@ -247,12 +242,12 @@ export default function Home() {
         </section>
 
         <section className="mx-auto max-w-6xl px-5 py-20">
-          <h2 className={`${styles.display} max-w-xl text-5xl font-bold`}>What people send runners for</h2>
+          <h2 className={`${styles.title} max-w-xl`}>What people send runners for</h2>
           <dl className="mt-10 grid gap-x-12 sm:grid-cols-2">
             {ERRANDS.map((e) => (
               <div key={e.name} className="border-t border-[var(--line)] py-6">
-                <dt className="text-xl font-semibold">{e.name}</dt>
-                <dd className="mt-1.5 leading-relaxed text-[var(--muted)]">{e.examples}</dd>
+                <dt className={styles.headline}>{e.name}</dt>
+                <dd className={`${styles.body} mt-1.5 text-[var(--muted)]`}>{e.examples}</dd>
               </div>
             ))}
           </dl>
@@ -264,8 +259,8 @@ export default function Home() {
         <section id="runners" className="bg-[var(--ink)] text-white">
           <div className="mx-auto grid max-w-6xl gap-12 px-5 py-20 lg:grid-cols-12">
             <div className="lg:col-span-5">
-              <h2 className={`${styles.display} text-5xl font-bold`}>Run errands on your own time</h2>
-              <p className="mt-5 max-w-md leading-relaxed text-white/70">
+              <h2 className={styles.title}>Run errands on your own time</h2>
+              <p className={`${styles.body} mt-5 max-w-md text-white/70`}>
                 Know your city and want flexible work? Pick up errands near you and get paid when each one is done.
               </p>
               <Link
@@ -277,7 +272,7 @@ export default function Home() {
             </div>
             <ul className="divide-y divide-white/15 border-y border-white/15 lg:col-span-6 lg:col-start-7">
               {RUNNER_POINTS.map((point) => (
-                <li key={point} className="py-5 leading-relaxed text-white/85">
+                <li key={point} className={`${styles.body} py-5 text-white/85`}>
                   {point}
                 </li>
               ))}
@@ -286,17 +281,17 @@ export default function Home() {
         </section>
 
         <section id="questions" className="mx-auto grid max-w-6xl gap-10 px-5 py-20 lg:grid-cols-12">
-          <h2 className={`${styles.display} text-5xl font-bold lg:col-span-4`}>Before your first errand</h2>
+          <h2 className={`${styles.title} lg:col-span-4`}>Before your first errand</h2>
           <div className="divide-y divide-[var(--line)] border-y border-[var(--line)] lg:col-span-7 lg:col-start-6">
             {QUESTIONS.map(({ q, a }) => (
               <details key={q} className="group py-5">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-semibold">
+                <summary className={`${styles.headline} flex min-h-11 cursor-pointer list-none items-center justify-between gap-4`}>
                   {q}
                   <span aria-hidden className="text-2xl font-normal text-[var(--muted)] group-open:rotate-45 motion-safe:transition-transform">
                     +
                   </span>
                 </summary>
-                <p className="mt-3 max-w-[38rem] leading-relaxed text-[var(--muted)]">{a}</p>
+                <p className={`${styles.body} mt-3 max-w-[38rem] text-[var(--muted)]`}>{a}</p>
               </details>
             ))}
           </div>
@@ -306,17 +301,17 @@ export default function Home() {
       <footer className="border-t border-[var(--line)] bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-12 md:flex-row md:justify-between">
           <div>
-            <p className={`${styles.display} text-3xl font-bold`}>Tsumi</p>
+            <p className="text-2xl font-bold tracking-tight">Tsumi</p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-[var(--muted)]">
               Errands and deliveries in Ghana, paid through escrow.
             </p>
-            <a href="mailto:support@tsumi.gh" className="mt-4 inline-block text-sm font-medium text-[var(--brand)] hover:underline">
+            <a href="mailto:support@tsumi.gh" className="mt-2 flex min-h-11 items-center text-sm font-medium text-[var(--brand)] hover:underline">
               support@tsumi.gh
             </a>
           </div>
-          <nav aria-label="Footer" className="grid grid-cols-2 gap-x-12 gap-y-2 text-sm sm:grid-cols-3">
+          <nav aria-label="Footer" className="grid grid-cols-2 gap-x-12 text-sm sm:grid-cols-3">
             {FOOTER_LINKS.map((l) => (
-              <Link key={l.href} href={l.href} className="text-[var(--muted)] hover:text-[var(--ink)]">
+              <Link key={l.href} href={l.href} className="flex min-h-11 items-center text-[var(--muted)] hover:text-[var(--ink)]">
                 {l.label}
               </Link>
             ))}

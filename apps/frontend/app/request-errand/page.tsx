@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ApiError, ErrandsAPI } from "@/lib/api";
@@ -20,6 +20,18 @@ export default function RequestErrandPage() {
     delivery_address: "",
     amount: "",
   });
+
+  // The home page hands over what the customer already typed. Read after mount so
+  // server and client render the same empty form first.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setForm((f) => ({
+      ...f,
+      title: params.get("title") ?? f.title,
+      pickup_address: params.get("pickup") ?? f.pickup_address,
+      delivery_address: params.get("dropoff") ?? f.delivery_address,
+    }));
+  }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

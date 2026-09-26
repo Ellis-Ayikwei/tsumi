@@ -19,11 +19,41 @@
   border-radius: 6px;
 }
 
-/* Narrow width at display sizes gives headlines a poster voice; body stays at 100. */
+/*
+ * Five type roles, named by job rather than size. rem units follow the reader's
+ * browser text size, so the whole scale grows with their setting.
+ */
 .display {
-  font-variation-settings: "wdth" 84, "opsz" 96;
-  letter-spacing: -0.005em;
-  line-height: 0.95;
+  font-size: clamp(2.75rem, 1.6rem + 4.6vw, 4.75rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  font-variation-settings: "opsz" 96;
+}
+
+.title {
+  text-wrap: balance;
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  font-variation-settings: "opsz" 72;
+}
+
+.headline {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.body {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.caption {
+  font-size: 0.875rem;
+  line-height: 1.45;
 }
 
 .money {
