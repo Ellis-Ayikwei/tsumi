@@ -6,6 +6,14 @@ typedef Json = Map<String, dynamic>;
 DateTime? _date(Object? v) => v == null ? null : DateTime.parse(v as String);
 int _int(Object? v) => v == null ? 0 : (v as num).toInt();
 
+/// A pinned stop. The API sends coordinates as 6dp decimal strings; null unless both parse.
+typedef GeoPoint = ({double lat, double lng});
+
+GeoPoint? _point(Object? lat, Object? lng) {
+  final la = double.tryParse('${lat ?? ''}'), ln = double.tryParse('${lng ?? ''}');
+  return la == null || ln == null ? null : (lat: la, lng: ln);
+}
+
 class Paged<T> {
   Paged({required this.count, required this.hasNext, required this.results});
 
@@ -103,7 +111,9 @@ class Errand {
         description = (j['description'] as String?) ?? '',
         errandType = j['errand_type'] as String,
         pickupAddress = (j['pickup_address'] as String?) ?? '',
+        pickupPoint = _point(j['pickup_lat'], j['pickup_lng']),
         dropoffAddress = (j['dropoff_address'] as String?) ?? '',
+        dropoffPoint = _point(j['dropoff_lat'], j['dropoff_lng']),
         pricePesewas = _int(j['price_pesewas']),
         commissionPesewas = _int(j['commission_pesewas']),
         agentPayoutPesewas = _int(j['agent_payout_pesewas']),
@@ -122,7 +132,9 @@ class Errand {
   final String description;
   final String errandType; // pickup | delivery | shopping | custom
   final String pickupAddress;
+  final GeoPoint? pickupPoint;
   final String dropoffAddress;
+  final GeoPoint? dropoffPoint;
   final int pricePesewas;
   final int commissionPesewas;
   final int agentPayoutPesewas;

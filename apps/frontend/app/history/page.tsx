@@ -158,7 +158,7 @@ export default function HistoryPage() {
                     </div>
                     <div className="text-sm text-gray-400 space-y-1">
                       <div>ID: #{errand.id} • {errand.date}</div>
-                      {errand.agent && <div>Agent: {errand.agent}</div>}
+                      {errand.agent && <div>Runner: {errand.agent}</div>}
                     </div>
                   </div>
                   <div className="text-right">

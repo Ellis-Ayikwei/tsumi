@@ -38,7 +38,7 @@ def resolve_dispute(dispute_id, admin, resolution, note):
     dispute.resolved_by = admin
     dispute.resolved_at = timezone.now()
     dispute.save()
-    outcome = "The agent was paid." if release else "The customer was refunded."
+    outcome = "The runner was paid." if release else "The customer was refunded."
     for user_id in (errand.customer_id, errand.agent_id):
         notify(user_id, "dispute_resolved", "Dispute resolved", f"{outcome} {note}".strip(), errand)
     return dispute

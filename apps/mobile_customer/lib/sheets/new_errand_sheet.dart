@@ -10,6 +10,14 @@ import 'topup_sheet.dart';
 
 const _minTopUpPesewas = 500;
 
+// One tap fills the title for the most common errands of each type.
+const _titleSuggestions = {
+  'delivery': ['Deliver a parcel', 'Send documents', 'Deliver food'],
+  'pickup': ['Pick up a package', 'Collect an item from a shop', 'Pick up from the post office'],
+  'shopping': ['Buy groceries', 'Buy medicine', 'Refill my gas cylinder'],
+  'custom': ['Queue for me', 'Pay a bill for me', 'Drop off my laundry'],
+};
+
 const _titleHints = {
   'delivery': 'Deliver a parcel to my sister',
   'pickup': 'Pick up my laptop from the repair shop',
@@ -229,6 +237,18 @@ class _NewErrandBodyState extends ConsumerState<_NewErrandBody> {
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(labelText: 'Short title', hintText: _titleHints[_draft.errandType], counterText: ''),
             ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (final t in _titleSuggestions[_draft.errandType]!)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ActionChip(label: Text(t), onPressed: () => _title.text = t),
+                    ),
+                ],
+              ),
+            ),
             const SizedBox(height: 12),
             TextField(
               controller: _notes,
@@ -236,7 +256,7 @@ class _NewErrandBodyState extends ConsumerState<_NewErrandBody> {
               maxLines: 5,
               textCapitalization: TextCapitalization.sentences,
               decoration: const InputDecoration(
-                labelText: 'Details for your agent (optional)',
+                labelText: 'Details for your runner (optional)',
                 hintText: 'Item list, who to ask for, gate colour...',
                 alignLabelWithHint: true,
               ),
@@ -282,7 +302,7 @@ class _NewErrandBodyState extends ConsumerState<_NewErrandBody> {
                   const SizedBox(width: 10),
                   const Expanded(
                     child: Text(
-                      'Protected by TsumiSafe. We hold the money and only pay the agent after you confirm the errand is done.',
+                      'Protected by TsumiSafe. We hold the money and only pay the runner after you confirm the errand is done.',
                     ),
                   ),
                 ],

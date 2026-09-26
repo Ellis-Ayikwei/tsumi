@@ -45,7 +45,7 @@ function JobSheet({ job, onClose }: { job: Errand | null; onClose: () => void })
         taken && err.message.includes("active errands")
           ? err.message
           : taken
-            ? "Another agent took this job."
+            ? "Another runner took this job."
             : err instanceof ApiError
               ? err.message
               : "Could not accept. Try again."

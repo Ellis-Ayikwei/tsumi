@@ -6,6 +6,6 @@ void main() => runTsumiApp(
       title: 'Tsumi',
       storagePrefix: 'tsumi_customer',
       requiredType: 'customer',
-      wrongTypeMessage: 'This is the customer app. Agents use the Tsumi Agent app.',
+      wrongTypeMessage: 'This is the customer app. Runners use the Tsumi Runner app.',
       router: buildRouter,
     );

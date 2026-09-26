@@ -29,7 +29,7 @@ export default function ErrandDetailPage() {
     },
     timeline: [
       { status: "created", label: "Errand Created", time: "10:30 AM", completed: true },
-      { status: "assigned", label: "Agent Assigned", time: "10:35 AM", completed: true },
+      { status: "assigned", label: "Runner Assigned", time: "10:35 AM", completed: true },
       { status: "started", label: "En Route to Pickup", time: "10:40 AM", completed: true },
       { status: "pickup", label: "At Pickup Location", time: "11:05 AM", completed: false },
       { status: "delivery", label: "Delivering to You", time: "Pending", completed: false },
@@ -177,7 +177,7 @@ export default function ErrandDetailPage() {
             <div className="space-y-6">
               {/* Agent Info */}
               <div className="bg-space/50 backdrop-blur-sm rounded-xl p-6 border border-gold-warm/30">
-                <h3 className="text-lg font-semibold mb-4">Your Tsumi Agent</h3>
+                <h3 className="text-lg font-semibold mb-4">Your Tsumi Runner</h3>
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-16 h-16 rounded-full bg-gradient-to-r from-gold-warm to-yellow-600 flex items-center justify-center text-2xl font-bold text-space-black">
                     {errand.agent.name.charAt(0)}
@@ -202,7 +202,7 @@ export default function ErrandDetailPage() {
 
                 <div className="space-y-2">
                   <button className="w-full py-3 bg-electric-blue hover:bg-blue-600 rounded-lg font-semibold flex items-center justify-center gap-2">
-                    📞 Call Agent
+                    📞 Call Runner
                   </button>
                   <button
                     onClick={() => setShowChat(!showChat)}

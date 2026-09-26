@@ -10,7 +10,7 @@ import 'sheets.dart';
 const _reasons = [
   Choice('not_delivered', 'Not delivered'),
   Choice('damaged', 'Damaged or wrong'),
-  Choice('agent_no_show', "Agent didn't show"),
+  Choice('agent_no_show', "Runner didn't show"),
   Choice('overcharged', 'Asked to pay extra'),
   Choice('other', 'Something else'),
 ];

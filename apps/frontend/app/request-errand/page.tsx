@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ApiError, ErrandsAPI } from "@/lib/api";
@@ -20,6 +20,18 @@ export default function RequestErrandPage() {
     delivery_address: "",
     amount: "",
   });
+
+  // The home page hands over what the customer already typed. Read after mount so
+  // server and client render the same empty form first.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setForm((f) => ({
+      ...f,
+      title: params.get("title") ?? f.title,
+      pickup_address: params.get("pickup") ?? f.pickup_address,
+      delivery_address: params.get("dropoff") ?? f.delivery_address,
+    }));
+  }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -128,7 +140,7 @@ export default function RequestErrandPage() {
             />
           </div>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            The amount is held safely in TsumiSafe escrow and only released to the agent when you confirm the errand is done.
+            The amount is held safely in TsumiSafe escrow and only released to the runner when you confirm the errand is done.
           </p>
           {error && (
             <p className="text-sm text-red-600">

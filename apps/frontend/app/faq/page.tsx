@@ -15,11 +15,11 @@ export default function FAQPage() {
       faqs: [
         {
           q: "How do I create an errand?",
-          a: "Click 'Request Errand' from the dashboard or homepage. Fill in the errand details including title, type (pickup/delivery/shopping/custom), pickup and delivery locations, budget, and any special instructions. Review the estimated fee and confirm payment method. Once submitted, you'll be matched with a nearby verified Tsumi Agent.",
+          a: "Click 'Request Errand' from the dashboard or homepage. Fill in the errand details including title, type (pickup/delivery/shopping/custom), pickup and delivery locations, budget, and any special instructions. Review the estimated fee and confirm payment method. Once submitted, you'll be matched with a nearby verified Tsumi Runner.",
         },
         {
-          q: "How long does it take to get matched with an agent?",
-          a: "Most errands are matched within 2-5 minutes. During peak hours, it may take up to 15 minutes. You'll receive a notification as soon as an agent accepts your errand.",
+          q: "How long does it take to get matched with a runner?",
+          a: "Most errands are matched within 2-5 minutes. During peak hours, it may take up to 15 minutes. You'll receive a notification as soon as a runner accepts your errand.",
         },
         {
           q: "What areas do you cover in Ghana?",
@@ -36,7 +36,7 @@ export default function FAQPage() {
       faqs: [
         {
           q: "How does TsumiSafe Escrow work?",
-          a: "TsumiSafe holds your payment securely until the errand is completed. Once the agent delivers and you confirm, funds are automatically released. If there's an issue, you can dispute and get a full refund. Your money is always protected.",
+          a: "TsumiSafe holds your payment securely until the errand is completed. Once the runner delivers and you confirm, funds are automatically released. If there's an issue, you can dispute and get a full refund. Your money is always protected.",
         },
         {
           q: "What payment methods do you accept?",
@@ -52,24 +52,24 @@ export default function FAQPage() {
         },
         {
           q: "Can I get a refund?",
-          a: "Yes. If an agent doesn't complete your errand or there's an issue, contact support for a full refund. TsumiSafe protects your money at all times.",
+          a: "Yes. If a runner doesn't complete your errand or there's an issue, contact support for a full refund. TsumiSafe protects your money at all times.",
         },
       ],
     },
     {
-      name: "For Agents",
+      name: "For Runners",
       faqs: [
         {
-          q: "How do I become a Tsumi Agent?",
-          a: "Click 'Become an Agent', fill in your details, upload your Ghana Card and selfie, provide your bank or MoMo details, and submit. Our team reviews applications within 24-48 hours. Once approved, you can start accepting errands immediately.",
+          q: "How do I become a Tsumi Runner?",
+          a: "Click 'Become a Runner', fill in your details, upload your Ghana Card and selfie, provide your bank or MoMo details, and submit. Our team reviews applications within 24-48 hours. Once approved, you can start accepting errands immediately.",
         },
         {
-          q: "What are the requirements to be an agent?",
+          q: "What are the requirements to be a runner?",
           a: "You must be 18+, have a valid Ghana Card, own a smartphone with GPS, have a reliable mode of transportation (foot, bicycle, motorbike, or car), and pass our background check.",
         },
         {
-          q: "How much can I earn as an agent?",
-          a: "Top agents earn GHS 3,000-5,000+ per month. Earnings depend on errands completed, time spent, and performance. You keep 85-92% of each errand fee depending on your tier.",
+          q: "How much can I earn as a runner?",
+          a: "Top runners earn GHS 3,000-5,000+ per month. Earnings depend on errands completed, time spent, and performance. You keep 85-92% of each errand fee depending on your tier.",
         },
         {
           q: "When do I get paid?",
@@ -85,8 +85,8 @@ export default function FAQPage() {
       name: "Safety & Trust",
       faqs: [
         {
-          q: "How do you verify agents?",
-          a: "All agents undergo KYC verification including Ghana Card check, selfie matching, background screening, and phone verification. We continuously monitor performance and user feedback.",
+          q: "How do you verify runners?",
+          a: "All runners undergo KYC verification including Ghana Card check, selfie matching, background screening, and phone verification. We continuously monitor performance and user feedback.",
         },
         {
           q: "What if something goes wrong during an errand?",
@@ -94,11 +94,11 @@ export default function FAQPage() {
         },
         {
           q: "Can I track my errand in real-time?",
-          a: "Yes! Once an agent accepts your errand, you can track their live location on the map, see ETA updates, and chat with them directly.",
+          a: "Yes! Once a runner accepts your errand, you can track their live location on the map, see ETA updates, and chat with them directly.",
         },
         {
-          q: "What if I'm not satisfied with the agent?",
-          a: "You can rate and review the agent after completion. If there's a serious issue, report it to support. We take all complaints seriously and may suspend or remove agents who violate our standards.",
+          q: "What if I'm not satisfied with the runner?",
+          a: "You can rate and review the runner after completion. If there's a serious issue, report it to support. We take all complaints seriously and may suspend or remove runners who violate our standards.",
         },
       ],
     },

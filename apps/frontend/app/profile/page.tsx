@@ -281,8 +281,8 @@ export default function ProfilePage() {
                         checked: false,
                       },
                       {
-                        title: "Agent Messages",
-                        description: "Chat messages from Tsumi Agents",
+                        title: "Runner Messages",
+                        description: "Chat messages from Tsumi Runners",
                         checked: true,
                       },
                       {

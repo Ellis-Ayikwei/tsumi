@@ -35,7 +35,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <SessionGate
       client={client}
       requiredType="agent"
-      wrongTypeMessage="This is the Tsumi Agent app. Customers use the Tsumi app to post errands."
+      wrongTypeMessage="This is the Tsumi Runner app. Customers use the Tsumi app to post errands."
     >
       <Shell>{children}</Shell>
     </SessionGate>

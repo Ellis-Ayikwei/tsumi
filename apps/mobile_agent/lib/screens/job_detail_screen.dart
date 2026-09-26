@@ -115,8 +115,8 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (j.pickupAddress.isNotEmpty) _Stop('Pickup', j.pickupAddress, c.mutedForeground),
-              if (j.dropoffAddress.isNotEmpty) _Stop('Drop-off', j.dropoffAddress, c.brand),
+              if (j.pickupAddress.isNotEmpty) _Stop('Pickup', j.pickupAddress, j.pickupPoint, c.mutedForeground),
+              if (j.dropoffAddress.isNotEmpty) _Stop('Drop-off', j.dropoffAddress, j.dropoffPoint, c.brand),
               if (j.description.isNotEmpty) ...[
                 const Divider(height: 24),
                 Text(j.description, style: TextStyle(color: c.mutedForeground)),
@@ -141,7 +141,7 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
               final released = await confirmActionSheet(
                 context,
                 title: 'Release this job?',
-                description: 'It goes back to the open list for another agent. Releasing often can affect your badges.',
+                description: 'It goes back to the open list for another runner. Releasing often can affect your badges.',
                 confirmLabel: 'Release job',
                 variant: TsumiButtonVariant.destructive,
                 onConfirm: (_) => _act('release'),
@@ -207,10 +207,11 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
 }
 
 class _Stop extends StatelessWidget {
-  const _Stop(this.label, this.address, this.color);
+  const _Stop(this.label, this.address, this.point, this.color);
 
   final String label;
   final String address;
+  final GeoPoint? point;
   final Color color;
 
   @override
@@ -231,7 +232,7 @@ class _Stop extends StatelessWidget {
               ],
             ),
           ),
-          CircleIconButton(icon: Icons.navigation_rounded, tooltip: 'Directions to $label', onPressed: () => openMaps(address)),
+          CircleIconButton(icon: Icons.navigation_rounded, tooltip: 'Directions to $label', onPressed: () => openMaps(address, point)),
         ],
       ),
     );

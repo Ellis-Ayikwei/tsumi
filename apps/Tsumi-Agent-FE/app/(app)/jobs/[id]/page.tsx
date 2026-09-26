@@ -10,10 +10,12 @@ import { ActionSheet } from "@tsumi/ui/components/action-sheet";
 import { Button } from "@tsumi/ui/components/button";
 import { DisputeSheet } from "@tsumi/ui/components/dispute-sheet";
 import { AppHeader } from "@tsumi/ui/components/mobile-shell";
+import { RouteMap } from "@tsumi/ui/components/route-map";
 import { ErrorState, LoadingList } from "@tsumi/ui/components/states";
 import { StatusBadge } from "@tsumi/ui/components/status-badge";
 import { ApiError } from "@tsumi/ui/lib/api";
 import { formatDateTime } from "@tsumi/ui/lib/format";
+import { type LatLng, parseCoords } from "@tsumi/ui/lib/maps";
 import { formatGhs } from "@tsumi/ui/lib/money";
 import type { Errand } from "@tsumi/ui/lib/types";
 
@@ -21,7 +23,17 @@ import { AGENT_STATUS_LABELS } from "@/components/job-card";
 import { api, client } from "@/lib/client";
 import { mapsUrl } from "@/lib/jobs";
 
-function Stop({ label, address, tone }: { label: string; address: string; tone: "muted" | "brand" }) {
+function Stop({
+  label,
+  address,
+  coords,
+  tone,
+}: {
+  label: string;
+  address: string;
+  coords: LatLng | null;
+  tone: "muted" | "brand";
+}) {
   return (
     <div className="flex items-center gap-3">
       <MapPin className={tone === "brand" ? "h-5 w-5 shrink-0 text-brand" : "h-5 w-5 shrink-0 text-muted-foreground"} aria-hidden />
@@ -30,7 +42,7 @@ function Stop({ label, address, tone }: { label: string; address: string; tone: 
         <p className="text-sm">{address}</p>
       </div>
       <a
-        href={mapsUrl(address)}
+        href={mapsUrl(address, coords)}
         target="_blank"
         rel="noreferrer"
         aria-label={`Directions to ${label.toLowerCase()}`}
@@ -68,6 +80,8 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
 
   if (isLoading) return <div className="p-4"><LoadingList /></div>;
   if (error || !job) return <div className="p-4"><ErrorState error={error} onRetry={() => refetch()} /></div>;
+  const pickup = parseCoords(job.pickup_lat, job.pickup_lng);
+  const dropoff = parseCoords(job.dropoff_lat, job.dropoff_lng);
 
   return (
     <>
@@ -102,8 +116,9 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
         </section>
 
         <section className="space-y-4 rounded-3xl border bg-card p-5 shadow-sm">
-          {job.pickup_address && <Stop label="Pickup" address={job.pickup_address} tone="muted" />}
-          {job.dropoff_address && <Stop label="Drop-off" address={job.dropoff_address} tone="brand" />}
+          <RouteMap pickup={pickup} dropoff={dropoff} />
+          {job.pickup_address && <Stop label="Pickup" address={job.pickup_address} coords={pickup} tone="muted" />}
+          {job.dropoff_address && <Stop label="Drop-off" address={job.dropoff_address} coords={dropoff} tone="brand" />}
           {job.description && <p className="whitespace-pre-wrap border-t pt-3 text-sm text-muted-foreground">{job.description}</p>}
         </section>
 
@@ -132,7 +147,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
               <ActionSheet
                 trigger={<Button size="xl" variant="ghost" className="w-full">Can&apos;t do it? Release job</Button>}
                 title="Release this job?"
-                description="It goes back to the open list for another agent. Releasing often can affect your badges."
+                description="It goes back to the open list for another runner. Releasing often can affect your badges."
                 confirmLabel="Release job"
                 confirmVariant="destructive"
                 onConfirm={async () => {

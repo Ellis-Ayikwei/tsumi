@@ -8,7 +8,7 @@ BADGES = [
     dict(code="reliable-runner", name="Reliable Runner", icon="bike",
          description="10+ completed errands with a 4.5+ rating.",
          min_completed_errands=10, min_avg_rating_centi=450, requires_kyc=True),
-    dict(code="elite-agent", name="Elite Tsumi Agent", icon="crown",
+    dict(code="elite-agent", name="Elite Tsumi Runner", icon="crown",
          description="100+ completed errands with a 4.8+ rating.",
          min_completed_errands=100, min_avg_rating_centi=480, requires_kyc=True),
     dict(code="great-communicator", name="Great Communicator", icon="message-circle",

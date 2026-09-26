@@ -67,7 +67,7 @@ function EditProfileSheet({ user }: { user: SessionUser }) {
             [
               ["first_name", "First name", "text"],
               ["last_name", "Last name", "text"],
-              ["phone_number", "Phone (agents call you on this)", "tel"],
+              ["phone_number", "Phone (runners call you on this)", "tel"],
             ] as const
           ).map(([key, label, type]) => (
             <div key={key} className="grid gap-1.5">

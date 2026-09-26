@@ -6,8 +6,8 @@ import '../theme/tokens.dart';
 enum _Tone { info, warning, success, danger, neutral }
 
 const _tones = <String, (_Tone, IconData, String?)>{
-  'open': (_Tone.info, Icons.radio_button_checked, 'Finding an agent'),
-  'accepted': (_Tone.info, Icons.schedule, 'Agent assigned'),
+  'open': (_Tone.info, Icons.radio_button_checked, 'Finding a runner'),
+  'accepted': (_Tone.info, Icons.schedule, 'Runner assigned'),
   'in_progress': (_Tone.info, Icons.schedule, 'In progress'),
   'delivered': (_Tone.warning, Icons.schedule, 'Awaiting confirmation'),
   'completed': (_Tone.success, Icons.check_circle, null),

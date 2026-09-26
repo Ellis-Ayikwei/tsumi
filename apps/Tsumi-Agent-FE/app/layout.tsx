@@ -8,9 +8,9 @@ import "./globals.css";
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" });
 
 export const metadata: Metadata = {
-  title: "Tsumi Agent",
+  title: "Tsumi Runner",
   description: "Run errands. Get paid safely.",
-  appleWebApp: { capable: true, statusBarStyle: "default", title: "Tsumi Agent" },
+  appleWebApp: { capable: true, statusBarStyle: "default", title: "Tsumi Runner" },
 };
 
 export const viewport: Viewport = {

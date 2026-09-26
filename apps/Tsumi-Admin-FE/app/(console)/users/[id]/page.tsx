@@ -172,7 +172,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
         {profile && (
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
-              <CardTitle className="text-base">Agent</CardTitle>
+              <CardTitle className="text-base">Runner</CardTitle>
               <StatusBadge status={profile.kyc_status} />
             </CardHeader>
             <CardContent className="space-y-1 text-sm">

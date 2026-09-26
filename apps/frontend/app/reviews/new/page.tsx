@@ -137,7 +137,7 @@ function NewReviewPageContent() {
                     {errandData.agent}
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Tsumi Agent
+                    Tsumi Runner
                   </p>
                 </div>
               </div>

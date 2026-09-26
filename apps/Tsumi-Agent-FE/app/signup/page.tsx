@@ -12,7 +12,7 @@ export default function Page() {
       userType="agent"
       heading="Earn with Tsumi"
       tagline="Run errands in your area and get paid safely to your MoMo."
-      wrongTypeMessage="This is the Tsumi Agent app. Customers use the Tsumi app to post errands."
+      wrongTypeMessage="This is the Tsumi Runner app. Customers use the Tsumi app to post errands."
     />
   );
 }

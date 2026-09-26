@@ -137,7 +137,7 @@ class _EditProfileBodyState extends ConsumerState<_EditProfileBody> {
         TextField(
           controller: _phone,
           keyboardType: TextInputType.phone,
-          decoration: const InputDecoration(labelText: 'Phone (agents call you on this)'),
+          decoration: const InputDecoration(labelText: 'Phone (runners call you on this)'),
         ),
         InlineError(_error),
         const SizedBox(height: 16),

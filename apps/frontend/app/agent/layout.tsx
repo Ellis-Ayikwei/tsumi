@@ -39,7 +39,7 @@ export default function AgentLayout({ children }: AgentLayoutProps) {
   useEffect(() => setMounted(true), []);
   const roles = [
     { value: "customer", label: "Customer", icon: UsersIcon },
-    { value: "agent", label: "Tsumi Agent", icon: Package },
+    { value: "agent", label: "Tsumi Runner", icon: Package },
     { value: "admin", label: "Admin", icon: Shield },
   ];
 
@@ -76,7 +76,7 @@ export default function AgentLayout({ children }: AgentLayoutProps) {
             <div className="flex items-center gap-4">
               <Link href="/agent">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white hover:opacity-80 transition-opacity">
-                  Tsumi Agent
+                  Tsumi Runner
                 </h1>
               </Link>
 
@@ -87,7 +87,7 @@ export default function AgentLayout({ children }: AgentLayoutProps) {
                   className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm text-gray-900 dark:text-white transition-colors rounded-lg"
                 >
                   <Package className="w-4 h-4 text-gray-600" />
-                  <span>Tsumi Agent</span>
+                  <span>Tsumi Runner</span>
                   <ChevronDown className={`w-4 h-4 text-gray-500 ${isRoleOpen ? "rotate-180" : ""}`} />
                 </button>
                 {isRoleOpen && (
@@ -211,7 +211,7 @@ export default function AgentLayout({ children }: AgentLayoutProps) {
                 <div className="w-16 h-16 bg-gray-900 dark:bg-white rounded-full flex items-center justify-center mx-auto mb-3">
                   <Award className="w-8 h-8 text-white dark:text-gray-900" />
                 </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Elite Agent</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Elite Runner</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">4.9 ⭐ • 245 jobs</p>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">

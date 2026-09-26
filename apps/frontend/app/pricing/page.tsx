@@ -172,11 +172,11 @@ export default function PricingPage() {
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-950 rounded-full mb-4">
                 <Shield className="w-4 h-4 text-green-600 dark:text-green-400" />
                 <span className="text-sm font-medium text-green-600 dark:text-green-400">
-                  For Tsumi Agents
+                  For Tsumi Runners
                 </span>
               </div>
               <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                Agent Earnings Tiers
+                Runner Earnings Tiers
               </h3>
               <p className="text-gray-600 dark:text-gray-400">
                 The more errands you complete, the more you earn. Performance-based rewards.
@@ -216,10 +216,10 @@ export default function PricingPage() {
 
             <div className="mt-8 text-center">
               <Link
-                href="/become-agent"
+                href="/become-a-runner"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-semibold hover:opacity-90 transition-opacity"
               >
-                Become a Tsumi Agent
+                Become a Tsumi Runner
                 <TrendingUp className="w-5 h-5" />
               </Link>
             </div>
@@ -241,8 +241,8 @@ export default function PricingPage() {
                   a: "Yes, you can cancel Tsumi Plus at any time. No questions asked.",
                 },
                 {
-                  q: "How do agent payouts work?",
-                  a: "Agents receive their earnings immediately after each errand completion. You can withdraw to your bank or Mobile Money wallet instantly.",
+                  q: "How do runner payouts work?",
+                  a: "Runners receive their earnings immediately after each errand completion. You can withdraw to your bank or Mobile Money wallet instantly.",
                 },
               ].map((faq, i) => (
                 <div

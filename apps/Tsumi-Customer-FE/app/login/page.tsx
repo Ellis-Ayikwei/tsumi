@@ -12,7 +12,7 @@ export default function LoginPage() {
       userType="customer"
       heading="Welcome back"
       tagline="Send someone you can trust."
-      wrongTypeMessage="This is the customer app. Agents sign in to the Tsumi Agent app."
+      wrongTypeMessage="This is the customer app. Runners sign in to the Tsumi Runner app."
     />
   );
 }

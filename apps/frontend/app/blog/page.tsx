@@ -18,10 +18,10 @@ export default function BlogPage() {
     },
     {
       id: 2,
-      category: "Agent Stories",
-      title: "How Kwame Earns GHS 4,000/Month as a Tsumi Agent",
+      category: "Runner Stories",
+      title: "How Kwame Earns GHS 4,000/Month as a Tsumi Runner",
       excerpt:
-        "Meet Kwame, one of our top-rated agents, and learn how he built a steady income stream through Tsumi.",
+        "Meet Kwame, one of our top-rated runners, and learn how he built a steady income stream through Tsumi.",
       date: "Jan 10, 2025",
       readTime: "5 min read",
       featured: false,
@@ -49,9 +49,9 @@ export default function BlogPage() {
     {
       id: 5,
       category: "Behind the Scenes",
-      title: "How We Verify Every Tsumi Agent",
+      title: "How We Verify Every Tsumi Runner",
       excerpt:
-        "A deep dive into our KYC process and how we ensure only trustworthy agents join the platform.",
+        "A deep dive into our KYC process and how we ensure only trustworthy runners join the platform.",
       date: "Dec 20, 2024",
       readTime: "6 min read",
       featured: false,
@@ -59,16 +59,16 @@ export default function BlogPage() {
     {
       id: 6,
       category: "Community",
-      title: "Meet Our First 100 Agents",
+      title: "Meet Our First 100 Runners",
       excerpt:
-        "Celebrating the incredible people who make Tsumi possible—our verified agents across Accra.",
+        "Celebrating the incredible people who make Tsumi possible: our verified runners across Accra.",
       date: "Dec 15, 2024",
       readTime: "4 min read",
       featured: false,
     },
   ];
 
-  const categories = ["All", "Company News", "Agent Stories", "Tips & Guides", "Product Updates"];
+  const categories = ["All", "Company News", "Runner Stories", "Tips & Guides", "Product Updates"];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -208,7 +208,7 @@ export default function BlogPage() {
           <div className="max-w-4xl mx-auto mt-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl p-12 text-center">
             <h3 className="text-3xl font-bold text-white mb-4">Stay in the Loop</h3>
             <p className="text-blue-100 mb-8 max-w-xl mx-auto">
-              Get the latest Tsumi updates, agent stories, and tips delivered to your inbox.
+              Get the latest Tsumi updates, runner stories, and tips delivered to your inbox.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input

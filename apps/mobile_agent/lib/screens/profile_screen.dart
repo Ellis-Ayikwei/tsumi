@@ -120,7 +120,7 @@ class ProfileScreen extends ConsumerWidget {
               const Divider(height: 1),
               ListTile(
                 leading: const Icon(Icons.support_agent_rounded),
-                title: const Text('Agent support'),
+                title: const Text('Runner support'),
                 trailing: const Icon(Icons.chevron_right_rounded),
                 onTap: () => openEmail('agents@tsumi.app'),
               ),

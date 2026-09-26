@@ -10,13 +10,13 @@ export default function PrivacyPage() {
       icon: Database,
       title: "Information We Collect",
       content:
-        "We collect information you provide directly (name, phone, email, Ghana Card details for agents), location data for tracking, payment information, and usage data. We use cookies and similar technologies to improve your experience.",
+        "We collect information you provide directly (name, phone, email, Ghana Card details for runners), location data for tracking, payment information, and usage data. We use cookies and similar technologies to improve your experience.",
     },
     {
       icon: Eye,
       title: "How We Use Your Information",
       content:
-        "We use your data to: provide and improve services, match customers with agents, process payments, verify agent identity, send notifications, prevent fraud, comply with legal obligations, and personalize your experience.",
+        "We use your data to: provide and improve services, match customers with runners, process payments, verify runner identity, send notifications, prevent fraud, comply with legal obligations, and personalize your experience.",
     },
     {
       icon: Lock,
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
       icon: UserCheck,
       title: "Data Sharing",
       content:
-        "We share limited data with: agents (customer name, phone, delivery location), payment processors, cloud service providers, and law enforcement when required by law. We NEVER sell your personal data to third parties for marketing.",
+        "We share limited data with: runners (customer name, phone, delivery location), payment processors, cloud service providers, and law enforcement when required by law. We NEVER sell your personal data to third parties for marketing.",
     },
     {
       icon: Shield,
@@ -120,7 +120,7 @@ export default function PrivacyPage() {
               <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
                 <h3 className="font-bold text-gray-900 dark:text-white mb-3">Location Data</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                  We collect location data to match you with nearby agents and enable real-time
+                  We collect location data to match you with nearby runners and enable real-time
                   tracking. You can disable location access in settings, but this may limit
                   functionality.
                 </p>

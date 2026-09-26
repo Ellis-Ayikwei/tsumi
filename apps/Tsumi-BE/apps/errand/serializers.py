@@ -91,6 +91,12 @@ class ErrandCreateSerializer(serializers.ModelSerializer):
             "price_pesewas",
             "client_request_id",
         ]
+        extra_kwargs = {
+            "pickup_lat": {"min_value": -90, "max_value": 90},
+            "dropoff_lat": {"min_value": -90, "max_value": 90},
+            "pickup_lng": {"min_value": -180, "max_value": 180},
+            "dropoff_lng": {"min_value": -180, "max_value": 180},
+        }
 
     def validate_price_pesewas(self, value):
         low, high = settings.TSUMI_MIN_ERRAND_PRICE_PESEWAS, settings.TSUMI_MAX_ERRAND_PRICE_PESEWAS
@@ -103,8 +109,19 @@ class ErrandCreateSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if not attrs.get("pickup_address") and not attrs.get("dropoff_address"):
             raise serializers.ValidationError(
-                {"pickup_address": "Add a pickup or drop-off address so the agent knows where to go."}
+                {"pickup_address": "Add a pickup or drop-off address so the runner knows where to go."}
             )
+        # A pin is a lat/lng pair with a readable address; half a pin cannot be navigated to.
+        for stop in ("pickup", "dropoff"):
+            lat, lng = attrs.get(f"{stop}_lat"), attrs.get(f"{stop}_lng")
+            if (lat is None) != (lng is None):
+                raise serializers.ValidationError(
+                    {f"{stop}_lat": "Send latitude and longitude together. Drop the pin again."}
+                )
+            if lat is not None and not attrs.get(f"{stop}_address"):
+                raise serializers.ValidationError(
+                    {f"{stop}_address": "Add an address for the pinned location."}
+                )
         return attrs
 
 

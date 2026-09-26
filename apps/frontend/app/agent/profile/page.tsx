@@ -109,7 +109,7 @@ export default function AgentProfilePage() {
     },
     {
       id: "elite_agent",
-      name: "Elite Tsumi Agent",
+      name: "Elite Tsumi Runner",
       description: "Top-tier performer",
       icon: Zap,
       color: "text-orange-600",
@@ -535,7 +535,7 @@ export default function AgentProfilePage() {
                         Earnings Privacy
                       </div>
                       <div className="text-sm text-gray-600 dark:text-gray-400">
-                        Hide earnings from other agents
+                        Hide earnings from other runners
                       </div>
                     </div>
                     <input type="checkbox" className="rounded" />

@@ -383,7 +383,7 @@ export default function EscrowPage() {
                   TsumiSafe Escrow Protection
                 </h4>
                 <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-                  Your funds are held securely in escrow until errands are completed. This protects both customers and agents, ensuring fair transactions and dispute resolution.
+                  Your funds are held securely in escrow until errands are completed. This protects both customers and runners, ensuring fair transactions and dispute resolution.
                 </p>
               </div>
             </div>

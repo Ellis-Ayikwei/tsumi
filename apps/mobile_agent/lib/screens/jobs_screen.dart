@@ -166,7 +166,7 @@ class _JobPreviewState extends ConsumerState<_JobPreview> {
       router.push('/jobs/${widget.job.id}');
     } on ApiError catch (e) {
       final taken = (e.status == 409 || e.status == 404) && !e.message.contains('active errands');
-      if (mounted) showToast(context, taken ? 'Another agent took this job.' : e.message, error: true);
+      if (mounted) showToast(context, taken ? 'Another runner took this job.' : e.message, error: true);
       ref.invalidate(errandsProvider(availableQuery));
       navigator.pop();
     } finally {

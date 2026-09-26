@@ -98,13 +98,13 @@ function ReviewCard({ agent, onDone }: { agent: AdminUser; onDone: () => void })
                 </Button>
               }
               title={`Reject ${fullName(agent)}?`}
-              description="The agent sees your reason and can resubmit."
+              description="The runner sees your reason and can resubmit."
               confirmLabel="Reject"
               confirmVariant="destructive"
               field={{ label: "What should they fix?", placeholder: "ID photo is blurry; retake in good light", required: true, multiline: true }}
               onConfirm={async (reason) => {
                 await api(`/admin/users/${agent.id}/kyc/`, { method: "POST", body: { decision: "reject", reason } });
-                toast.success("Rejected. The agent has been notified.");
+                toast.success("Rejected. The runner has been notified.");
                 onDone();
               }}
             />
@@ -137,7 +137,7 @@ export default function AgentsPage() {
     <>
       <PageHeader
         title="KYC review"
-        description="Oldest submissions first. Approving lets the agent accept errands immediately."
+        description="Oldest submissions first. Approving lets the runner accept errands immediately."
         actions={
           <NativeSelect
             aria-label="KYC status"
@@ -157,7 +157,7 @@ export default function AgentsPage() {
       {isLoading && <LoadingRows />}
       {error && <ErrorState error={error} onRetry={() => refetch()} />}
       {data && data.results.length === 0 && (
-        <EmptyState title={status === "pending" ? "Queue is clear" : "No agents here"} hint="New submissions appear here automatically." />
+        <EmptyState title={status === "pending" ? "Queue is clear" : "No runners here"} hint="New submissions appear here automatically." />
       )}
       <div className="space-y-4">
         {data?.results.map((agent) => (

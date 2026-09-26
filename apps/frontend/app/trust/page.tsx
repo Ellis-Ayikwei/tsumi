@@ -74,16 +74,16 @@ export default function TrustPage() {
       {
         id: "community_favorite",
         name: "Community Favorite",
-        description: "Top 10% rated agent in your area",
+        description: "Top 10% rated runner in your area",
         icon: "🛡️",
         category: "performance",
         earned: false,
         progress: 85,
-        requirements: "Be in top 10% of agents in Accra",
+        requirements: "Be in top 10% of runners in Accra",
       },
       {
         id: "elite_agent",
-        name: "Elite Tsumi Agent",
+        name: "Elite Tsumi Runner",
         description: "Achieve all other badges + 200+ errands",
         icon: "👑",
         category: "elite",
@@ -458,7 +458,7 @@ export default function TrustPage() {
                 <div>
                   <h4 className="font-medium text-gray-900 dark:text-white">Customer Trust</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Customers prefer verified agents
+                    Customers prefer verified runners
                   </p>
                 </div>
               </div>

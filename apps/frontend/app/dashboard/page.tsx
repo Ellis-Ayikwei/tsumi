@@ -68,7 +68,7 @@ export default function DashboardPage() {
                       Create Errand
                     </h3>
                     <p className="text-gray-300 dark:text-gray-600">
-                      Request a Tsumi Agent now
+                      Request a Tsumi Runner now
                     </p>
                   </div>
                   <Package className="w-16 h-16 text-white/20 dark:text-gray-900/20 group-hover:scale-110 transition-transform" />

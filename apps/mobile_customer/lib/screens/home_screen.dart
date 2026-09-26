@@ -16,7 +16,7 @@ class HomeScreen extends ConsumerWidget {
   Future<void> _newErrand(BuildContext context, [String? type]) async {
     final id = await showNewErrandSheet(context, initialType: type);
     if (id != null && context.mounted) {
-      showToast(context, "Errand posted. We're finding you an agent.");
+      showToast(context, "Errand posted. We're finding you a runner.");
       context.push('/errands/$id');
     }
   }
@@ -133,7 +133,7 @@ class HomeScreen extends ConsumerWidget {
                 data: (page) => page.results.isEmpty
                     ? EmptyView(
                         title: 'No errands in progress',
-                        hint: 'Post one and a verified agent picks it up.',
+                        hint: 'Post one and a verified runner picks it up.',
                         action: TsumiButton(
                           label: 'New errand',
                           icon: Icons.add_rounded,
