@@ -141,7 +141,7 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
               final released = await confirmActionSheet(
                 context,
                 title: 'Release this job?',
-                description: 'It goes back to the open list for another agent. Releasing often can affect your badges.',
+                description: 'It goes back to the open list for another runner. Releasing often can affect your badges.',
                 confirmLabel: 'Release job',
                 variant: TsumiButtonVariant.destructive,
                 onConfirm: (_) => _act('release'),

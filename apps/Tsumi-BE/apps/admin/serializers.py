@@ -167,7 +167,7 @@ class KycDecisionSerializer(serializers.Serializer):
     def validate(self, attrs):
         if attrs["decision"] == "reject" and not attrs["reason"].strip():
             raise serializers.ValidationError(
-                {"reason": "Tell the agent what to fix, e.g. 'ID photo is blurry'."}
+                {"reason": "Tell the runner what to fix, e.g. 'ID photo is blurry'."}
             )
         return attrs
 

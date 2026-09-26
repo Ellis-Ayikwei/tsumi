@@ -15,7 +15,7 @@ from .serializer import AgentProfileSerializer, KycSubmitSerializer
 
 def _my_profile(request, lock=False):
     if not request.user.is_agent:
-        raise PermissionDenied("Only agent accounts have an agent profile.")
+        raise PermissionDenied("Only runner accounts have a runner profile.")
     qs = AgentProfile.objects.select_for_update() if lock else AgentProfile.objects
     profile, _ = qs.get_or_create(user=request.user)
     return profile

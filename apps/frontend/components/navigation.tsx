@@ -39,7 +39,7 @@ export function Navigation({ currentPage, userName = "User", currentRole = "cust
     },
     {
       value: "agent",
-      label: "Tsumi Agent",
+      label: "Tsumi Runner",
       icon: Package,
       description: "Complete errands",
       color: "text-green-600 dark:text-green-400",

@@ -23,7 +23,7 @@ export default function BecomeAgentPage() {
     {
       icon: "💰",
       title: "Earn up to GHS 5,000/month",
-      description: "Top agents make great money on flexible schedules",
+      description: "Top runners make great money on flexible schedules",
     },
     {
       icon: "⚡",
@@ -45,7 +45,7 @@ export default function BecomeAgentPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Implement agent signup API call
-    console.log("Agent Signup:", formData);
+    console.log("Runner Signup:", formData);
   };
 
   return (
@@ -65,7 +65,7 @@ export default function BecomeAgentPage() {
             </Link>
 
             <h2 className="text-5xl md:text-6xl font-display font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gold-warm via-white to-electric-blue">
-              Become a Tsumi Agent
+              Become a Tsumi Runner
             </h2>
             <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
               Join Ghana&apos;s most trusted errand platform. Earn money on your own schedule while helping your community.

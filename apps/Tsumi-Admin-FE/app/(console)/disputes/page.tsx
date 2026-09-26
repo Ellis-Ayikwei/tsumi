@@ -31,7 +31,7 @@ export default function DisputesPage() {
     await api(`/admin/disputes/${dispute.id}/resolve/`, { method: "POST", body: { resolution, note } });
     client.invalidateQueries({ queryKey: ["disputes"] });
     client.invalidateQueries({ queryKey: ["stats"] });
-    toast.success(resolution === "refund_customer" ? "Customer refunded." : "Agent paid.");
+    toast.success(resolution === "refund_customer" ? "Customer refunded." : "Runner paid.");
   };
 
   return (
@@ -71,7 +71,7 @@ export default function DisputesPage() {
                 <p className="whitespace-pre-wrap">{dispute.description}</p>
                 <div className="grid gap-2 sm:grid-cols-3">
                   <div><span className="text-muted-foreground">Customer: </span>{fullName(errand.customer)} {errand.customer.phone_number}</div>
-                  <div><span className="text-muted-foreground">Agent: </span>{errand.agent ? `${fullName(errand.agent)} ${errand.agent.phone_number ?? ""}` : "-"}</div>
+                  <div><span className="text-muted-foreground">Runner: </span>{errand.agent ? `${fullName(errand.agent)} ${errand.agent.phone_number ?? ""}` : "-"}</div>
                   <div><span className="text-muted-foreground">In escrow: </span>{formatGhs(errand.price_pesewas)}</div>
                 </div>
                 {dispute.status === "open" ? (
@@ -79,16 +79,16 @@ export default function DisputesPage() {
                     <ConfirmDialog
                       trigger={<Button variant="outline">Refund customer</Button>}
                       title="Refund the customer?"
-                      description={`${formatGhs(errand.price_pesewas)} returns to ${fullName(errand.customer)}'s wallet. The agent is paid nothing.`}
+                      description={`${formatGhs(errand.price_pesewas)} returns to ${fullName(errand.customer)}'s wallet. The runner is paid nothing.`}
                       confirmLabel="Refund customer"
                       field={{ label: "Note to both parties", multiline: true }}
                       onConfirm={(note) => resolve(dispute, "refund_customer", note)}
                     />
                     <ConfirmDialog
-                      trigger={<Button>Pay agent</Button>}
-                      title="Pay the agent?"
-                      description={`${formatGhs(errand.agent_payout_pesewas)} goes to the agent and ${formatGhs(errand.commission_pesewas)} to Tsumi.`}
-                      confirmLabel="Pay agent"
+                      trigger={<Button>Pay runner</Button>}
+                      title="Pay the runner?"
+                      description={`${formatGhs(errand.agent_payout_pesewas)} goes to the runner and ${formatGhs(errand.commission_pesewas)} to Tsumi.`}
+                      confirmLabel="Pay runner"
                       field={{ label: "Note to both parties", multiline: true }}
                       onConfirm={(note) => resolve(dispute, "release_agent", note)}
                     />

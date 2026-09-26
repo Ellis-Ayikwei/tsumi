@@ -98,7 +98,7 @@ export default function NotificationPreferencesPage() {
     {
       id: "messageReceived",
       label: "Messages",
-      description: "New messages from customers or agents",
+      description: "New messages from customers or runners",
       icon: MessageSquare,
       color: "text-indigo-600 dark:text-indigo-400",
     },

@@ -51,7 +51,7 @@ export default function OverviewPage() {
           <section>
             <h2 className="mb-3 text-sm font-medium text-muted-foreground">Needs attention</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <Tile label="Agents waiting for KYC" value={String(data.agents_pending_kyc)} href="/agents" />
+              <Tile label="Runners waiting for KYC" value={String(data.agents_pending_kyc)} href="/agents" />
               <Tile label="Open disputes" value={String(data.open_disputes)} href="/disputes" />
               <Tile
                 label="Withdrawals to pay"
@@ -102,7 +102,7 @@ export default function OverviewPage() {
               <CardContent className="space-y-2 text-sm">
                 {[
                   ["Customers", data.users.customers, "/users?user_type=customer"],
-                  ["Agents", data.users.agents, "/users?user_type=agent"],
+                  ["Runners", data.users.agents, "/users?user_type=agent"],
                   ["Suspended", data.users.suspended, "/users?is_active=false"],
                   ["Joined in the last 30 days", data.users.new_last_30d, "/users"],
                 ].map(([label, value, href]) => (

@@ -147,7 +147,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
               <ActionSheet
                 trigger={<Button size="xl" variant="ghost" className="w-full">Can&apos;t do it? Release job</Button>}
                 title="Release this job?"
-                description="It goes back to the open list for another agent. Releasing often can affect your badges."
+                description="It goes back to the open list for another runner. Releasing often can affect your badges."
                 confirmLabel="Release job"
                 confirmVariant="destructive"
                 onConfirm={async () => {

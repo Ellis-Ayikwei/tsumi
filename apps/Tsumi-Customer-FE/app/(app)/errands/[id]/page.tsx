@@ -35,7 +35,7 @@ import { api, client } from "@/lib/client";
 
 const PROGRESS: { status: ErrandStatus; label: string }[] = [
   { status: "open", label: "Posted" },
-  { status: "accepted", label: "Agent assigned" },
+  { status: "accepted", label: "Runner assigned" },
   { status: "in_progress", label: "On the way" },
   { status: "delivered", label: "Done, confirm" },
   { status: "completed", label: "Paid" },
@@ -67,13 +67,13 @@ function RateSheet({ errand, onDone }: { errand: Errand; onDone: () => void }) {
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button size="xl" className="w-full">
-          <Star /> Rate {errand.agent?.display_name ?? "your agent"}
+          <Star /> Rate {errand.agent?.display_name ?? "your runner"}
         </Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-center">
-          <DrawerTitle>How was {errand.agent?.display_name ?? "your agent"}?</DrawerTitle>
-          <DrawerDescription>Ratings help great agents earn trust badges.</DrawerDescription>
+          <DrawerTitle>How was {errand.agent?.display_name ?? "your runner"}?</DrawerTitle>
+          <DrawerDescription>Ratings help great runners earn trust badges.</DrawerDescription>
         </DrawerHeader>
         <div className="space-y-4 px-5 py-2">
           <StarRating value={stars} onChange={setStars} />
@@ -150,7 +150,7 @@ export default function ErrandDetailPage({ params }: { params: Promise<{ id: str
             </ol>
           )}
           {errand.status === "open" && (
-            <p className="mt-4 text-sm text-muted-foreground">Verified agents nearby can see your errand. You will be notified when one accepts.</p>
+            <p className="mt-4 text-sm text-muted-foreground">Verified runners nearby can see your errand. You will be notified when one accepts.</p>
           )}
           {errand.status === "disputed" && (
             <p className="mt-4 text-sm text-muted-foreground">Tsumi support is reviewing this errand. Your money stays held until they decide.</p>
@@ -200,7 +200,7 @@ export default function ErrandDetailPage({ params }: { params: Promise<{ id: str
           <div className="flex items-center justify-between border-t pt-3">
             <span className="flex items-center gap-1.5 text-muted-foreground">
               <ShieldCheck className="h-4 w-4 text-brand" aria-hidden />
-              {errand.status === "completed" ? "Paid to agent" : ["cancelled", "refunded"].includes(errand.status) ? "Refunded to wallet" : "Held in TsumiSafe"}
+              {errand.status === "completed" ? "Paid to runner" : ["cancelled", "refunded"].includes(errand.status) ? "Refunded to wallet" : "Held in TsumiSafe"}
             </span>
             <span className="text-lg font-semibold tabular-nums">{formatGhs(errand.price_pesewas)}</span>
           </div>
@@ -209,9 +209,9 @@ export default function ErrandDetailPage({ params }: { params: Promise<{ id: str
         <div className="space-y-2">
           {errand.status === "delivered" && (
             <ActionSheet
-              trigger={<Button size="xl" variant="brand" className="w-full"><Check /> Confirm and pay agent</Button>}
+              trigger={<Button size="xl" variant="brand" className="w-full"><Check /> Confirm and pay runner</Button>}
               title="Is everything done?"
-              description={`We'll release ${formatGhs(errand.price_pesewas)} to ${errand.agent?.display_name ?? "the agent"}. This can't be undone.`}
+              description={`We'll release ${formatGhs(errand.price_pesewas)} to ${errand.agent?.display_name ?? "the runner"}. This can't be undone.`}
               confirmLabel="Yes, release payment"
               confirmVariant="brand"
               onConfirm={async () => {

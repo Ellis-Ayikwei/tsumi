@@ -50,7 +50,7 @@ export default function TransactionsPage() {
       id: "3",
       type: "release",
       amount: 45,
-      description: "Errand payment released to agent",
+      description: "Errand payment released to runner",
       status: "completed",
       date: "2024-01-15T14:30:00Z",
       reference: "TXN-001236",

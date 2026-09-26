@@ -27,7 +27,7 @@ export default function AboutPage() {
     },
     {
       icon: TrendingUp,
-      title: "Empower Agents",
+      title: "Empower Runners",
       description: "We help everyday Ghanaians earn dignified income on their terms",
     },
     {
@@ -207,8 +207,8 @@ export default function AboutPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
                 { value: "10,000+", label: "Errands Completed" },
-                { value: "500+", label: "Active Agents" },
-                { value: "GHS 500K+", label: "Earned by Agents" },
+                { value: "500+", label: "Active Runners" },
+                { value: "GHS 500K+", label: "Earned by Runners" },
                 { value: "4.9/5", label: "Average Rating" },
               ].map((stat, i) => (
                 <div key={i} className="text-center">
@@ -239,10 +239,10 @@ export default function AboutPage() {
                 Request an Errand
               </Link>
               <Link
-                href="/become-agent"
+                href="/become-a-runner"
                 className="px-8 py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-800 rounded-xl font-semibold hover:border-gray-900 dark:hover:border-white transition-all"
               >
-                Become an Agent
+                Become a Runner
               </Link>
             </div>
           </div>

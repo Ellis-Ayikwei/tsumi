@@ -61,7 +61,7 @@ function UsersList() {
             <NativeSelect aria-label="Type" value={userType} onChange={(e) => setParam({ user_type: e.target.value })}>
               <option value="">All types</option>
               <option value="customer">Customers</option>
-              <option value="agent">Agents</option>
+              <option value="agent">Runners</option>
               <option value="admin">Admins</option>
             </NativeSelect>
             <NativeSelect aria-label="State" value={isActive} onChange={(e) => setParam({ is_active: e.target.value })}>

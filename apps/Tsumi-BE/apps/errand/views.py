@@ -48,7 +48,7 @@ class ErrandViewSet(
 
     def create(self, request, *args, **kwargs):
         if request.user.is_agent:
-            raise PermissionDenied("Agent accounts cannot post errands. Use a customer account.")
+            raise PermissionDenied("Runner accounts cannot post errands. Use a customer account.")
         serializer = ErrandCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         errand, created = services.create_errand(request.user, serializer.validated_data)

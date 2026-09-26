@@ -47,7 +47,7 @@ export default function ErrandDetailPage({ params }: { params: Promise<{ id: str
               <ConfirmDialog
                 trigger={<Button variant="destructive" size="sm">Cancel and refund</Button>}
                 title="Cancel this errand?"
-                description={`${formatGhs(data.price_pesewas)} goes back to the customer's wallet. The customer and agent are notified. This cannot be undone.`}
+                description={`${formatGhs(data.price_pesewas)} goes back to the customer's wallet. The customer and runner are notified. This cannot be undone.`}
                 confirmLabel="Cancel and refund"
                 confirmVariant="destructive"
                 field={{ label: "Reason (shown to both parties)", required: true, multiline: true }}
@@ -72,7 +72,7 @@ export default function ErrandDetailPage({ params }: { params: Promise<{ id: str
           </CardHeader>
           <CardContent className="space-y-1 text-sm">
             <div className="flex justify-between"><span>Price</span><span className="tabular-nums">{formatGhs(data.price_pesewas)}</span></div>
-            <div className="flex justify-between"><span>Agent payout</span><span className="tabular-nums">{formatGhs(data.agent_payout_pesewas)}</span></div>
+            <div className="flex justify-between"><span>Runner payout</span><span className="tabular-nums">{formatGhs(data.agent_payout_pesewas)}</span></div>
             <div className="flex justify-between">
               <span>Commission ({data.commission_bps / 100}%)</span>
               <span className="tabular-nums">{formatGhs(data.commission_pesewas)}</span>
@@ -94,7 +94,7 @@ export default function ErrandDetailPage({ params }: { params: Promise<{ id: str
               <div className="text-muted-foreground">{data.customer.phone_number ?? data.customer.email}</div>
             </div>
             <div>
-              <div className="text-muted-foreground">Agent</div>
+              <div className="text-muted-foreground">Runner</div>
               {data.agent ? (
                 <>
                   <Link href={`/users/${data.agent.id}`} className="hover:underline">{fullName(data.agent)}</Link>

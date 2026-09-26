@@ -128,7 +128,7 @@ export default function RequestErrandPage() {
             />
           </div>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            The amount is held safely in TsumiSafe escrow and only released to the agent when you confirm the errand is done.
+            The amount is held safely in TsumiSafe escrow and only released to the runner when you confirm the errand is done.
           </p>
           {error && (
             <p className="text-sm text-red-600">

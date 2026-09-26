@@ -38,7 +38,7 @@ export default function AgentSettingsPage() {
       email: "ama.serwaa@example.com",
       phone: "+233 24 234 5678",
       location: "Accra, Ghana",
-      bio: "Professional delivery agent with 2+ years experience. Reliable, punctual, and customer-focused.",
+      bio: "Professional delivery runner with 2+ years experience. Reliable, punctual, and customer-focused.",
       profileImage: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400",
     },
     notifications: {
@@ -165,7 +165,7 @@ export default function AgentSettingsPage() {
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       {agentSettings.profile.name}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400">Agent since January 2024</p>
+                    <p className="text-gray-600 dark:text-gray-400">Runner since January 2024</p>
                     <button className="mt-2 text-sm text-green-600 dark:text-green-400 hover:underline">
                       Change Profile Picture
                     </button>
@@ -273,7 +273,7 @@ export default function AgentSettingsPage() {
                         <div className="text-sm text-gray-600 dark:text-gray-400">
                           {key === "profileVisibility" && "Make your profile visible to customers"}
                           {key === "locationSharing" && "Share your location during active jobs"}
-                          {key === "earningsPrivacy" && "Hide your earnings from other agents"}
+                          {key === "earningsPrivacy" && "Hide your earnings from other runners"}
                           {key === "contactInfoSharing" && "Allow customers to contact you directly"}
                           {key === "dataAnalytics" && "Help improve the app with anonymous usage data"}
                         </div>

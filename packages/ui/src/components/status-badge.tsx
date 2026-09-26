@@ -7,8 +7,8 @@ type Tone = NonNullable<BadgeProps["variant"]>;
 
 // Status is never shown by color alone: every badge carries an icon and its label.
 const TONES: Record<string, { variant: Tone; Icon: typeof CircleDot; label?: string }> = {
-  open: { variant: "info", Icon: CircleDot, label: "Finding an agent" },
-  accepted: { variant: "info", Icon: Clock, label: "Agent assigned" },
+  open: { variant: "info", Icon: CircleDot, label: "Finding a runner" },
+  accepted: { variant: "info", Icon: Clock, label: "Runner assigned" },
   in_progress: { variant: "info", Icon: Clock, label: "In progress" },
   delivered: { variant: "warning", Icon: Clock, label: "Awaiting confirmation" },
   completed: { variant: "success", Icon: CheckCircle2 },

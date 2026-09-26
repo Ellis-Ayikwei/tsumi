@@ -256,7 +256,7 @@ class _NewErrandBodyState extends ConsumerState<_NewErrandBody> {
               maxLines: 5,
               textCapitalization: TextCapitalization.sentences,
               decoration: const InputDecoration(
-                labelText: 'Details for your agent (optional)',
+                labelText: 'Details for your runner (optional)',
                 hintText: 'Item list, who to ask for, gate colour...',
                 alignLabelWithHint: true,
               ),
@@ -302,7 +302,7 @@ class _NewErrandBodyState extends ConsumerState<_NewErrandBody> {
                   const SizedBox(width: 10),
                   const Expanded(
                     child: Text(
-                      'Protected by TsumiSafe. We hold the money and only pay the agent after you confirm the errand is done.',
+                      'Protected by TsumiSafe. We hold the money and only pay the runner after you confirm the errand is done.',
                     ),
                   ),
                 ],

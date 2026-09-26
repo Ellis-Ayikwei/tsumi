@@ -86,7 +86,7 @@ function ErrandsList() {
               <TableHead>Errand</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Customer</TableHead>
-              <TableHead>Agent</TableHead>
+              <TableHead>Runner</TableHead>
               <TableHead className="text-right">Price</TableHead>
               <TableHead>Created</TableHead>
             </TableRow>

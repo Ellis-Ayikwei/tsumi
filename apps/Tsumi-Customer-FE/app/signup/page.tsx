@@ -12,7 +12,7 @@ export default function SignupPage() {
       userType="customer"
       heading="Send me. Safely."
       tagline="Verified runners for your errands, with your money held safely until it's done."
-      wrongTypeMessage="This is the customer app. Agents sign in to the Tsumi Agent app."
+      wrongTypeMessage="This is the customer app. Runners sign in to the Tsumi Runner app."
     />
   );
 }

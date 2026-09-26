@@ -110,7 +110,7 @@ export default function WalletPage() {
               What is TsumiSafe Escrow?
             </h3>
             <p className="text-sm text-gray-300">
-              Your money is securely held until the errand is completed. Once the agent delivers and you confirm, funds are automatically released. Your protection, guaranteed.
+              Your money is securely held until the errand is completed. Once the runner delivers and you confirm, funds are automatically released. Your protection, guaranteed.
             </p>
           </div>
 

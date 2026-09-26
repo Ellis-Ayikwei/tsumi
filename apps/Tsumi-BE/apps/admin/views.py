@@ -186,7 +186,7 @@ def kyc_decision(request, pk):
     with transaction.atomic():
         profile = get_object_or_404(AgentProfile.objects.select_for_update(), user_id=pk)
         if profile.kyc_status != AgentProfile.KycStatus.PENDING:
-            raise ValidationError({"decision": f"This agent's KYC is {profile.kyc_status}, not pending."})
+            raise ValidationError({"decision": f"This runner's KYC is {profile.kyc_status}, not pending."})
         profile.kyc_status = (
             AgentProfile.KycStatus.APPROVED if approve else AgentProfile.KycStatus.REJECTED
         )
@@ -269,7 +269,7 @@ def errand_cancel(request, pk):
     serializer = CancelSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     if not serializer.validated_data["reason"].strip():
-        raise ValidationError({"reason": "Give a reason; the customer and agent will see it."})
+        raise ValidationError({"reason": "Give a reason; the customer and runner will see it."})
     get_object_or_404(Errand, pk=pk)
     errand_services.cancel(pk, request.user, serializer.validated_data["reason"])
     return Response(_errand_detail(pk))

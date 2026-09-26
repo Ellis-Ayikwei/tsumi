@@ -1,0 +1,128 @@
+/* Home page tokens. Gold is reserved for money; nothing else uses it. */
+.page {
+  --paper: #f6f7f4;
+  --ink: #10231c;
+  --brand: #12875a;
+  --brand-ink: #0c5f40;
+  --gold: #e8b53a;
+  --line: #d9dfdb;
+  --muted: #56645e;
+
+  background: var(--paper);
+  color: var(--ink);
+  font-feature-settings: "tnum" 0;
+}
+
+.page :focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Narrow width at display sizes gives headlines a poster voice; body stays at 100. */
+.display {
+  font-variation-settings: "wdth" 84, "opsz" 96;
+  letter-spacing: -0.005em;
+  line-height: 0.95;
+}
+
+.money {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The errand ticket: the one animated moment on the page. */
+.ticket {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 1px 0 var(--line), 0 24px 48px -28px rgb(16 35 28 / 0.35);
+}
+
+.track {
+  position: relative;
+  height: 2px;
+  background: var(--line);
+  margin: 0 12px;
+}
+
+.trackFill {
+  position: absolute;
+  inset: 0 50% 0 0;
+  background: var(--gold);
+  transform-origin: left;
+  animation: fill 0.7s 0.5s cubic-bezier(0.3, 0.7, 0.2, 1) backwards;
+}
+
+.node {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid var(--line);
+  background: #fff;
+  transform: translate(-50%, -50%);
+}
+
+.nodeHeld {
+  border-color: var(--gold);
+}
+
+/* The chip rests on TsumiSafe (50%): money never reaches the runner before you confirm. */
+.chip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--gold);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px -6px rgb(160 110 0 / 0.6);
+  animation: travel 0.7s 0.5s cubic-bezier(0.3, 0.7, 0.2, 1) backwards;
+}
+
+.step {
+  animation: arrive 0.35s var(--at) ease-out backwards;
+}
+
+.stepDot {
+  animation: tick 0.35s var(--at) ease-out backwards;
+}
+
+@keyframes fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes travel {
+  from {
+    left: 0%;
+  }
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0.35;
+  }
+}
+
+@keyframes tick {
+  from {
+    background: #fff;
+    border-color: var(--line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trackFill,
+  .chip,
+  .step,
+  .stepDot {
+    animation: none;
+  }
+}

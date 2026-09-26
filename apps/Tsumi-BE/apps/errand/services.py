@@ -156,7 +156,7 @@ def accept(errand_id, agent):
     # capacity check below cannot be raced past.
     profile = AgentProfile.objects.select_for_update().filter(user=agent).first()
     if not agent.is_agent or profile is None or not profile.can_take_work:
-        raise PermissionDenied("Only KYC-approved agents can accept errands.")
+        raise PermissionDenied("Only KYC-approved runners can accept errands.")
     active = Errand.objects.filter(agent=agent, status__in=ACTIVE_AGENT_STATUSES).count()
     if active >= settings.TSUMI_MAX_ACTIVE_ERRANDS_PER_AGENT:
         raise Conflict(
@@ -164,28 +164,28 @@ def accept(errand_id, agent):
         )
     errand = _locked(errand_id)
     if errand.status != S.OPEN:
-        raise Conflict("Another agent already accepted this errand.")
+        raise Conflict("Another runner already accepted this errand.")
     errand.agent = agent
     errand.save(update_fields=["agent", "updated_at"])
     _move(errand, S.ACCEPTED, agent)
-    notify(errand.customer_id, "errand_accepted", "An agent accepted your errand", errand.title, errand)
+    notify(errand.customer_id, "errand_accepted", "A runner accepted your errand", errand.title, errand)
     return errand
 
 
 def _require_assigned_agent(errand, user):
     if errand.agent_id != user.id:
-        raise PermissionDenied("Only the assigned agent can do this.")
+        raise PermissionDenied("Only the assigned runner can do this.")
 
 
 @transaction.atomic
 def release(errand_id, agent):
     errand = _locked(errand_id)
     _require_assigned_agent(errand, agent)
-    _move(errand, S.OPEN, agent, note="Agent released the errand")
+    _move(errand, S.OPEN, agent, note="Runner released the errand")
     errand.agent = None
     errand.accepted_at = None
     errand.save(update_fields=["agent", "accepted_at", "updated_at"])
-    notify(errand.customer_id, "errand_released", "Your errand is looking for a new agent", errand.title, errand)
+    notify(errand.customer_id, "errand_released", "Your errand is looking for a new runner", errand.title, errand)
     return errand
 
 
@@ -205,7 +205,7 @@ def deliver(errand_id, agent):
     _move(errand, S.DELIVERED, agent)
     notify(
         errand.customer_id, "errand_delivered",
-        "Your errand is done. Confirm to pay the agent.", errand.title, errand,
+        "Your errand is done. Confirm to pay the runner.", errand.title, errand,
     )
     return errand
 
@@ -247,7 +247,7 @@ def cancel(errand_id, user, reason=""):
 def open_dispute_on(errand, user):
     """Called by apps.dispute with the errand already locked."""
     if user.id not in (errand.customer_id, errand.agent_id):
-        raise PermissionDenied("Only the customer or the assigned agent can open a dispute.")
+        raise PermissionDenied("Only the customer or the assigned runner can open a dispute.")
     _move(errand, S.DISPUTED, user)
 
 

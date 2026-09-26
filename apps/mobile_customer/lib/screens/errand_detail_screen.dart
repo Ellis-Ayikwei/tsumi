@@ -6,7 +6,7 @@ import '../widgets/errand_types.dart';
 
 const _progress = [
   ('open', 'Posted'),
-  ('accepted', 'Agent assigned'),
+  ('accepted', 'Runner assigned'),
   ('in_progress', 'On the way'),
   ('delivered', 'Done, confirm'),
   ('completed', 'Paid'),
@@ -61,7 +61,7 @@ class _Body extends ConsumerWidget {
     final e = errand;
     final step = _progress.indexWhere((p) => p.$1 == e.status);
     final moneyLabel = e.status == 'completed'
-        ? 'Paid to agent'
+        ? 'Paid to runner'
         : (e.status == 'cancelled' || e.status == 'refunded')
             ? 'Refunded to wallet'
             : 'Held in TsumiSafe';
@@ -122,7 +122,7 @@ class _Body extends ConsumerWidget {
                 ),
               ],
               if (e.status == 'open')
-                _Note('Verified agents nearby can see your errand. You will be notified when one accepts.', c),
+                _Note('Verified runners nearby can see your errand. You will be notified when one accepts.', c),
               if (e.status == 'disputed')
                 _Note('Tsumi support is reviewing this errand. Your money stays held until they decide.', c),
               if (e.cancelReason.isNotEmpty) _Note('Reason: ${e.cancelReason}', c),
@@ -202,14 +202,14 @@ class _Body extends ConsumerWidget {
         const SizedBox(height: 18),
         if (e.status == 'delivered')
           TsumiButton(
-            label: 'Confirm and pay agent',
+            label: 'Confirm and pay runner',
             icon: Icons.check_rounded,
             variant: TsumiButtonVariant.brand,
             onPressed: () async {
               final done = await confirmActionSheet(
                 context,
                 title: 'Is everything done?',
-                description: "We'll release ${formatGhs(e.pricePesewas)} to ${e.agent?.displayName ?? 'the agent'}. This can't be undone.",
+                description: "We'll release ${formatGhs(e.pricePesewas)} to ${e.agent?.displayName ?? 'the runner'}. This can't be undone.",
                 confirmLabel: 'Yes, release payment',
                 variant: TsumiButtonVariant.brand,
                 onConfirm: (_) => act('confirm'),
@@ -357,8 +357,8 @@ class _RateBodyState extends State<_RateBody> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SheetHeader(
-          title: 'How was ${widget.errand.agent?.displayName ?? 'your agent'}?',
-          description: 'Ratings help great agents earn trust badges.',
+          title: 'How was ${widget.errand.agent?.displayName ?? 'your runner'}?',
+          description: 'Ratings help great runners earn trust badges.',
         ),
         StarRatingInput(value: _stars, onChanged: (s) => setState(() => _stars = s)),
         const SizedBox(height: 12),

@@ -14,7 +14,7 @@ import { Textarea } from "./textarea";
 const REASONS = [
   { value: "not_delivered", label: "Not delivered" },
   { value: "damaged", label: "Damaged or wrong" },
-  { value: "agent_no_show", label: "Agent didn't show" },
+  { value: "agent_no_show", label: "Runner didn't show" },
   { value: "overcharged", label: "Asked to pay extra" },
   { value: "other", label: "Something else" },
 ] as const;

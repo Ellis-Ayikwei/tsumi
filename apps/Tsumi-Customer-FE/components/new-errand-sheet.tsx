@@ -126,7 +126,7 @@ export function NewErrandSheet({
       drafts.clear();
       queryClient.invalidateQueries({ queryKey: ["errands"] });
       queryClient.invalidateQueries({ queryKey: ["wallet"] });
-      toast.success("Errand posted. We're finding you an agent.");
+      toast.success("Errand posted. We're finding you a runner.");
       onOpenChange(false);
       router.push(`/errands/${errand.id}`);
     } catch (err) {
@@ -219,7 +219,7 @@ export function NewErrandSheet({
                   </div>
                 </div>
                 <div className="grid gap-1.5">
-                  <Label htmlFor="errand-notes">Details for your agent (optional)</Label>
+                  <Label htmlFor="errand-notes">Details for your runner (optional)</Label>
                   <Textarea
                     id="errand-notes"
                     className="min-h-24 rounded-xl"
@@ -252,7 +252,7 @@ export function NewErrandSheet({
                             {stop === "pickup" ? "Pickup" : "Drop-off"} {optional && "(optional)"}
                           </span>
                           <span className={cn("block truncate text-sm", !place && "text-muted-foreground")}>
-                            {place?.address ?? (stop === "pickup" ? "Where should the agent start?" : "Where should it end up?")}
+                            {place?.address ?? (stop === "pickup" ? "Where should the runner start?" : "Where should it end up?")}
                           </span>
                         </span>
                         <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
@@ -286,7 +286,7 @@ export function NewErrandSheet({
                   <ShieldCheck className="h-5 w-5 shrink-0 text-brand" aria-hidden />
                   <p>
                     <span className="font-medium">Protected by TsumiSafe.</span> We hold the money and only pay the
-                    agent after you confirm the errand is done.
+                    runner after you confirm the errand is done.
                   </p>
                 </div>
                 <div className="rounded-2xl border p-4 text-sm">

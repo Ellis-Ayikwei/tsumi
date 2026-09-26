@@ -76,8 +76,8 @@ export default function NotificationsPage() {
     {
       id: "5",
       type: "location_update",
-      title: "Agent Location Update",
-      message: "Your agent is now at the pickup location",
+      title: "Runner Location Update",
+      message: "Your runner is now at the pickup location",
       status: "read",
       timestamp: "2024-01-16T08:00:00Z",
       errandId: "ERR-001",

@@ -109,7 +109,7 @@ class ErrandCreateSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if not attrs.get("pickup_address") and not attrs.get("dropoff_address"):
             raise serializers.ValidationError(
-                {"pickup_address": "Add a pickup or drop-off address so the agent knows where to go."}
+                {"pickup_address": "Add a pickup or drop-off address so the runner knows where to go."}
             )
         # A pin is a lat/lng pair with a readable address; half a pin cannot be navigated to.
         for stop in ("pickup", "dropoff"):

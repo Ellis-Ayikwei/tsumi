@@ -29,7 +29,7 @@ export default function ProfilePage() {
     { href: "/verify", label: "Identity verification", Icon: ShieldCheck },
     { href: "/earnings", label: "Earnings and withdrawals", Icon: Wallet },
     { href: "/notifications", label: "Notifications", Icon: Bell },
-    { href: "mailto:agents@tsumi.app", label: "Agent support", Icon: LifeBuoy },
+    { href: "mailto:agents@tsumi.app", label: "Runner support", Icon: LifeBuoy },
   ];
 
   return (

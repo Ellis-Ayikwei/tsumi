@@ -128,7 +128,7 @@ export default function HomePage() {
           {active.data?.results.length === 0 && (
             <EmptyState
               title="No errands in progress"
-              hint="Post one and a verified agent picks it up."
+              hint="Post one and a verified runner picks it up."
               action={
                 <Button className="rounded-full" onClick={() => openSheet()}>
                   <Plus /> New errand
