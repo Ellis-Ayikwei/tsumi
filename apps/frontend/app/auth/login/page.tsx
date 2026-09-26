@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { AuthAPI, setAuthTokens } from "@/lib/api";
+import { ApiError, AuthAPI, setAuthTokens } from "@/lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,11 +17,11 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      // const res = await AuthAPI.login(emailOrPhone, password);
-      // if (res.access) setAuthTokens(res.access, (res as any).refresh);
-      router.push("/dashboard");
+      const res = await AuthAPI.login(email, password);
+      setAuthTokens(res.access, res.refresh);
+      router.push(res.user.user_type === "agent" ? "/agent" : "/dashboard");
     } catch (err) {
-      setError("Invalid credentials");
+      setError(err instanceof ApiError ? err.message : "Could not sign in. Try again.");
     } finally {
       setLoading(false);
     }
@@ -52,12 +52,13 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Sign in</h1>
         <form onSubmit={onSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Email or Phone</label>
+            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Email</label>
             <input
-              type="text"
-              value={emailOrPhone}
-              onChange={(e) => setEmailOrPhone(e.target.value)}
-              placeholder="Enter email or phone number"
+              type="email"
+              autoComplete="username"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
               required
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />

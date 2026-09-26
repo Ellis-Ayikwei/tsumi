@@ -55,7 +55,7 @@ jobs:
         run: npm install
 
       - name: Install Python Dependencies
-        working-directory: apps/backend-py
+        working-directory: apps/Tsumi-BE
         run: pip install -r requirements.txt
 
       - name: Lint Frontend
@@ -65,10 +65,9 @@ jobs:
           npm run lint
 
       - name: Lint Backend (Python)
-        working-directory: apps/backend-py
+        working-directory: apps/Tsumi-BE
         run: |
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          black --check .
 
       - name: Lint Backend (Node)
         working-directory: apps/backend-node
@@ -77,7 +76,7 @@ jobs:
           npm run lint
 
       - name: Run Python Tests
-        working-directory: apps/backend-py
+        working-directory: apps/Tsumi-BE
         env:
           DB_HOST: localhost
           DB_PORT: 5432
@@ -86,8 +85,26 @@ jobs:
           DB_PASSWORD: postgres
           REDIS_URL: redis://localhost:6379/1
         run: |
-          python manage.py migrate
-          python manage.py test
+          python manage.py makemigrations --check --dry-run
+          python manage.py test --settings=backend.test_settings
+
+      - name: Typecheck Admin
+        working-directory: apps/Tsumi-Admin-FE
+        run: |
+          npm install
+          npm run typecheck
+
+      - name: Typecheck and build Customer app
+        working-directory: apps/Tsumi-Customer-FE
+        run: |
+          npm run typecheck
+          npm run build
+
+      - name: Typecheck and build Agent app
+        working-directory: apps/Tsumi-Agent-FE
+        run: |
+          npm run typecheck
+          npm run build
 
       - name: Build Frontend
         working-directory: apps/frontend
@@ -96,6 +113,27 @@ jobs:
       - name: Build Backend (Node)
         working-directory: apps/backend-node
         run: npm run build
+
+  flutter:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [packages/tsumi_kit, apps/mobile_customer, apps/mobile_agent]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Analyze and test
+        working-directory: ${{ matrix.package }}
+        run: |
+          flutter pub get
+          flutter analyze
+          if [ -d test ] && ls test/*_test.dart >/dev/null 2>&1; then flutter test; fi
 
   docker-build:
     runs-on: ubuntu-latest

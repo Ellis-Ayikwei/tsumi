@@ -2,9 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ErrandsAPI } from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { ApiError, ErrandsAPI } from "@/lib/api";
+import { formatGhs, parseGhsToPesewas } from "@/lib/money";
 
 export default function RequestErrandPage() {
+  const router = useRouter();
+  // One id per form: a double-click or retry returns the same errand and charges once.
+  const [clientRequestId] = useState(() => crypto.randomUUID());
+  const [error, setError] = useState<string | null>(null);
+  const [shortfall, setShortfall] = useState<number | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -15,15 +23,37 @@ export default function RequestErrandPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await ErrandsAPI.create({
-      title: form.title,
-      description: form.description,
-      pickup_address: form.pickup_address,
-      delivery_address: form.delivery_address,
-      amount: Number(form.amount || 0),
-      errand_type: "custom",
-    });
-    alert("Errand created");
+    setError(null);
+    setShortfall(null);
+    const pricePesewas = parseGhsToPesewas(form.amount);
+    if (!pricePesewas || pricePesewas <= 0) {
+      setError("Enter the amount you will pay in GHS, like 25 or 25.50.");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await ErrandsAPI.create({
+        title: form.title,
+        description: form.description,
+        pickup_address: form.pickup_address,
+        dropoff_address: form.delivery_address,
+        price_pesewas: pricePesewas,
+        errand_type: "custom",
+        client_request_id: clientRequestId,
+      });
+      router.push("/errands");
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) {
+        router.push("/auth/login");
+        return;
+      }
+      if (err instanceof ApiError && err.code === "insufficient_funds") {
+        setShortfall(Number(err.meta.shortfall_pesewas));
+      }
+      setError(err instanceof ApiError ? err.message : "Could not create the errand. Try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -89,17 +119,36 @@ export default function RequestErrandPage() {
           <div>
             <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Amount (GHS)</label>
             <input
-              type="number"
+              inputMode="decimal"
+              required
+              placeholder="25.00"
               value={form.amount}
               onChange={(e) => setForm({ ...form, amount: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            The amount is held safely in TsumiSafe escrow and only released to the agent when you confirm the errand is done.
+          </p>
+          {error && (
+            <p className="text-sm text-red-600">
+              {error}
+              {shortfall !== null && shortfall > 0 && (
+                <>
+                  {" "}
+                  <Link href="/wallet/topup" className="underline">
+                    Top up {formatGhs(shortfall)}
+                  </Link>
+                </>
+              )}
+            </p>
+          )}
           <button
             type="submit"
-            className="px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:opacity-90 transition-opacity"
+            disabled={submitting}
+            className="px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            Create Errand
+            {submitting ? "Creating..." : "Create Errand"}
           </button>
         </form>
         </div>

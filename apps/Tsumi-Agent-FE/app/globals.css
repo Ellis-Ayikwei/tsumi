@@ -1,0 +1,4 @@
+/* Design tokens come from @tsumi/ui's Tailwind preset. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

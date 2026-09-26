@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { AuthAPI } from "@/lib/api";
+import { ApiError, AuthAPI, setAuthTokens } from "@/lib/api";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -16,20 +16,25 @@ export default function SignupPage() {
     password: "",
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     try {
-      await AuthAPI.register({
+      const res = await AuthAPI.register({
         email: form.email,
-        phone: form.phone,
+        phone_number: form.phone || undefined,
         first_name: form.first_name,
         last_name: form.last_name,
         password: form.password,
         user_type: "customer",
       });
-      router.push("/auth/login");
+      setAuthTokens(res.access, res.refresh);
+      router.push("/dashboard");
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Could not create your account. Try again.");
     } finally {
       setLoading(false);
     }
@@ -95,7 +100,7 @@ export default function SignupPage() {
               type="tel"
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              placeholder="+233 XX XXX XXXX"
+              placeholder="024 123 4567"
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -109,6 +114,7 @@ export default function SignupPage() {
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
+          {error && <p className="text-sm text-red-600">{error}</p>}
           <button
             type="submit"
             disabled={loading}
