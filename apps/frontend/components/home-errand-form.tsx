@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const field =
-  "h-14 w-full rounded-xl bg-[#eef1ef] px-4 text-[1.0625rem] text-[var(--ink)] placeholder:text-[var(--muted)] outline-none focus:bg-white focus:ring-2 focus:ring-[var(--ink)]";
+  "h-14 w-full rounded-xl bg-[var(--field)] px-4 text-[1.0625rem] text-[var(--ink)] placeholder:text-[var(--muted)] outline-none focus:bg-[var(--card)] focus:ring-2 focus:ring-[var(--ink)]";
 
 /**
  * The home page's first action, as on ride apps: say what and where, then
@@ -38,7 +38,7 @@ export function HomeErrandForm() {
       />
       {/* Route pair: circle for the start, square for the end, joined by a line. */}
       <div className="relative space-y-3">
-        <span aria-hidden className="absolute left-[1.3rem] top-7 z-10 h-[calc(100%-3.5rem)] w-px bg-black/40" />
+        <span aria-hidden className="absolute left-[1.3rem] top-7 z-10 h-[calc(100%-3.5rem)] w-px bg-[var(--muted)]" />
         <div className="relative">
           <span aria-hidden className="absolute left-4 top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-[var(--ink)]" />
           <label className="sr-only" htmlFor="home-pickup">
@@ -56,7 +56,7 @@ export function HomeErrandForm() {
       </div>
       <button
         type="submit"
-        className="h-14 w-full rounded-xl bg-[var(--brand)] text-[1.0625rem] font-semibold text-white transition-colors hover:bg-[var(--brand-ink)] sm:w-auto sm:px-8"
+        className="h-14 w-full rounded-xl bg-[var(--brand)] text-[1.0625rem] font-semibold text-[var(--brand-fg)] transition-colors hover:bg-[var(--brand-ink)] sm:w-auto sm:px-8"
       >
         Continue
       </button>
