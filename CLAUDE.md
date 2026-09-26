@@ -297,7 +297,15 @@ into my commit, and a checkout or stash can wipe hours of work.
     `Basemodel` with UUID ids, single error envelope, `backend/test_settings.py`.
   - `apps/Tsumi-Admin-FE`: admin console, Next.js 15 + shadcn/ui (Radix,
     Tailwind 3), served under `/admin`, port 3002.
-  - `apps/frontend`: customer and agent web (Next.js 15), port 3000.
+  - `apps/Tsumi-Customer-FE` (port 3003) and `apps/Tsumi-Agent-FE` (port 3004):
+    mobile-first Next.js 15 apps (bottom nav, bottom sheets via vaul). Built
+    only from `packages/ui`.
+  - `packages/ui` (`@tsumi/ui`): the design system. shadcn/ui primitives,
+    tokens as a Tailwind preset plugin (`tailwind-preset.ts`), mobile shell,
+    shared API client (`createApiClient`), API types, money/format helpers.
+    Import with relative paths inside the package; apps import
+    `@tsumi/ui/components/<name>` and `@tsumi/ui/lib/<name>`.
+  - `apps/frontend`: marketing site and older customer/agent pages (Next.js 15), port 3000.
   - `apps/backend-node`: Express + Socket.io realtime; `JWT_SECRET` must equal
     the API's `JWT_SIGNING_KEY`.
   - `apps/mobile`: Flutter.
@@ -317,4 +325,5 @@ into my commit, and a checkout or stash can wipe hours of work.
 - Commands:
   - Backend tests: `cd apps/Tsumi-BE && python manage.py test --settings=backend.test_settings`
   - Admin: `cd apps/Tsumi-Admin-FE && npm run typecheck && npm run build`
+  - Customer / agent apps: `cd apps/Tsumi-Customer-FE` (or `Tsumi-Agent-FE`) `&& npm run typecheck && npm run build`
   - Everything: `docker-compose up -d` (Postgres, Redis, API, worker, beat, node).

@@ -94,6 +94,18 @@ jobs:
           npm install
           npm run typecheck
 
+      - name: Typecheck and build Customer app
+        working-directory: apps/Tsumi-Customer-FE
+        run: |
+          npm run typecheck
+          npm run build
+
+      - name: Typecheck and build Agent app
+        working-directory: apps/Tsumi-Agent-FE
+        run: |
+          npm run typecheck
+          npm run build
+
       - name: Build Frontend
         working-directory: apps/frontend
         run: npm run build

@@ -51,7 +51,8 @@ services:
       - REDIS_URL=redis://redis:6379/1
       - CELERY_BROKER_URL=redis://redis:6379/0
       - JWT_SIGNING_KEY=dev-only-shared-jwt-key
-      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3002
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3002,http://localhost:3003,http://localhost:3004
+      - FRONTEND_URL=http://localhost:3003
     depends_on:
       postgres:
         condition: service_healthy

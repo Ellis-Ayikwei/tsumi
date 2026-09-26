@@ -200,7 +200,8 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     o.strip()
     for o in os.getenv(
-        "CORS_ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3002"
+        "CORS_ALLOWED_ORIGINS",
+        "http://localhost:3000,http://localhost:3002,http://localhost:3003,http://localhost:3004",
     ).split(",")
     if o.strip()
 ]
@@ -208,7 +209,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 APPEND_SLASH = False
 
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+# Customer app origin. Paystack returns customers to {FRONTEND_URL}/wallet/topup.
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3003")
 
 # Paystack (GHS). Amounts sent to Paystack are already in pesewas.
 PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "")
