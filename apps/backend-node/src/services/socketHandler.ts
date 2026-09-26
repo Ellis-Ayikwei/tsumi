@@ -1,4 +1,4 @@
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 import { redisClient } from "../server";
 import { AuthenticatedSocket } from "../middleware/auth";
 

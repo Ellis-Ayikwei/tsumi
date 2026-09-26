@@ -131,7 +131,7 @@ export default function AgentDashboard() {
               Welcome back, Ama! 👋
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              You have 12 available jobs nearby. Let's make today count!
+              You have 12 available jobs nearby. Let&apos;s make today count!
             </p>
           </div>
 

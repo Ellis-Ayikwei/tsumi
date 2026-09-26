@@ -27,7 +27,7 @@ export const authMiddleware = (socket: Socket, next: (err?: Error) => void) => {
     socket.data.userType = decoded.user_type;
 
     next();
-  } catch (err) {
+  } catch {
     next(new Error("Authentication error: Invalid token"));
   }
 };

@@ -46,7 +46,10 @@ class JobsScreen extends ConsumerWidget {
         ],
         onRefresh: () async {
           ref.invalidate(agentMeProvider);
-          if (verified && online) await ref.refresh(errandsProvider(availableQuery).future);
+          if (verified && online) {
+            ref.invalidate(errandsProvider(availableQuery));
+            await ref.read(errandsProvider(availableQuery).future);
+          }
         },
         children: [
           if (me != null && !verified)

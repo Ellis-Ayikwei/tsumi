@@ -34,7 +34,8 @@ class ProfileScreen extends ConsumerWidget {
       title: 'Profile',
       onRefresh: () async {
         ref.invalidate(badgesProvider(user.id));
-        await ref.refresh(agentMeProvider.future);
+        ref.invalidate(agentMeProvider);
+        await ref.read(agentMeProvider.future);
       },
       children: [
         TsumiCard(

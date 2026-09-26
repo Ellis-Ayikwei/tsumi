@@ -84,6 +84,7 @@ jobs:
           DB_USER: postgres
           DB_PASSWORD: postgres
           REDIS_URL: redis://localhost:6379/1
+          DJANGO_SECRET_KEY: ci-test-only-not-a-secret
         run: |
           python manage.py makemigrations --check --dry-run
           python manage.py test --settings=backend.test_settings
@@ -148,6 +149,6 @@ jobs:
 
       - name: Build Docker Images
         run: |
-          docker-compose build
+          docker compose build
 
 

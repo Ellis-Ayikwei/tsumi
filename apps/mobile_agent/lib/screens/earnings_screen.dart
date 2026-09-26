@@ -31,7 +31,8 @@ class _EarningsScreenState extends ConsumerState<EarningsScreen> {
       onRefresh: () async {
         ref.invalidate(walletProvider);
         ref.invalidate(_withdrawalsProvider);
-        await ref.refresh(ledgerProvider(_page).future);
+        ref.invalidate(ledgerProvider(_page));
+        await ref.read(ledgerProvider(_page).future);
       },
       children: [
         HeroCard(

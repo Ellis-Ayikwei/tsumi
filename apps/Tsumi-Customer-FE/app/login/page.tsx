@@ -1,3 +1,5 @@
+"use client";
+
 import { AuthScreen } from "@tsumi/ui/components/auth-screen";
 
 import { client } from "@/lib/client";
