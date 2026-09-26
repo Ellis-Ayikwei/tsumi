@@ -108,6 +108,29 @@ class ErrandFlowTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data["error"]["details"][0]["field"], "price_pesewas")
 
+    def test_pinned_locations_round_trip(self):
+        response = self.create_errand(
+            5000, pickup_address="Accra Mall", pickup_lat="5.622210", pickup_lng="-0.173130",
+            dropoff_lat="5.636100", dropoff_lng="-0.161300",
+        )
+        self.assertEqual(response.status_code, 201, response.data)
+        self.assertEqual(response.data["pickup_lat"], "5.622210")
+        self.assertEqual(response.data["dropoff_lng"], "-0.161300")
+
+    def test_half_a_pin_or_off_map_rejected_and_nothing_charged(self):
+        cases = [
+            ({"dropoff_lat": "5.6"}, "dropoff_lat"),
+            ({"dropoff_lat": "91", "dropoff_lng": "0"}, "dropoff_lat"),
+            ({"dropoff_lat": "5.6", "dropoff_lng": "-181"}, "dropoff_lng"),
+            ({"pickup_lat": "5.6", "pickup_lng": "-0.1"}, "pickup_address"),
+        ]
+        for extra, field in cases:
+            response = self.create_errand(5000, **extra)
+            self.assertEqual(response.status_code, 400, extra)
+            self.assertEqual(response.data["error"]["details"][0]["field"], field, extra)
+        self.assertEqual(Errand.objects.count(), 0)
+        self.assertEqual(balance(self.customer), 10000)
+
     def test_duplicate_submission_charges_once(self):
         request_id = str(uuid.uuid4())
         first = self.create_errand(5000, client_request_id=request_id)

@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, MapPin, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ChevronRight, MapPin, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -18,8 +18,10 @@ import {
 } from "@tsumi/ui/components/drawer";
 import { Input } from "@tsumi/ui/components/input";
 import { Label } from "@tsumi/ui/components/label";
+import { LocationPicker } from "@tsumi/ui/components/location-picker";
 import { Textarea } from "@tsumi/ui/components/textarea";
 import { ApiError } from "@tsumi/ui/lib/api";
+import type { Place } from "@tsumi/ui/lib/maps";
 import { formatGhs, parseGhsToPesewas } from "@tsumi/ui/lib/money";
 import type { Errand, ErrandType } from "@tsumi/ui/lib/types";
 import { cn } from "@tsumi/ui/lib/utils";
@@ -38,6 +40,14 @@ const TITLE_PLACEHOLDER: Record<ErrandType, string> = {
   pickup: "Pick up my laptop from the repair shop",
   shopping: "Buy groceries at Makola",
   custom: "Queue at the passport office",
+};
+
+// One tap fills the title for the most common errands of each type.
+const TITLE_SUGGESTIONS: Record<ErrandType, string[]> = {
+  delivery: ["Deliver a parcel", "Send documents", "Deliver food"],
+  pickup: ["Pick up a package", "Collect an item from a shop", "Pick up from the post office"],
+  shopping: ["Buy groceries", "Buy medicine", "Refill my gas cylinder"],
+  custom: ["Queue for me", "Pay a bill for me", "Drop off my laundry"],
 };
 
 /**
@@ -61,6 +71,7 @@ export function NewErrandSheet({
   const [shortfall, setShortfall] = useState<number | null>(null);
   const [topUpOpen, setTopUpOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [picking, setPicking] = useState<"pickup" | "dropoff" | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -85,7 +96,7 @@ export function NewErrandSheet({
 
   const stepValid = [
     draft.title.trim().length >= 3,
-    Boolean(draft.pickupAddress.trim() || draft.dropoffAddress.trim()),
+    Boolean(draft.pickup || draft.dropoff),
     Boolean(pricePesewas && pricePesewas > 0),
   ][step];
 
@@ -102,12 +113,16 @@ export function NewErrandSheet({
           errand_type: draft.errandType,
           title: draft.title.trim(),
           description: draft.description.trim(),
-          pickup_address: draft.pickupAddress.trim(),
-          dropoff_address: draft.dropoffAddress.trim(),
+          pickup_address: draft.pickup?.address ?? "",
+          pickup_lat: draft.pickup?.coords?.lat.toFixed(6) ?? null,
+          pickup_lng: draft.pickup?.coords?.lng.toFixed(6) ?? null,
+          dropoff_address: draft.dropoff?.address ?? "",
+          dropoff_lat: draft.dropoff?.coords?.lat.toFixed(6) ?? null,
+          dropoff_lng: draft.dropoff?.coords?.lng.toFixed(6) ?? null,
           price_pesewas: pricePesewas,
         },
       });
-      drafts.rememberDropoff(draft.dropoffAddress.trim());
+      drafts.rememberDropoff(draft.dropoff);
       drafts.clear();
       queryClient.invalidateQueries({ queryKey: ["errands"] });
       queryClient.invalidateQueries({ queryKey: ["wallet"] });
@@ -118,7 +133,9 @@ export function NewErrandSheet({
       if (err instanceof ApiError && err.code === "insufficient_funds") {
         setShortfall(Math.max(Number(err.meta.shortfall_pesewas), MIN_TOPUP_PESEWAS));
       }
-      if (err instanceof ApiError && err.details[0]?.field === "price_pesewas") setStep(2);
+      const field = err instanceof ApiError ? err.details[0]?.field : undefined;
+      if (field === "price_pesewas") setStep(2);
+      if (field?.startsWith("pickup_") || field?.startsWith("dropoff_")) setStep(1);
       setError(err instanceof ApiError ? err.message : "Could not post the errand. Try again.");
     } finally {
       setBusy(false);
@@ -185,6 +202,21 @@ export function NewErrandSheet({
                     onChange={(e) => update({ title: e.target.value })}
                     maxLength={200}
                   />
+                  <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pt-1">
+                    {TITLE_SUGGESTIONS[draft.errandType].map((title) => (
+                      <button
+                        key={title}
+                        type="button"
+                        onClick={() => update({ title })}
+                        className={cn(
+                          "shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium transition-all active:scale-95",
+                          draft.title === title ? "border-primary bg-primary/10" : "hover:bg-accent"
+                        )}
+                      >
+                        {title}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <div className="grid gap-1.5">
                   <Label htmlFor="errand-notes">Details for your agent (optional)</Label>
@@ -200,36 +232,45 @@ export function NewErrandSheet({
             )}
 
             {step === 1 && (
-              <>
-                <div className="grid gap-1.5">
-                  <Label htmlFor="errand-pickup">
-                    Pickup {draft.errandType === "delivery" || draft.errandType === "pickup" ? "" : "(optional)"}
-                  </Label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-3.5 h-5 w-5 text-muted-foreground" aria-hidden />
-                    <Input
-                      id="errand-pickup"
-                      className="h-12 rounded-xl pl-10"
-                      placeholder="e.g. Osu, Oxford Street"
-                      value={draft.pickupAddress}
-                      onChange={(e) => update({ pickupAddress: e.target.value })}
-                    />
-                  </div>
-                </div>
-                <div className="grid gap-1.5">
-                  <Label htmlFor="errand-dropoff">Drop-off</Label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-3.5 h-5 w-5 text-brand" aria-hidden />
-                    <Input
-                      id="errand-dropoff"
-                      className="h-12 rounded-xl pl-10"
-                      placeholder="e.g. East Legon, American House"
-                      value={draft.dropoffAddress}
-                      onChange={(e) => update({ dropoffAddress: e.target.value })}
-                    />
-                  </div>
-                </div>
-              </>
+              <div className="divide-y overflow-hidden rounded-2xl border">
+                {(["pickup", "dropoff"] as const).map((stop) => {
+                  const place: Place | null = draft[stop];
+                  const optional = stop === "pickup" && draft.errandType !== "delivery" && draft.errandType !== "pickup";
+                  return (
+                    <div key={stop} className="flex items-center">
+                      <button
+                        type="button"
+                        onClick={() => setPicking(stop)}
+                        className="flex min-w-0 flex-1 items-center gap-3 p-4 text-left hover:bg-accent"
+                      >
+                        <MapPin
+                          className={cn("h-5 w-5 shrink-0", stop === "pickup" ? "text-muted-foreground" : "text-brand")}
+                          aria-hidden
+                        />
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-xs text-muted-foreground">
+                            {stop === "pickup" ? "Pickup" : "Drop-off"} {optional && "(optional)"}
+                          </span>
+                          <span className={cn("block truncate text-sm", !place && "text-muted-foreground")}>
+                            {place?.address ?? (stop === "pickup" ? "Where should the agent start?" : "Where should it end up?")}
+                          </span>
+                        </span>
+                        <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+                      </button>
+                      {place && (
+                        <button
+                          type="button"
+                          aria-label={`Clear ${stop === "pickup" ? "pickup" : "drop-off"}`}
+                          onClick={() => update(stop === "pickup" ? { pickup: null } : { dropoff: null })}
+                          className="mr-2 rounded-full px-2 py-1 text-xs text-muted-foreground hover:bg-accent"
+                        >
+                          Clear
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             )}
 
             {step === 2 && (
@@ -251,7 +292,7 @@ export function NewErrandSheet({
                 <div className="rounded-2xl border p-4 text-sm">
                   <p className="font-medium">{draft.title}</p>
                   <p className="text-muted-foreground">
-                    {[draft.pickupAddress, draft.dropoffAddress].filter(Boolean).join(" to ")}
+                    {[draft.pickup?.address, draft.dropoff?.address].filter(Boolean).join(" to ")}
                   </p>
                 </div>
               </>
@@ -282,6 +323,14 @@ export function NewErrandSheet({
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
+      <LocationPicker
+        open={picking !== null}
+        onOpenChange={(next) => !next && setPicking(null)}
+        title={picking === "pickup" ? "Pickup location" : "Drop-off location"}
+        confirmLabel={picking === "pickup" ? "Set pickup here" : "Set drop-off here"}
+        value={picking === "pickup" ? draft.pickup : draft.dropoff}
+        onPick={(place) => update(picking === "pickup" ? { pickup: place } : { dropoff: place })}
+      />
       {shortfall !== null && (
         <TopUpSheet
           open={topUpOpen}

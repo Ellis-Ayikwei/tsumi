@@ -63,7 +63,12 @@ export interface Errand {
   description: string;
   errand_type: ErrandType;
   pickup_address: string;
+  // Pinned coordinates as 6dp decimal strings; null when the address was typed.
+  pickup_lat: string | null;
+  pickup_lng: string | null;
   dropoff_address: string;
+  dropoff_lat: string | null;
+  dropoff_lng: string | null;
   scheduled_for: string | null;
   price_pesewas: number;
   commission_pesewas: number;

@@ -19,11 +19,13 @@ import {
   DrawerTrigger,
 } from "@tsumi/ui/components/drawer";
 import { AppHeader } from "@tsumi/ui/components/mobile-shell";
+import { RouteMap } from "@tsumi/ui/components/route-map";
 import { ErrorState, LoadingList } from "@tsumi/ui/components/states";
 import { StatusBadge } from "@tsumi/ui/components/status-badge";
 import { Textarea } from "@tsumi/ui/components/textarea";
 import { ApiError } from "@tsumi/ui/lib/api";
 import { formatDateTime } from "@tsumi/ui/lib/format";
+import { parseCoords } from "@tsumi/ui/lib/maps";
 import { formatGhs } from "@tsumi/ui/lib/money";
 import type { Errand, ErrandStatus, UserBadge } from "@tsumi/ui/lib/types";
 import { cn } from "@tsumi/ui/lib/utils";
@@ -184,6 +186,10 @@ export default function ErrandDetailPage({ params }: { params: Promise<{ id: str
         )}
 
         <section className="space-y-3 rounded-3xl border bg-card p-5 text-sm shadow-sm">
+          <RouteMap
+            pickup={parseCoords(errand.pickup_lat, errand.pickup_lng)}
+            dropoff={parseCoords(errand.dropoff_lat, errand.dropoff_lng)}
+          />
           {errand.pickup_address && (
             <p className="flex gap-2"><MapPin className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden /> {errand.pickup_address}</p>
           )}

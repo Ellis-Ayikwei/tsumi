@@ -10,6 +10,14 @@ import 'topup_sheet.dart';
 
 const _minTopUpPesewas = 500;
 
+// One tap fills the title for the most common errands of each type.
+const _titleSuggestions = {
+  'delivery': ['Deliver a parcel', 'Send documents', 'Deliver food'],
+  'pickup': ['Pick up a package', 'Collect an item from a shop', 'Pick up from the post office'],
+  'shopping': ['Buy groceries', 'Buy medicine', 'Refill my gas cylinder'],
+  'custom': ['Queue for me', 'Pay a bill for me', 'Drop off my laundry'],
+};
+
 const _titleHints = {
   'delivery': 'Deliver a parcel to my sister',
   'pickup': 'Pick up my laptop from the repair shop',
@@ -228,6 +236,18 @@ class _NewErrandBodyState extends ConsumerState<_NewErrandBody> {
               maxLength: 200,
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(labelText: 'Short title', hintText: _titleHints[_draft.errandType], counterText: ''),
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (final t in _titleSuggestions[_draft.errandType]!)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ActionChip(label: Text(t), onPressed: () => _title.text = t),
+                    ),
+                ],
+              ),
             ),
             const SizedBox(height: 12),
             TextField(
