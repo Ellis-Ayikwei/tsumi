@@ -1,16 +1,10 @@
-import { Bricolage_Grotesque } from "next/font/google";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 
 import { HomeErrandForm } from "@/components/home-errand-form";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 import styles from "./home.module.css";
-
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  axes: ["opsz"],
-  display: "swap",
-});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
@@ -110,15 +104,15 @@ const jsonLd = {
 
 // Size classes stay out of the shared colour classes so no two heights compete.
 const brandButton =
-  "inline-flex items-center justify-center rounded-xl bg-[var(--brand)] font-semibold text-white transition-colors hover:bg-[var(--brand-ink)]";
+  "inline-flex items-center justify-center rounded-xl bg-[var(--brand)] font-semibold text-[var(--brand-fg)] transition-colors hover:bg-[var(--brand-ink)]";
 const primaryButton = `${brandButton} h-12 px-6`;
 
 export default function Home() {
   return (
-    <div className={`${styles.page} ${bricolage.className} min-h-screen`}>
+    <div className={`${styles.page} min-h-screen`}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[rgb(246_247_244/0.85)] backdrop-blur-md">
+      <header className={`${styles.header} sticky top-0 z-40 border-b border-[var(--line)] backdrop-blur-md`}>
         <nav aria-label="Main" className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-5">
           <Link href="/" className="flex min-h-11 items-center text-2xl font-bold tracking-tight">
             Tsumi
@@ -129,6 +123,7 @@ export default function Home() {
             <a href="#questions" className="flex min-h-11 items-center px-3 hover:text-[var(--ink)]">Questions</a>
           </div>
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <Link href="/auth/login" className="flex h-11 items-center rounded-lg px-3 text-[15px] font-medium hover:bg-black/5">
               Sign in
             </Link>
@@ -140,6 +135,7 @@ export default function Home() {
       </header>
 
       <main>
+        <div className={styles.hero}>
         <section className="mx-auto grid max-w-6xl gap-12 px-5 pb-20 pt-14 md:pt-20 lg:grid-cols-12 lg:items-center lg:gap-10">
           <div className="lg:col-span-7">
             <h1 className={`${styles.display} text-balance`}>
@@ -194,8 +190,8 @@ export default function Home() {
                         s.state === "done"
                           ? `${styles.stepDot} border-[var(--brand)] bg-[var(--brand)]`
                           : s.state === "now"
-                            ? `${styles.stepDot} border-[var(--brand)] bg-white`
-                            : "border-[var(--line)] bg-white"
+                            ? `${styles.stepDot} border-[var(--brand)] bg-[var(--card)]`
+                            : "border-[var(--line)] bg-[var(--card)]"
                       }`}
                     />
                     <span className={s.state === "now" ? "font-semibold" : undefined}>{s.label}</span>
@@ -203,7 +199,7 @@ export default function Home() {
                 ))}
               </ol>
 
-              <dl className={`${styles.money} mt-5 grid grid-cols-2 gap-y-1 rounded-xl bg-[var(--paper)] px-4 py-3 text-sm`}>
+              <dl className={`${styles.money} mt-5 grid grid-cols-2 gap-y-1 rounded-xl bg-[var(--field)] px-4 py-3 text-sm`}>
                 <dt className="text-[var(--muted)]">Runner receives</dt>
                 <dd className="text-right font-medium">{EXAMPLE.runnerGets}</dd>
                 <dt className="text-[var(--muted)]">Tsumi fee (15%)</dt>
@@ -212,12 +208,13 @@ export default function Home() {
             </div>
           </figure>
         </section>
+        </div>
 
-        <section id="how-it-works" className="border-t border-[var(--line)] bg-white">
+        <section id="how-it-works" className="border-t border-[var(--line)] bg-[var(--surface)]">
           <div className="mx-auto grid max-w-6xl gap-12 px-5 py-20 lg:grid-cols-12">
             <div className="lg:col-span-4">
               <h2 className={styles.title}>Where your money is at every step</h2>
-              <div className="mt-8 border-l-2 border-[var(--gold)] pl-5">
+              <div className="mt-8 border-l-2 border-[var(--ink)] pl-5">
                 <p className="font-semibold">If something goes wrong</p>
                 <p className="mt-2 leading-relaxed text-[var(--muted)]">
                   Report a problem before you confirm and the money stays held while Tsumi support reviews it. Cancel
@@ -256,23 +253,23 @@ export default function Home() {
           </Link>
         </section>
 
-        <section id="runners" className="bg-[var(--ink)] text-white">
+        <section id="runners" className="bg-[var(--band)] text-[var(--band-fg)]">
           <div className="mx-auto grid max-w-6xl gap-12 px-5 py-20 lg:grid-cols-12">
             <div className="lg:col-span-5">
               <h2 className={styles.title}>Run errands on your own time</h2>
-              <p className={`${styles.body} mt-5 max-w-md text-white/70`}>
+              <p className={`${styles.body} mt-5 max-w-md opacity-70`}>
                 Know your city and want flexible work? Pick up errands near you and get paid when each one is done.
               </p>
               <Link
                 href="/become-a-runner"
-                className="mt-8 inline-flex h-12 items-center justify-center rounded-xl bg-white px-6 font-semibold text-[var(--ink)] transition-colors hover:bg-white/90"
+                className="mt-8 inline-flex h-12 items-center justify-center rounded-xl bg-[var(--band-fg)] px-6 font-semibold text-[var(--band)] transition-opacity hover:opacity-90"
               >
                 Become a runner
               </Link>
             </div>
             <ul className="divide-y divide-white/15 border-y border-white/15 lg:col-span-6 lg:col-start-7">
               {RUNNER_POINTS.map((point) => (
-                <li key={point} className={`${styles.body} py-5 text-white/85`}>
+                <li key={point} className={`${styles.body} py-5 opacity-85`}>
                   {point}
                 </li>
               ))}
@@ -298,14 +295,14 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-[var(--line)] bg-white">
+      <footer className="border-t border-[var(--line)] bg-[var(--surface)]">
         <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-12 md:flex-row md:justify-between">
           <div>
             <p className="text-2xl font-bold tracking-tight">Tsumi</p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-[var(--muted)]">
               Errands and deliveries in Ghana, paid through escrow.
             </p>
-            <a href="mailto:support@tsumi.gh" className="mt-2 flex min-h-11 items-center text-sm font-medium text-[var(--brand)] hover:underline">
+            <a href="mailto:support@tsumi.gh" className="mt-2 flex min-h-11 items-center text-sm font-medium underline-offset-4 hover:underline">
               support@tsumi.gh
             </a>
           </div>

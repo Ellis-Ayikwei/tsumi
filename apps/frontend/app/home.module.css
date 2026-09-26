@@ -1,16 +1,50 @@
-/* Home page tokens. Gold is reserved for money; nothing else uses it. */
+/*
+ * Home page tokens, in the site's original monochrome palette (Tailwind grays).
+ * Light is the base; the html.dark class from next-themes swaps every token.
+ */
 .page {
-  --paper: #f6f7f4;
-  --ink: #10231c;
-  --brand: #12875a;
-  --brand-ink: #0c5f40;
-  --gold: #e8b53a;
-  --line: #d9dfdb;
-  --muted: #56645e;
+  --paper: #ffffff; /* white */
+  --surface: #f9fafb; /* gray-50: alternating sections */
+  --card: #ffffff;
+  --field: #f3f4f6; /* gray-100 */
+  --ink: #111827; /* gray-900 */
+  --muted: #4b5563; /* gray-600 */
+  --line: #e5e7eb; /* gray-200 */
+  --brand: #111827; /* primary action: gray-900 */
+  --brand-ink: #1f2937; /* gray-800 hover */
+  --brand-fg: #ffffff;
+  --band: #111827; /* runner section */
+  --band-fg: #ffffff;
+  --hero-from: #eff6ff; /* blue-50 */
+  --hero-to: #faf5ff; /* purple-50 */
 
   background: var(--paper);
   color: var(--ink);
-  font-feature-settings: "tnum" 0;
+}
+
+:global(.dark) .page {
+  --paper: #000000;
+  --surface: #030712; /* gray-950 */
+  --card: #111827; /* gray-900 */
+  --field: #1f2937; /* gray-800 */
+  --ink: #ffffff;
+  --muted: #9ca3af; /* gray-400 */
+  --line: #1f2937; /* gray-800 */
+  --brand: #ffffff;
+  --brand-ink: #e5e7eb; /* gray-200 hover */
+  --brand-fg: #111827;
+  --band: #111827;
+  --band-fg: #ffffff;
+  --hero-from: #000000;
+  --hero-to: #000000;
+}
+
+.header {
+  background: color-mix(in srgb, var(--paper) 80%, transparent);
+}
+
+.hero {
+  background: linear-gradient(to bottom right, var(--hero-from), var(--paper), var(--hero-to));
 }
 
 .page :focus-visible {
@@ -28,7 +62,6 @@
   font-weight: 700;
   line-height: 1.02;
   letter-spacing: -0.03em;
-  font-variation-settings: "opsz" 96;
 }
 
 .title {
@@ -37,7 +70,6 @@
   font-weight: 700;
   line-height: 1.08;
   letter-spacing: -0.025em;
-  font-variation-settings: "opsz" 72;
 }
 
 .headline {
@@ -62,10 +94,10 @@
 
 /* The errand ticket: the one animated moment on the page. */
 .ticket {
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: 20px;
-  box-shadow: 0 1px 0 var(--line), 0 24px 48px -28px rgb(16 35 28 / 0.35);
+  box-shadow: 0 1px 0 var(--line), 0 24px 48px -28px rgb(0 0 0 / 0.35);
 }
 
 .track {
@@ -78,7 +110,7 @@
 .trackFill {
   position: absolute;
   inset: 0 50% 0 0;
-  background: var(--gold);
+  background: var(--ink);
   transform-origin: left;
   animation: fill 0.7s 0.5s cubic-bezier(0.3, 0.7, 0.2, 1) backwards;
 }
@@ -90,12 +122,12 @@
   height: 12px;
   border-radius: 999px;
   border: 2px solid var(--line);
-  background: #fff;
+  background: var(--card);
   transform: translate(-50%, -50%);
 }
 
 .nodeHeld {
-  border-color: var(--gold);
+  border-color: var(--ink);
 }
 
 /* The chip rests on TsumiSafe (50%): money never reaches the runner before you confirm. */
@@ -104,14 +136,14 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: var(--gold);
-  color: var(--ink);
+  background: var(--brand);
+  color: var(--brand-fg);
   border-radius: 999px;
   padding: 4px 10px;
   font-weight: 700;
   font-size: 0.8125rem;
   white-space: nowrap;
-  box-shadow: 0 6px 16px -6px rgb(160 110 0 / 0.6);
+  box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.45);
   animation: travel 0.7s 0.5s cubic-bezier(0.3, 0.7, 0.2, 1) backwards;
 }
 
@@ -143,7 +175,7 @@
 
 @keyframes tick {
   from {
-    background: #fff;
+    background: var(--card);
     border-color: var(--line);
   }
 }
