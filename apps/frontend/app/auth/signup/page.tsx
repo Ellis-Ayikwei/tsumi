@@ -2,9 +2,10 @@
 
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiError, AuthAPI, setAuthTokens } from "@/lib/api";
+import { safeNext } from "@/lib/errand-draft";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -17,6 +18,10 @@ export default function SignupPage() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Where the customer was heading, e.g. back to a half-posted errand. Read after mount (browser only).
+  const [next, setNext] = useState<string | null>(null);
+  useEffect(() => setNext(new URLSearchParams(window.location.search).get("next")), []);
+  const nextQuery = next ? `?next=${encodeURIComponent(next)}` : "";
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +37,7 @@ export default function SignupPage() {
         user_type: "customer",
       });
       setAuthTokens(res.access, res.refresh);
-      router.push("/dashboard");
+      router.push(safeNext(next, "/dashboard"));
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Could not create your account. Try again.");
     } finally {
@@ -124,7 +129,7 @@ export default function SignupPage() {
           </button>
         </form>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-4">
-          Already have an account? <Link href="/auth/login" className="underline hover:text-gray-900 dark:hover:text-white">Sign in</Link>
+          Already have an account? <Link href={`/auth/login${nextQuery}`} className="underline hover:text-gray-900 dark:hover:text-white">Sign in</Link>
         </p>
         </div>
       </div>

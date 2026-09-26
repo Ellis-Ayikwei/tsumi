@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiError, AuthAPI, setAuthTokens } from "@/lib/api";
+import { safeNext } from "@/lib/errand-draft";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,6 +12,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Where the customer was heading, e.g. back to a half-posted errand. Read after mount (browser only).
+  const [next, setNext] = useState<string | null>(null);
+  useEffect(() => setNext(new URLSearchParams(window.location.search).get("next")), []);
+  const nextQuery = next ? `?next=${encodeURIComponent(next)}` : "";
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +24,8 @@ export default function LoginPage() {
     try {
       const res = await AuthAPI.login(email, password);
       setAuthTokens(res.access, res.refresh);
-      router.push(res.user.user_type === "agent" ? "/agent" : "/dashboard");
+      // Runners can't post errands, so they always go to their own home.
+      router.push(res.user.user_type === "agent" ? "/agent" : safeNext(next, "/dashboard"));
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Could not sign in. Try again.");
     } finally {
@@ -83,7 +89,7 @@ export default function LoginPage() {
           </button>
         </form>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-4">
-          No account? <Link href="/auth/signup" className="underline hover:text-gray-900 dark:hover:text-white">Create one</Link>
+          No account? <Link href={`/auth/signup${nextQuery}`} className="underline hover:text-gray-900 dark:hover:text-white">Create one</Link>
         </p>
         </div>
       </div>

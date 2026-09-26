@@ -1,72 +1,88 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import { PinsMap } from "@/components/pins-map";
+import { PlaceField } from "@/components/place-field";
 import { ApiError, ErrandsAPI } from "@/lib/api";
+import { clearDraft, type ErrandDraft, loadDraft, saveDraft } from "@/lib/errand-draft";
 import { formatGhs, parseGhsToPesewas } from "@/lib/money";
 
+const PRESETS_PESEWAS = [2000, 3000, 5000, 8000];
+
+const input =
+  "h-14 w-full rounded-xl border border-gray-300 bg-white px-4 text-gray-900 outline-none focus:border-transparent focus:ring-2 focus:ring-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:focus:ring-white";
+
+/**
+ * Finishes the errand started in the home page box: the title and stops come
+ * from the shared draft, so this page mostly asks for the price. If the
+ * customer isn't signed in, the draft waits while they sign in and they land
+ * back here with everything still filled in.
+ */
 export default function RequestErrandPage() {
   const router = useRouter();
-  // One id per form: a double-click or retry returns the same errand and charges once.
-  const [clientRequestId] = useState(() => crypto.randomUUID());
+  const [draft, setDraft] = useState<ErrandDraft | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [shortfall, setShortfall] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState({
-    title: "",
-    description: "",
-    pickup_address: "",
-    delivery_address: "",
-    amount: "",
-  });
 
-  // The home page hands over what the customer already typed. Read after mount so
-  // server and client render the same empty form first.
+  // Read after mount: storage only exists in the browser.
+  useEffect(() => setDraft(loadDraft()), []);
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    setForm((f) => ({
-      ...f,
-      title: params.get("title") ?? f.title,
-      pickup_address: params.get("pickup") ?? f.pickup_address,
-      delivery_address: params.get("dropoff") ?? f.delivery_address,
-    }));
-  }, []);
+    if (draft) saveDraft(draft);
+  }, [draft]);
+
+  const update = (patch: Partial<ErrandDraft>) => setDraft((d) => (d ? { ...d, ...patch } : d));
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!draft) return;
     setError(null);
     setShortfall(null);
-    const pricePesewas = parseGhsToPesewas(form.amount);
+    if (!draft.pickup && !draft.dropoff) {
+      setError("Add a pickup or drop-off so your runner knows where to go.");
+      return;
+    }
+    const pricePesewas = parseGhsToPesewas(draft.amount);
     if (!pricePesewas || pricePesewas <= 0) {
-      setError("Enter the amount you will pay in GHS, like 25 or 25.50.");
+      setError("Enter what you'll pay in GHS, like 25 or 25.50, or tap an amount.");
       return;
     }
     setSubmitting(true);
     try {
       await ErrandsAPI.create({
-        title: form.title,
-        description: form.description,
-        pickup_address: form.pickup_address,
-        dropoff_address: form.delivery_address,
+        title: draft.title.trim(),
+        description: draft.description.trim(),
+        pickup_address: draft.pickup?.address ?? "",
+        pickup_lat: draft.pickup?.coords?.lat.toFixed(6) ?? null,
+        pickup_lng: draft.pickup?.coords?.lng.toFixed(6) ?? null,
+        dropoff_address: draft.dropoff?.address ?? "",
+        dropoff_lat: draft.dropoff?.coords?.lat.toFixed(6) ?? null,
+        dropoff_lng: draft.dropoff?.coords?.lng.toFixed(6) ?? null,
         price_pesewas: pricePesewas,
         errand_type: "custom",
-        client_request_id: clientRequestId,
+        client_request_id: draft.clientRequestId,
       });
+      clearDraft();
       router.push("/errands");
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
-        router.push("/auth/login");
+        // The draft is already saved; sign-in brings the customer straight back here.
+        router.push("/auth/login?next=/request-errand");
         return;
       }
       if (err instanceof ApiError && err.code === "insufficient_funds") {
         setShortfall(Number(err.meta.shortfall_pesewas));
       }
-      setError(err instanceof ApiError ? err.message : "Could not create the errand. Try again.");
+      setError(err instanceof ApiError ? err.message : "Could not post the errand. Try again.");
     } finally {
       setSubmitting(false);
     }
   };
+
+  const pricePesewas = draft ? parseGhsToPesewas(draft.amount) : null;
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
@@ -87,82 +103,127 @@ export default function RequestErrandPage() {
         </div>
       </nav>
 
-      {/* Request Errand Form */}
       <div className="px-4 py-10">
-        <div className="max-w-2xl mx-auto border border-gray-200 dark:border-gray-800 p-8 bg-white dark:bg-gray-900 rounded-2xl shadow-lg">
-        <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Request an Errand</h1>
-        <form onSubmit={onSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Title</label>
-            <input
-              value={form.title}
-              onChange={(e) => setForm({ ...form, title: e.target.value })}
-              required
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-          <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Description</label>
-            <textarea
-              value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Pickup address</label>
-              <input
-                value={form.pickup_address}
-                onChange={(e) => setForm({ ...form, pickup_address: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Delivery address</label>
-              <input
-                value={form.delivery_address}
-                onChange={(e) => setForm({ ...form, delivery_address: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Amount (GHS)</label>
-            <input
-              inputMode="decimal"
-              required
-              placeholder="25.00"
-              value={form.amount}
-              onChange={(e) => setForm({ ...form, amount: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            The amount is held safely in TsumiSafe escrow and only released to the runner when you confirm the errand is done.
-          </p>
-          {error && (
-            <p className="text-sm text-red-600">
-              {error}
-              {shortfall !== null && shortfall > 0 && (
-                <>
-                  {" "}
-                  <Link href="/wallet/topup" className="underline">
-                    Top up {formatGhs(shortfall)}
-                  </Link>
-                </>
+        <div className="mx-auto max-w-2xl rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-800 dark:bg-gray-900 sm:p-8">
+          <h1 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Post your errand</h1>
+          {draft && (
+            <form onSubmit={onSubmit} className="space-y-6 text-gray-900 dark:text-white">
+              <div>
+                <label htmlFor="errand-title" className="mb-1.5 block text-sm text-gray-600 dark:text-gray-400">
+                  What do you need done?
+                </label>
+                <input
+                  id="errand-title"
+                  className={input}
+                  required
+                  maxLength={200}
+                  placeholder="e.g. Pick up documents from Ridge"
+                  value={draft.title}
+                  onChange={(e) => update({ title: e.target.value })}
+                />
+              </div>
+
+              <fieldset className="space-y-3">
+                <legend className="mb-1.5 text-sm text-gray-600 dark:text-gray-400">Where</legend>
+                <div className="relative space-y-3">
+                  <span aria-hidden className="absolute left-[1.3rem] top-7 z-10 h-[calc(100%-3.5rem)] w-px bg-gray-400" />
+                  <PlaceField
+                    id="errand-pickup"
+                    label="Pickup"
+                    placeholder="Pickup"
+                    marker="circle"
+                    locate
+                    value={draft.pickup}
+                    onChange={(pickup) => update({ pickup })}
+                    inputClassName={input}
+                  />
+                  <PlaceField
+                    id="errand-dropoff"
+                    label="Drop-off"
+                    placeholder="Drop-off"
+                    marker="square"
+                    value={draft.dropoff}
+                    onChange={(dropoff) => update({ dropoff })}
+                    inputClassName={input}
+                  />
+                </div>
+                <PinsMap
+                  pickup={draft.pickup}
+                  dropoff={draft.dropoff}
+                  onMove={(stop, place) => update(stop === "pickup" ? { pickup: place } : { dropoff: place })}
+                />
+              </fieldset>
+
+              <div>
+                <label htmlFor="errand-amount" className="mb-1.5 block text-sm text-gray-600 dark:text-gray-400">
+                  Your price (GHS)
+                </label>
+                <input
+                  id="errand-amount"
+                  className={input}
+                  inputMode="decimal"
+                  placeholder="25.00"
+                  value={draft.amount}
+                  onChange={(e) => update({ amount: e.target.value })}
+                />
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {PRESETS_PESEWAS.map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => update({ amount: String(p / 100) })}
+                      aria-pressed={pricePesewas === p}
+                      className={`h-11 rounded-full border px-4 text-sm font-medium transition-colors ${
+                        pricePesewas === p
+                          ? "border-gray-900 bg-gray-900 text-white dark:border-white dark:bg-white dark:text-gray-900"
+                          : "border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
+                      }`}
+                    >
+                      {formatGhs(p)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="errand-notes" className="mb-1.5 block text-sm text-gray-600 dark:text-gray-400">
+                  Details for your runner (optional)
+                </label>
+                <textarea
+                  id="errand-notes"
+                  rows={3}
+                  placeholder="Item list, who to ask for, gate colour..."
+                  value={draft.description}
+                  onChange={(e) => update({ description: e.target.value })}
+                  className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none focus:border-transparent focus:ring-2 focus:ring-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:focus:ring-white"
+                />
+              </div>
+
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Your payment is held in TsumiSafe and only released to the runner when you confirm the errand is done.
+              </p>
+              {error && (
+                <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+                  {error}
+                  {shortfall !== null && shortfall > 0 && (
+                    <>
+                      {" "}
+                      <Link href="/wallet/topup" className="underline">
+                        Top up {formatGhs(shortfall)}
+                      </Link>
+                    </>
+                  )}
+                </p>
               )}
-            </p>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="h-14 w-full rounded-xl bg-gray-900 font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50 dark:bg-white dark:text-gray-900"
+              >
+                {submitting ? "Posting..." : pricePesewas ? `Post errand for ${formatGhs(pricePesewas)}` : "Post errand"}
+              </button>
+            </form>
           )}
-          <button
-            type="submit"
-            disabled={submitting}
-            className="px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
-          >
-            {submitting ? "Creating..." : "Create Errand"}
-          </button>
-        </form>
         </div>
       </div>
     </div>

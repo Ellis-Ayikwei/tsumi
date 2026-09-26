@@ -8,7 +8,7 @@ eslint: {
   async redirects() {
     return [{ source: "/become-agent", destination: "/become-a-runner", permanent: true }];
   },
-  transpilePackages: ["@tsumi/shared"],
+  transpilePackages: ["@tsumi/shared", "@tsumi/ui"],
   allowedDevOrigins: ["192.168.100.12"],
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000",
