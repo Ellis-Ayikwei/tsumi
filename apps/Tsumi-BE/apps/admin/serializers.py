@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from apps.dispute.models import Dispute
 from apps.errand.models import Errand, ErrandEvent, EscrowHold
+from apps.errand.serializers import ErrandStopSerializer
 from apps.User.models import AgentProfile, User
 from apps.wallet.models import LedgerEntry, Withdrawal
 
@@ -76,6 +77,7 @@ class AdminErrandSerializer(serializers.ModelSerializer):
     customer = AdminUserRefSerializer(read_only=True)
     agent = AdminUserRefSerializer(read_only=True)
     escrow_status = serializers.CharField(source="escrow.status", read_only=True, default=None)
+    stops = ErrandStopSerializer(many=True, read_only=True)
 
     class Meta:
         model = Errand
@@ -93,6 +95,7 @@ class AdminErrandSerializer(serializers.ModelSerializer):
             "escrow_status",
             "pickup_address",
             "dropoff_address",
+            "stops",
             "created_at",
             "completed_at",
             "cancelled_at",

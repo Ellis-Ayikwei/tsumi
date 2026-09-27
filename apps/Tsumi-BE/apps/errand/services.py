@@ -25,7 +25,7 @@ from apps.wallet.models import LedgerEntry, Wallet
 from apps.wallet.services import system_wallet, transfer, user_wallet
 from backend.api_exceptions import Conflict
 
-from .models import Errand, ErrandEvent, EscrowHold, Rating
+from .models import Errand, ErrandEvent, ErrandStop, EscrowHold, Rating
 from .pricing import split_commission
 
 S = Errand.Status
@@ -54,7 +54,7 @@ ACTIVE_AGENT_STATUSES = (S.ACCEPTED, S.IN_PROGRESS, S.DELIVERED)
 def visible_errands(user):
     """Errands this user may read: admins all; customers their own; agents
     their assigned errands plus open ones once KYC is approved."""
-    qs = Errand.objects.select_related("customer", "agent")
+    qs = Errand.objects.select_related("customer", "agent").prefetch_related("stops")
     if user.is_staff:
         return qs
     if user.is_agent:
@@ -117,6 +117,8 @@ def create_errand(customer, data):
     Idempotent on client_request_id: a retry returns the first errand and
     charges nothing. InsufficientFunds (402) rolls back the errand too.
     """
+    data = dict(data)
+    stops = data.pop("stops", [])
     client_request_id = data.get("client_request_id")
     if client_request_id:
         existing = Errand.objects.filter(customer=customer, client_request_id=client_request_id).first()
@@ -140,6 +142,7 @@ def create_errand(customer, data):
                 Entry.ESCROW_HOLD, errand=errand, actor=customer,
             )
             EscrowHold.objects.create(errand=errand, amount_pesewas=price)
+            ErrandStop.objects.bulk_create(ErrandStop(errand=errand, position=i, **stop) for i, stop in enumerate(stops))
             ErrandEvent.objects.create(errand=errand, to_status=S.OPEN, actor=customer)
     except IntegrityError:
         if client_request_id:

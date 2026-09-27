@@ -25,7 +25,7 @@ import { StatusBadge } from "@tsumi/ui/components/status-badge";
 import { Textarea } from "@tsumi/ui/components/textarea";
 import { ApiError } from "@tsumi/ui/lib/api";
 import { formatDateTime } from "@tsumi/ui/lib/format";
-import { parseCoords } from "@tsumi/ui/lib/maps";
+import { errandStops } from "@tsumi/ui/lib/stops";
 import { formatGhs } from "@tsumi/ui/lib/money";
 import type { Errand, ErrandStatus, UserBadge } from "@tsumi/ui/lib/types";
 import { cn } from "@tsumi/ui/lib/utils";
@@ -186,16 +186,19 @@ export default function ErrandDetailPage({ params }: { params: Promise<{ id: str
         )}
 
         <section className="space-y-3 rounded-3xl border bg-card p-5 text-sm shadow-sm">
-          <RouteMap
-            pickup={parseCoords(errand.pickup_lat, errand.pickup_lng)}
-            dropoff={parseCoords(errand.dropoff_lat, errand.dropoff_lng)}
-          />
-          {errand.pickup_address && (
-            <p className="flex gap-2"><MapPin className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden /> {errand.pickup_address}</p>
-          )}
-          {errand.dropoff_address && (
-            <p className="flex gap-2"><MapPin className="h-4 w-4 shrink-0 text-brand" aria-hidden /> {errand.dropoff_address}</p>
-          )}
+          <RouteMap stops={errandStops(errand)} />
+          <ol className="space-y-2">
+            {errandStops(errand).map((stop, i) => (
+              <li key={stop.position} className="flex gap-2">
+                <MapPin className={`h-4 w-4 shrink-0 ${stop.kind === "pickup" ? "text-muted-foreground" : "text-brand"}`} aria-hidden />
+                <span>
+                  <span className="text-muted-foreground">{i + 1}. {stop.kind === "pickup" ? "Pickup" : "Drop-off"}: </span>
+                  {stop.address}
+                  {stop.note && <span className="block text-xs text-muted-foreground">{stop.note}</span>}
+                </span>
+              </li>
+            ))}
+          </ol>
           {errand.description && <p className="whitespace-pre-wrap text-muted-foreground">{errand.description}</p>}
           <div className="flex items-center justify-between border-t pt-3">
             <span className="flex items-center gap-1.5 text-muted-foreground">

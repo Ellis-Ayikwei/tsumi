@@ -104,6 +104,26 @@ class ErrandEvent {
   final DateTime createdAt;
 }
 
+/// One place the runner goes. [position] 0 is first.
+class ErrandStop {
+  ErrandStop({required this.position, required this.kind, required this.address, this.point, this.note = ''});
+
+  ErrandStop.fromJson(Json j)
+      : position = _int(j['position']),
+        kind = j['kind'] as String,
+        address = (j['address'] as String?) ?? '',
+        point = _point(j['lat'], j['lng']),
+        note = (j['note'] as String?) ?? '';
+
+  final int position;
+  final String kind; // pickup | dropoff
+  final String address;
+  final GeoPoint? point;
+  final String note;
+
+  bool get isPickup => kind == 'pickup';
+}
+
 class Errand {
   Errand.fromJson(Json j)
       : id = j['id'] as String,
@@ -114,6 +134,7 @@ class Errand {
         pickupPoint = _point(j['pickup_lat'], j['pickup_lng']),
         dropoffAddress = (j['dropoff_address'] as String?) ?? '',
         dropoffPoint = _point(j['dropoff_lat'], j['dropoff_lng']),
+        stops = ((j['stops'] as List?) ?? const []).cast<Json>().map(ErrandStop.fromJson).toList(),
         pricePesewas = _int(j['price_pesewas']),
         commissionPesewas = _int(j['commission_pesewas']),
         agentPayoutPesewas = _int(j['agent_payout_pesewas']),
@@ -135,6 +156,7 @@ class Errand {
   final GeoPoint? pickupPoint;
   final String dropoffAddress;
   final GeoPoint? dropoffPoint;
+  final List<ErrandStop> stops;
   final int pricePesewas;
   final int commissionPesewas;
   final int agentPayoutPesewas;
@@ -149,6 +171,15 @@ class Errand {
   final List<ErrandEvent> events;
 
   String get where => dropoffAddress.isNotEmpty ? dropoffAddress : pickupAddress;
+
+  /// Stops in route order. Errands posted before stops existed fall back to
+  /// their pickup and drop-off, so every screen reads one list.
+  List<ErrandStop> get route => stops.isNotEmpty
+      ? stops
+      : [
+          if (pickupAddress.isNotEmpty) ErrandStop(position: 0, kind: 'pickup', address: pickupAddress, point: pickupPoint),
+          if (dropoffAddress.isNotEmpty) ErrandStop(position: 1, kind: 'dropoff', address: dropoffAddress, point: dropoffPoint),
+        ];
 }
 
 class WalletSummary {

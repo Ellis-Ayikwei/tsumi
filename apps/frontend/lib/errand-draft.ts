@@ -1,4 +1,18 @@
 import type { Place } from "@tsumi/ui/lib/maps";
+import type { StopKind } from "@tsumi/ui/lib/types";
+
+/** Matches TSUMI_MAX_ERRAND_STOPS on the API. */
+export const MAX_STOPS = 8;
+
+/** One place on the route. `id` keeps React rows stable while stops are reordered. */
+export interface DraftStop {
+  id: string;
+  kind: StopKind;
+  place: Place | null;
+  note: string;
+}
+
+export const newStop = (kind: StopKind): DraftStop => ({ id: crypto.randomUUID(), kind, place: null, note: "" });
 
 /**
  * The errand being written. It starts in the home page box, continues on
@@ -10,8 +24,7 @@ export interface ErrandDraft {
   clientRequestId: string;
   title: string;
   description: string;
-  pickup: Place | null;
-  dropoff: Place | null;
+  stops: DraftStop[]; // in route order
   amount: string; // GHS as typed; parsed to pesewas on submit
 }
 
@@ -22,13 +35,20 @@ export function loadDraft(): ErrandDraft {
     clientRequestId: crypto.randomUUID(),
     title: "",
     description: "",
-    pickup: null,
-    dropoff: null,
+    stops: [newStop("pickup"), newStop("dropoff")],
     amount: "",
   };
   try {
-    const saved = JSON.parse(localStorage.getItem(KEY) ?? "null") as Partial<ErrandDraft> | null;
-    return saved && typeof saved.clientRequestId === "string" ? { ...fresh, ...saved } : fresh;
+    const saved = JSON.parse(localStorage.getItem(KEY) ?? "null") as
+      | (Partial<ErrandDraft> & { pickup?: Place | null; dropoff?: Place | null })
+      | null;
+    if (!saved || typeof saved.clientRequestId !== "string") return fresh;
+    const { pickup, dropoff, ...rest } = saved;
+    // Drafts saved before multi-stop errands held one pickup and one drop-off.
+    const stops = Array.isArray(rest.stops) && rest.stops.length
+      ? rest.stops
+      : [{ ...newStop("pickup"), place: pickup ?? null }, { ...newStop("dropoff"), place: dropoff ?? null }];
+    return { ...fresh, ...rest, stops };
   } catch {
     return fresh;
   }

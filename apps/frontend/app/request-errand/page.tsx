@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { PinsMap } from "@/components/pins-map";
 import { PlaceField } from "@/components/place-field";
 import { ApiError, ErrandsAPI } from "@/lib/api";
-import { clearDraft, type ErrandDraft, loadDraft, saveDraft } from "@/lib/errand-draft";
+import { clearDraft, type DraftStop, type ErrandDraft, loadDraft, MAX_STOPS, newStop, saveDraft } from "@/lib/errand-draft";
 import { formatGhs, parseGhsToPesewas } from "@/lib/money";
 
 const PRESETS_PESEWAS = [2000, 3000, 5000, 8000];
@@ -27,6 +27,9 @@ export default function RequestErrandPage() {
   const [error, setError] = useState<string | null>(null);
   const [shortfall, setShortfall] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  // Which stop an error belongs to, so it shows under that stop.
+  const [stopError, setStopError] = useState<{ index: number; text: string } | null>(null);
+  const [noteOpen, setNoteOpen] = useState<Set<string>>(new Set());
 
   // Read after mount: storage only exists in the browser.
   useEffect(() => setDraft(loadDraft()), []);
@@ -35,14 +38,28 @@ export default function RequestErrandPage() {
   }, [draft]);
 
   const update = (patch: Partial<ErrandDraft>) => setDraft((d) => (d ? { ...d, ...patch } : d));
+  const setStops = (change: (stops: DraftStop[]) => DraftStop[]) => {
+    setStopError(null);
+    setDraft((d) => (d ? { ...d, stops: change(d.stops) } : d));
+  };
+  const editStop = (index: number, patch: Partial<DraftStop>) =>
+    setStops((stops) => stops.map((st, i) => (i === index ? { ...st, ...patch } : st)));
+  const moveStop = (index: number, by: -1 | 1) =>
+    setStops((stops) => {
+      const next = [...stops];
+      [next[index], next[index + by]] = [next[index + by], next[index]];
+      return next;
+    });
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!draft) return;
     setError(null);
     setShortfall(null);
-    if (!draft.pickup && !draft.dropoff) {
-      setError("Add a pickup or drop-off so your runner knows where to go.");
+    setStopError(null);
+    const empty = draft.stops.findIndex((st) => !st.place?.address.trim());
+    if (empty >= 0) {
+      setStopError({ index: empty, text: "This stop has no address. Add one or remove the stop." });
       return;
     }
     const pricePesewas = parseGhsToPesewas(draft.amount);
@@ -55,12 +72,13 @@ export default function RequestErrandPage() {
       await ErrandsAPI.create({
         title: draft.title.trim(),
         description: draft.description.trim(),
-        pickup_address: draft.pickup?.address ?? "",
-        pickup_lat: draft.pickup?.coords?.lat.toFixed(6) ?? null,
-        pickup_lng: draft.pickup?.coords?.lng.toFixed(6) ?? null,
-        dropoff_address: draft.dropoff?.address ?? "",
-        dropoff_lat: draft.dropoff?.coords?.lat.toFixed(6) ?? null,
-        dropoff_lng: draft.dropoff?.coords?.lng.toFixed(6) ?? null,
+        stops: draft.stops.map((st) => ({
+          kind: st.kind,
+          address: st.place?.address.trim() ?? "",
+          lat: st.place?.coords?.lat.toFixed(6) ?? null,
+          lng: st.place?.coords?.lng.toFixed(6) ?? null,
+          note: st.note.trim(),
+        })),
         price_pesewas: pricePesewas,
         errand_type: "custom",
         client_request_id: draft.clientRequestId,
@@ -75,6 +93,12 @@ export default function RequestErrandPage() {
       }
       if (err instanceof ApiError && err.code === "insufficient_funds") {
         setShortfall(Number(err.meta.shortfall_pesewas));
+      }
+      // "stops.2.lat" belongs to the third stop: show it there, without the field path.
+      const onStop = err instanceof ApiError ? /^stops\.(\d+)\./.exec(err.details[0]?.field ?? "") : null;
+      if (onStop && err instanceof ApiError) {
+        setStopError({ index: Number(onStop[1]), text: err.details[0].issue });
+        return;
       }
       setError(err instanceof ApiError ? err.message : "Could not post the errand. Try again.");
     } finally {
@@ -124,34 +148,92 @@ export default function RequestErrandPage() {
               </div>
 
               <fieldset className="space-y-3">
-                <legend className="mb-1.5 text-sm text-gray-600 dark:text-gray-400">Where</legend>
-                <div className="relative space-y-3">
-                  <span aria-hidden className="absolute left-[1.3rem] top-7 z-10 h-[calc(100%-3.5rem)] w-px bg-gray-400" />
-                  <PlaceField
-                    id="errand-pickup"
-                    label="Pickup"
-                    placeholder="Pickup"
-                    marker="circle"
-                    locate
-                    value={draft.pickup}
-                    onChange={(pickup) => update({ pickup })}
-                    inputClassName={input}
-                  />
-                  <PlaceField
-                    id="errand-dropoff"
-                    label="Drop-off"
-                    placeholder="Drop-off"
-                    marker="square"
-                    value={draft.dropoff}
-                    onChange={(dropoff) => update({ dropoff })}
-                    inputClassName={input}
-                  />
-                </div>
-                <PinsMap
-                  pickup={draft.pickup}
-                  dropoff={draft.dropoff}
-                  onMove={(stop, place) => update(stop === "pickup" ? { pickup: place } : { dropoff: place })}
-                />
+                <legend className="mb-1.5 text-sm text-gray-600 dark:text-gray-400">Stops, in the order your runner goes</legend>
+                <ol className="space-y-4">
+                  {draft.stops.map((stop, i) => (
+                    <li key={stop.id} className="space-y-2 rounded-xl border border-gray-200 p-3 dark:border-gray-800">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-900 text-xs font-semibold text-white dark:bg-white dark:text-gray-900" aria-hidden>
+                          {i + 1}
+                        </span>
+                        <div role="radiogroup" aria-label={`Stop ${i + 1} type`} className="flex rounded-lg border border-gray-300 p-0.5 dark:border-gray-700">
+                          {(["pickup", "dropoff"] as const).map((kind) => (
+                            <button
+                              key={kind}
+                              type="button"
+                              role="radio"
+                              aria-checked={stop.kind === kind}
+                              onClick={() => editStop(i, { kind })}
+                              className={`h-9 rounded-md px-3 text-sm font-medium ${
+                                stop.kind === kind ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900" : "text-gray-600 dark:text-gray-400"
+                              }`}
+                            >
+                              {kind === "pickup" ? "Pickup" : "Drop-off"}
+                            </button>
+                          ))}
+                        </div>
+                        <div className="ml-auto flex items-center">
+                          <button type="button" onClick={() => moveStop(i, -1)} disabled={i === 0} aria-label={`Move stop ${i + 1} earlier`} className="flex h-11 w-11 items-center justify-center rounded-lg text-lg disabled:opacity-30">
+                            &uarr;
+                          </button>
+                          <button type="button" onClick={() => moveStop(i, 1)} disabled={i === draft.stops.length - 1} aria-label={`Move stop ${i + 1} later`} className="flex h-11 w-11 items-center justify-center rounded-lg text-lg disabled:opacity-30">
+                            &darr;
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setStops((stops) => stops.filter((_, j) => j !== i))}
+                            disabled={draft.stops.length === 1}
+                            aria-label={`Remove stop ${i + 1}`}
+                            className="flex h-11 items-center rounded-lg px-2 text-sm text-gray-600 hover:text-red-600 disabled:opacity-30 dark:text-gray-400"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                      <PlaceField
+                        id={`errand-stop-${stop.id}`}
+                        label={`Stop ${i + 1}`}
+                        placeholder={stop.kind === "pickup" ? "Where to pick up" : "Where to drop off"}
+                        marker={stop.kind === "pickup" ? "circle" : "square"}
+                        locate={i === 0}
+                        value={stop.place}
+                        onChange={(place) => editStop(i, { place })}
+                        inputClassName={input}
+                      />
+                      {stop.note || noteOpen.has(stop.id) ? (
+                        <input
+                          aria-label={`Note for stop ${i + 1}`}
+                          className={input}
+                          maxLength={255}
+                          autoFocus={!stop.note}
+                          placeholder="Who to ask for, gate colour, what to collect"
+                          value={stop.note}
+                          onChange={(e) => editStop(i, { note: e.target.value })}
+                        />
+                      ) : (
+                        <button type="button" onClick={() => setNoteOpen(new Set(noteOpen).add(stop.id))} className="min-h-11 text-sm text-gray-600 underline-offset-4 hover:underline dark:text-gray-400">
+                          + Add a note for this stop
+                        </button>
+                      )}
+                      {stopError?.index === i && (
+                        <p role="alert" className="text-sm text-red-600 dark:text-red-400">{stopError.text}</p>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+                {draft.stops.length < MAX_STOPS ? (
+                  <button
+                    type="button"
+                    // A new stop goes before the final destination, like adding a stop on the way.
+                    onClick={() => setStops((stops) => [...stops.slice(0, -1), newStop("dropoff"), ...stops.slice(-1)])}
+                    className="flex h-11 w-full items-center justify-center rounded-xl border border-dashed border-gray-300 text-sm font-medium hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800"
+                  >
+                    + Add a stop
+                  </button>
+                ) : (
+                  <p className="text-sm text-gray-500 dark:text-gray-400">That&apos;s the most stops one errand can have ({MAX_STOPS}).</p>
+                )}
+                <PinsMap stops={draft.stops} onMove={(index, place) => editStop(index, { place })} />
               </fieldset>
 
               <div>

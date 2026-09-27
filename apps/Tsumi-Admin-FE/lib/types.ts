@@ -84,6 +84,8 @@ export interface AdminErrand {
   escrow_status: "held" | "released" | "refunded" | null;
   pickup_address: string;
   dropoff_address: string;
+  // In route order. Empty on errands posted before stops existed.
+  stops: { position: number; kind: "pickup" | "dropoff"; address: string; lat: string | null; lng: string | null; note: string }[];
   created_at: string;
   completed_at: string | null;
   cancelled_at: string | null;

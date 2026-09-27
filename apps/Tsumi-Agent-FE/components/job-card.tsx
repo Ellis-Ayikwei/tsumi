@@ -39,6 +39,11 @@ export function JobCard({ job, showStatus = false }: { job: Errand; showStatus?:
             <MapPin className="h-4 w-4 shrink-0 text-brand" aria-hidden /> {job.dropoff_address}
           </p>
         )}
+        {job.stops.length > 2 && (
+          <p className="pl-6 text-xs text-muted-foreground">
+            +{job.stops.length - 2} more {job.stops.length - 2 === 1 ? "stop" : "stops"} on the way
+          </p>
+        )}
       </div>
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         {showStatus ? <StatusBadge status={job.status} labels={AGENT_STATUS_LABELS} /> : <span>Posted {formatDateTime(job.created_at)}</span>}

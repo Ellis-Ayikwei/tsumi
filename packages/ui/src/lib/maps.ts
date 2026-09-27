@@ -58,6 +58,7 @@ export interface GMarker {
   addListener(event: string, handler: () => void): Listener;
   getPosition(): GLatLng | null | undefined;
   setPosition(position: LatLng): void;
+  setLabel(label: string): void;
   setMap(map: GMap | null): void;
 }
 interface GPlace {

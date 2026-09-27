@@ -115,8 +115,15 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (j.pickupAddress.isNotEmpty) _Stop('Pickup', j.pickupAddress, j.pickupPoint, c.mutedForeground),
-              if (j.dropoffAddress.isNotEmpty) _Stop('Drop-off', j.dropoffAddress, j.dropoffPoint, c.brand),
+              for (final (i, s) in j.route.indexed)
+                _Stop('${i + 1}. ${s.isPickup ? 'Pickup' : 'Drop-off'}', s.address, s.point, s.isPickup ? c.mutedForeground : c.brand,
+                    note: s.note),
+              if (j.route.length > 1)
+                TextButton.icon(
+                  onPressed: () => openRoute(j.route),
+                  icon: const Icon(Icons.navigation_rounded),
+                  label: const Text('Directions for the whole route'),
+                ),
               if (j.description.isNotEmpty) ...[
                 const Divider(height: 24),
                 Text(j.description, style: TextStyle(color: c.mutedForeground)),
@@ -207,12 +214,13 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
 }
 
 class _Stop extends StatelessWidget {
-  const _Stop(this.label, this.address, this.point, this.color);
+  const _Stop(this.label, this.address, this.point, this.color, {this.note = ''});
 
   final String label;
   final String address;
   final GeoPoint? point;
   final Color color;
+  final String note;
 
   @override
   Widget build(BuildContext context) {
@@ -229,6 +237,7 @@ class _Stop extends StatelessWidget {
               children: [
                 Text(label, style: TextStyle(color: c.mutedForeground, fontSize: 12)),
                 Text(address),
+                if (note.isNotEmpty) Text(note, style: TextStyle(color: c.mutedForeground, fontSize: 12)),
               ],
             ),
           ),

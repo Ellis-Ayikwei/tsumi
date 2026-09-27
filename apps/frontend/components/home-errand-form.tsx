@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { type ErrandDraft, loadDraft, saveDraft } from "@/lib/errand-draft";
+import { type DraftStop, type ErrandDraft, loadDraft, newStop, saveDraft } from "@/lib/errand-draft";
 
 import { PlaceField } from "./place-field";
 
@@ -20,12 +20,24 @@ export function HomeErrandForm() {
   const [draft, setDraft] = useState<ErrandDraft | null>(null);
 
   // Read after mount: storage only exists in the browser, and server and client must render the same first.
-  useEffect(() => setDraft(loadDraft()), []);
+  useEffect(() => {
+    const loaded = loadDraft();
+    // The box always shows a start and an end; a one-stop draft gains the missing side.
+    if (loaded.stops.length < 2) {
+      const only = loaded.stops[0];
+      loaded.stops = only?.kind === "pickup" ? [only, newStop("dropoff")] : [newStop("pickup"), ...loaded.stops];
+    }
+    setDraft(loaded);
+  }, []);
   useEffect(() => {
     if (draft) saveDraft(draft);
   }, [draft]);
 
   const update = (patch: Partial<ErrandDraft>) => setDraft((d) => (d ? { ...d, ...patch } : d));
+  const setStopPlace = (index: number, place: DraftStop["place"]) =>
+    setDraft((d) => (d ? { ...d, stops: d.stops.map((st, i) => (i === index ? { ...st, place } : st)) } : d));
+  const last = (draft?.stops.length ?? 2) - 1;
+  const extra = Math.max(0, (draft?.stops.length ?? 0) - 2);
 
   return (
     <form
@@ -55,8 +67,8 @@ export function HomeErrandForm() {
           placeholder="Pickup"
           marker="circle"
           locate
-          value={draft?.pickup ?? null}
-          onChange={(pickup) => update({ pickup })}
+          value={draft?.stops[0]?.place ?? null}
+          onChange={(place) => setStopPlace(0, place)}
           inputClassName={field}
         />
         <PlaceField
@@ -64,11 +76,16 @@ export function HomeErrandForm() {
           label="Drop-off"
           placeholder="Drop-off"
           marker="square"
-          value={draft?.dropoff ?? null}
-          onChange={(dropoff) => update({ dropoff })}
+          value={draft?.stops[last]?.place ?? null}
+          onChange={(place) => setStopPlace(last, place)}
           inputClassName={field}
         />
       </div>
+      {extra > 0 && (
+        <p className="text-sm text-[var(--muted)]">
+          +{extra} more {extra === 1 ? "stop" : "stops"} on the way. You can edit them on the next step.
+        </p>
+      )}
       <button
         type="submit"
         className="h-14 w-full rounded-xl bg-[var(--brand)] text-[1.0625rem] font-semibold text-[var(--brand-fg)] transition-colors hover:bg-[var(--brand-ink)] sm:w-auto sm:px-8"

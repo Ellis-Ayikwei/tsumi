@@ -180,8 +180,12 @@ class _Body extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (e.pickupAddress.isNotEmpty) _Place(Icons.trip_origin_rounded, e.pickupAddress, c.mutedForeground),
-              if (e.dropoffAddress.isNotEmpty) _Place(Icons.place_rounded, e.dropoffAddress, c.brand),
+              for (final (i, s) in e.route.indexed)
+                _Place(
+                  s.isPickup ? Icons.trip_origin_rounded : Icons.place_rounded,
+                  '${i + 1}. ${s.address}${s.note.isEmpty ? '' : '\n${s.note}'}',
+                  s.isPickup ? c.mutedForeground : c.brand,
+                ),
               if (e.description.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),

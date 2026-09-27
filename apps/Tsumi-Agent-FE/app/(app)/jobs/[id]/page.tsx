@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle2, Hourglass, MapPin, Navigation, Phone, Play } from "lucide-react";
+import { CheckCircle2, Hourglass, Navigation, Phone, Play } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { use, useState } from "react";
 import { toast } from "sonner";
@@ -15,38 +15,37 @@ import { ErrorState, LoadingList } from "@tsumi/ui/components/states";
 import { StatusBadge } from "@tsumi/ui/components/status-badge";
 import { ApiError } from "@tsumi/ui/lib/api";
 import { formatDateTime } from "@tsumi/ui/lib/format";
-import { type LatLng, parseCoords } from "@tsumi/ui/lib/maps";
+import { errandStops, type RouteStop } from "@tsumi/ui/lib/stops";
 import { formatGhs } from "@tsumi/ui/lib/money";
 import type { Errand } from "@tsumi/ui/lib/types";
 
 import { AGENT_STATUS_LABELS } from "@/components/job-card";
 import { api, client } from "@/lib/client";
-import { mapsUrl } from "@/lib/jobs";
+import { mapsUrl, routeUrl } from "@/lib/jobs";
 
-function Stop({
-  label,
-  address,
-  coords,
-  tone,
-}: {
-  label: string;
-  address: string;
-  coords: LatLng | null;
-  tone: "muted" | "brand";
-}) {
+function Stop({ number, stop }: { number: number; stop: RouteStop }) {
+  const label = `${number}. ${stop.kind === "pickup" ? "Pickup" : "Drop-off"}`;
   return (
     <div className="flex items-center gap-3">
-      <MapPin className={tone === "brand" ? "h-5 w-5 shrink-0 text-brand" : "h-5 w-5 shrink-0 text-muted-foreground"} aria-hidden />
+      <span
+        aria-hidden
+        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
+          stop.kind === "pickup" ? "bg-muted text-foreground" : "bg-brand text-brand-foreground"
+        }`}
+      >
+        {number}
+      </span>
       <div className="min-w-0 flex-1">
         <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="text-sm">{address}</p>
+        <p className="text-sm">{stop.address}</p>
+        {stop.note && <p className="text-xs text-muted-foreground">{stop.note}</p>}
       </div>
       <a
-        href={mapsUrl(address, coords)}
+        href={mapsUrl(stop.address, stop.coords)}
         target="_blank"
         rel="noreferrer"
-        aria-label={`Directions to ${label.toLowerCase()}`}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border"
+        aria-label={`Directions to stop ${number}`}
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border"
       >
         <Navigation className="h-4 w-4" />
       </a>
@@ -80,8 +79,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
 
   if (isLoading) return <div className="p-4"><LoadingList /></div>;
   if (error || !job) return <div className="p-4"><ErrorState error={error} onRetry={() => refetch()} /></div>;
-  const pickup = parseCoords(job.pickup_lat, job.pickup_lng);
-  const dropoff = parseCoords(job.dropoff_lat, job.dropoff_lng);
+  const stops = errandStops(job);
 
   return (
     <>
@@ -116,9 +114,20 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
         </section>
 
         <section className="space-y-4 rounded-3xl border bg-card p-5 shadow-sm">
-          <RouteMap pickup={pickup} dropoff={dropoff} />
-          {job.pickup_address && <Stop label="Pickup" address={job.pickup_address} coords={pickup} tone="muted" />}
-          {job.dropoff_address && <Stop label="Drop-off" address={job.dropoff_address} coords={dropoff} tone="brand" />}
+          <RouteMap stops={stops} />
+          {stops.map((stop, i) => (
+            <Stop key={stop.position} number={i + 1} stop={stop} />
+          ))}
+          {stops.length > 1 && (
+            <a
+              href={routeUrl(stops)}
+              target="_blank"
+              rel="noreferrer"
+              className="flex min-h-11 items-center justify-center gap-2 rounded-full border text-sm font-medium"
+            >
+              <Navigation className="h-4 w-4" aria-hidden /> Directions for the whole route
+            </a>
+          )}
           {job.description && <p className="whitespace-pre-wrap border-t pt-3 text-sm text-muted-foreground">{job.description}</p>}
         </section>
 

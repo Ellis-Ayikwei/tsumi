@@ -57,6 +57,17 @@ export interface ErrandEvent {
   created_at: string;
 }
 
+export type StopKind = "pickup" | "dropoff";
+
+export interface ErrandStop {
+  position: number;
+  kind: StopKind;
+  address: string;
+  lat: string | null;
+  lng: string | null;
+  note: string;
+}
+
 export interface Errand {
   id: string;
   title: string;
@@ -69,6 +80,8 @@ export interface Errand {
   dropoff_address: string;
   dropoff_lat: string | null;
   dropoff_lng: string | null;
+  // Every place the runner goes, in order. Empty on errands posted before stops existed.
+  stops: ErrandStop[];
   scheduled_for: string | null;
   price_pesewas: number;
   commission_pesewas: number;

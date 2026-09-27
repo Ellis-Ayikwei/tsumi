@@ -13,6 +13,19 @@ Future<bool> openMaps(String address, [GeoPoint? point]) => launchUrl(
       mode: LaunchMode.externalApplication,
     );
 
+/// Directions through every stop in order, starting from the runner.
+Future<bool> openRoute(List<ErrandStop> stops) {
+  String point(ErrandStop s) => s.point != null ? '${s.point!.lat},${s.point!.lng}' : '${s.address}, Ghana';
+  return launchUrl(
+    Uri.https('www.google.com', '/maps/dir/', {
+      'api': '1',
+      'destination': point(stops.last),
+      if (stops.length > 1) 'waypoints': stops.sublist(0, stops.length - 1).map(point).join('|'),
+    }),
+    mode: LaunchMode.externalApplication,
+  );
+}
+
 /// Paystack checkout. An in-app browser keeps the user close to the app.
 Future<bool> openCheckout(String url) => launchUrl(Uri.parse(url), mode: LaunchMode.inAppBrowserView);
 

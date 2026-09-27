@@ -5,8 +5,10 @@ Run: python manage.py test --settings=backend.test_settings
 
 import uuid
 
+from django.db import connection
 from django.db.models import Sum
 from django.test import SimpleTestCase
+from django.test.utils import CaptureQueriesContext
 from rest_framework.test import APITestCase
 
 from apps.errand.models import Errand, EscrowHold
@@ -130,6 +132,71 @@ class ErrandFlowTests(APITestCase):
             self.assertEqual(response.data["error"]["details"][0]["field"], field, extra)
         self.assertEqual(Errand.objects.count(), 0)
         self.assertEqual(balance(self.customer), 10000)
+
+    def post_stops(self, stops, price=5000):
+        self.client.force_authenticate(self.customer)
+        body = {"title": "Two drops", "errand_type": "delivery", "price_pesewas": price, "stops": stops}
+        return self.client.post(f"{API}/errands/", body, format="json")
+
+    def test_multi_stop_errand_keeps_order_and_mirrors_first_pickup_last_dropoff(self):
+        stops = [
+            {"kind": "pickup", "address": "Accra Mall", "lat": "5.622210", "lng": "-0.173130", "note": "Shop 12"},
+            {"kind": "dropoff", "address": "Osu"},
+            {"kind": "pickup", "address": "Makola"},
+            {"kind": "dropoff", "address": "East Legon", "lat": "5.636100", "lng": "-0.161300"},
+        ]
+        response = self.post_stops(stops)
+        self.assertEqual(response.status_code, 201, response.data)
+        self.assertEqual([(s["position"], s["kind"], s["address"]) for s in response.data["stops"]], [
+            (0, "pickup", "Accra Mall"), (1, "dropoff", "Osu"), (2, "pickup", "Makola"), (3, "dropoff", "East Legon"),
+        ])
+        self.assertEqual(response.data["stops"][0]["note"], "Shop 12")
+        self.assertEqual(response.data["pickup_address"], "Accra Mall")
+        self.assertEqual(response.data["dropoff_address"], "East Legon")
+        self.assertEqual(response.data["dropoff_lat"], "5.636100")
+        self.assertEqual(balance(self.customer), 5000)
+
+    def test_legacy_pickup_and_dropoff_become_stops(self):
+        response = self.create_errand(5000, pickup_address="Accra Mall")
+        self.assertEqual(response.status_code, 201, response.data)
+        self.assertEqual([(s["kind"], s["address"]) for s in response.data["stops"]], [
+            ("pickup", "Accra Mall"), ("dropoff", "East Legon, Accra"),
+        ])
+
+    def test_bad_stops_rejected_and_nothing_charged(self):
+        cases = [
+            ([], "stops"),
+            ([{"kind": "dropoff", "address": f"Stop {i}"} for i in range(9)], "stops"),
+            ([{"kind": "dropoff", "address": ""}], "stops.0.address"),
+            ([{"kind": "dropoff", "address": "Osu", "lat": "5.6"}], "stops.0.lat"),
+            ([{"kind": "somewhere", "address": "Osu"}], "stops.0.kind"),
+        ]
+        for stops, field in cases:
+            response = self.post_stops(stops)
+            self.assertEqual(response.status_code, 400, stops)
+            self.assertEqual(response.data["error"]["details"][0]["field"], field, stops)
+        self.client.force_authenticate(self.customer)
+        both = self.client.post(f"{API}/errands/", {
+            "title": "Mixed", "errand_type": "delivery", "price_pesewas": 3000,
+            "dropoff_address": "Osu", "stops": [{"kind": "dropoff", "address": "Osu"}],
+        }, format="json")
+        self.assertEqual(both.status_code, 400)
+        self.assertEqual(Errand.objects.count(), 0)
+        self.assertEqual(balance(self.customer), 10000)
+
+    def test_listing_errands_does_not_query_per_errand(self):
+        stops = [{"kind": "pickup", "address": "A"}, {"kind": "dropoff", "address": "B"}]
+        self.post_stops(stops, price=1000)
+        self.client.force_authenticate(self.customer)
+        with CaptureQueriesContext(connection) as single:
+            self.client.get(f"{API}/errands/")
+        for _ in range(3):
+            self.post_stops(stops, price=1000)
+        self.client.force_authenticate(self.customer)
+        with CaptureQueriesContext(connection) as many:
+            response = self.client.get(f"{API}/errands/")
+        self.assertEqual(len(response.data["results"]), 4)
+        self.assertEqual(len(many.captured_queries), len(single.captured_queries))
 
     def test_duplicate_submission_charges_once(self):
         request_id = str(uuid.uuid4())

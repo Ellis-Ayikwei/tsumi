@@ -147,5 +147,19 @@ class ErrandCoverageTests(APITestCase):
         self.assertEqual(Errand.objects.count(), 0)
         self.assertEqual(balance(self.customer), 10000)
 
+    def test_one_out_of_area_stop_refuses_the_whole_errand(self):
+        body = {
+            "title": "Two drops", "errand_type": "delivery", "price_pesewas": 3000,
+            "stops": [
+                {"kind": "pickup", "address": "Osu", "lat": f"{OSU[0]:.6f}", "lng": f"{OSU[1]:.6f}"},
+                {"kind": "dropoff", "address": "Kejetia", "lat": f"{KUMASI[0]:.6f}", "lng": f"{KUMASI[1]:.6f}"},
+            ],
+        }
+        response = self.client.post(f"{API}/errands/", body, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data["error"]["details"][0]["field"], "stops.1.lat")
+        self.assertEqual(Errand.objects.count(), 0)
+        self.assertEqual(balance(self.customer), 10000)
+
     def test_typed_address_without_pin_still_posts(self):
         self.assertEqual(self.post().status_code, 201)
