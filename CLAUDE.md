@@ -327,8 +327,10 @@ into my commit, and a checkout or stash can wipe hours of work.
   `apps/wallet/services.py` (transfer / post_external), which writes a ledger
   line in the same transaction.
 - Errand status edges live in `LEGAL_TRANSITIONS` in `apps/errand/services.py`.
+- Database is PostGIS (GeoDjango). Service areas (`apps/geo`) decide where errands can be pinned:
+  `is_served()` in `apps/geo/services.py` is the rule; admins manage areas at `/admin/service-areas`.
 - Commands:
-  - Backend tests: `cd apps/Tsumi-BE && python manage.py test --settings=backend.test_settings`
+  - Backend tests (need PostGIS + GDAL, so run in Docker locally): `docker compose run --rm backend-py python manage.py test --settings=backend.test_settings`
   - Admin: `cd apps/Tsumi-Admin-FE && npm run typecheck && npm run build`
   - Customer / agent apps: `cd apps/Tsumi-Customer-FE` (or `Tsumi-Agent-FE`) `&& npm run typecheck && npm run build`
   - Flutter: `cd packages/tsumi_kit` (or `apps/mobile_customer`, `apps/mobile_agent`) `&& flutter pub get && flutter analyze && flutter test`

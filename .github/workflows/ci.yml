@@ -12,7 +12,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:16-alpine
+        image: postgis/postgis:16-3.4
         env:
           POSTGRES_DB: tsumi_test_db
           POSTGRES_USER: postgres
@@ -53,6 +53,9 @@ jobs:
 
       - name: Install Dependencies (Root)
         run: npm install
+
+      - name: Install GDAL and GEOS (GeoDjango)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends gdal-bin
 
       - name: Install Python Dependencies
         working-directory: apps/Tsumi-BE

@@ -158,3 +158,18 @@ export interface AdminStats {
   pending_withdrawals: { count: number; total_pesewas: number };
   pending_deposits: number;
 }
+
+export type ServiceAreaKind = "region" | "city" | "zone";
+export type ServiceAreaStatus = "active" | "inactive" | "no_service";
+
+export interface ServiceArea {
+  id: string;
+  name: string;
+  kind: ServiceAreaKind;
+  status: ServiceAreaStatus;
+  note: string;
+  // GeoJSON MultiPolygon, simplified to 5 decimal places (about 1 m).
+  geometry: { type: "MultiPolygon"; coordinates: number[][][][] } | null;
+  created_at: string;
+  updated_at: string;
+}

@@ -23,12 +23,27 @@ export const ACCRA: LatLng = { lat: 5.6037, lng: -0.187 };
 
 // The slice of the Maps JS API Tsumi uses. @types/google.maps is not installed,
 // so these interfaces are the contract; extend them when using more of the API.
-interface GLatLng {
+export interface GLatLng {
   lat(): number;
   lng(): number;
 }
 interface Listener {
   remove(): void;
+}
+export interface GMouseEvent {
+  latLng?: GLatLng | null;
+  feature?: GFeature;
+}
+export interface GFeature {
+  getProperty(name: string): unknown;
+}
+/** The map's GeoJSON layer: draws polygons and reports clicks on them. */
+export interface GData {
+  addGeoJson(geojson: object): GFeature[];
+  remove(feature: GFeature): void;
+  forEach(callback: (feature: GFeature) => void): void;
+  setStyle(style: (feature: GFeature) => Record<string, unknown>): void;
+  addListener(event: string, handler: (event: GMouseEvent) => void): Listener;
 }
 export interface GMap {
   getCenter(): GLatLng | undefined;
@@ -36,7 +51,8 @@ export interface GMap {
   setZoom(zoom: number): void;
   setCenter(center: LatLng): void;
   fitBounds(bounds: { north: number; south: number; east: number; west: number }, padding?: number): void;
-  addListener(event: string, handler: () => void): Listener;
+  addListener(event: string, handler: (event: GMouseEvent) => void): Listener;
+  data: GData;
 }
 export interface GMarker {
   addListener(event: string, handler: () => void): Listener;
