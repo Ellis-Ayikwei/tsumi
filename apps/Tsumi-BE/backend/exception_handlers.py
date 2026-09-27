@@ -75,8 +75,11 @@ def _flatten(detail, prefix=""):
             path = f"{prefix}.{key}" if prefix else str(key)
             out.extend(_flatten(value, path))
     elif isinstance(detail, (list, tuple)):
-        for item in detail:
-            out.extend(_flatten(item, prefix))
+        for i, item in enumerate(detail):
+            # Objects in a list (e.g. errand stops) are addressed by index: stops.2.address.
+            # A list of plain messages belongs to the field itself.
+            path = f"{prefix}.{i}" if isinstance(item, (dict, list, tuple)) and prefix else prefix
+            out.extend(_flatten(item, path))
     else:
         out.append({"field": prefix or "non_field_errors", "issue": str(detail)})
     return out

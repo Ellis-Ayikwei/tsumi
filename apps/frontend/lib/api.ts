@@ -116,6 +116,8 @@ export interface CreateErrandPayload {
   dropoff_address?: string;
   dropoff_lat?: string | null;
   dropoff_lng?: string | null;
+  // Every place in route order. Sent instead of the pickup_* and dropoff_* fields.
+  stops?: { kind: "pickup" | "dropoff"; address: string; lat: string | null; lng: string | null; note: string }[];
   price_pesewas: number;
   client_request_id: string;
 }

@@ -229,7 +229,7 @@ class ErrandListView(generics.ListAPIView):
     permission_classes = [IsAdmin]
 
     def get_queryset(self):
-        qs = Errand.objects.select_related("customer", "agent", "escrow")
+        qs = Errand.objects.select_related("customer", "agent", "escrow").prefetch_related("stops")
         params = self.request.query_params
         if status_filter := params.get("status"):
             qs = qs.filter(status__in=status_filter.split(","))
@@ -243,7 +243,7 @@ class ErrandListView(generics.ListAPIView):
 
 
 def _errand_detail(pk):
-    errand = get_object_or_404(Errand.objects.select_related("customer", "agent", "escrow"), pk=pk)
+    errand = get_object_or_404(Errand.objects.select_related("customer", "agent", "escrow").prefetch_related("stops"), pk=pk)
     data = AdminErrandSerializer(errand).data
     data["description"] = errand.description
     data["events"] = AdminEventSerializer(errand.events.select_related("actor"), many=True).data
@@ -287,7 +287,7 @@ class DisputeListView(generics.ListAPIView):
     def get_queryset(self):
         qs = Dispute.objects.select_related(
             "errand__customer", "errand__agent", "errand__escrow", "opened_by"
-        )
+        ).prefetch_related("errand__stops")
         if status_filter := self.request.query_params.get("status"):
             qs = qs.filter(status=status_filter)
         # Open disputes: oldest first. Resolved: newest first.
@@ -305,7 +305,7 @@ def dispute_resolve(request, pk):
     )
     dispute = Dispute.objects.select_related(
         "errand__customer", "errand__agent", "errand__escrow", "opened_by"
-    ).get(pk=dispute.pk)
+    ).prefetch_related("errand__stops").get(pk=dispute.pk)
     return Response(AdminDisputeSerializer(dispute).data)
 
 

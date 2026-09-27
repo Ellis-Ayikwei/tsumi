@@ -2,44 +2,45 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { GOOGLE_MAPS_API_KEY, type LatLng, loadGoogleMaps } from "../lib/maps";
+import { GOOGLE_MAPS_API_KEY, loadGoogleMaps } from "../lib/maps";
+import type { RouteStop } from "../lib/stops";
 
 /**
- * Pickup (A) and drop-off (B) pins on a small map. Renders nothing when no stop
- * is pinned, no Maps key is set or Google is unreachable: the addresses printed
- * next to it stay the source of truth.
+ * Every pinned stop on a small map, numbered in route order. Renders nothing
+ * when no stop is pinned, no Maps key is set or Google is unreachable: the
+ * addresses printed next to it stay the source of truth.
  */
-export function RouteMap({ pickup, dropoff }: { pickup: LatLng | null; dropoff: LatLng | null }) {
+export function RouteMap({ stops }: { stops: RouteStop[] }) {
   const el = useRef<HTMLDivElement | null>(null);
   const [failed, setFailed] = useState(false);
-  const stops = [pickup && { label: "A", at: pickup }, dropoff && { label: "B", at: dropoff }].filter(
-    (s): s is { label: string; at: LatLng } => Boolean(s)
-  );
-  const key = stops.map((s) => `${s.label}${s.at.lat},${s.at.lng}`).join("|");
+  const pins = stops.flatMap((s, i) => (s.coords ? [{ label: String(i + 1), at: s.coords, kind: s.kind }] : []));
+  const key = pins.map((p) => `${p.label}:${p.at.lat},${p.at.lng}`).join("|");
 
   useEffect(() => {
     if (!key) return;
     let cancelled = false;
+    const points = pins;
     (async () => {
       const maps = await loadGoogleMaps();
       const [{ Map }, { Marker }] = await Promise.all([maps.importLibrary("maps"), maps.importLibrary("marker")]);
       if (cancelled || !el.current) return;
       const map = new Map(el.current, {
-        center: stops[0].at,
+        center: points[0].at,
         zoom: 15,
         disableDefaultUI: true,
         gestureHandling: "cooperative",
         clickableIcons: false,
       });
-      for (const s of stops) new Marker({ map, position: s.at, label: s.label, title: s.label === "A" ? "Pickup" : "Drop-off" });
-      if (stops.length === 2) {
-        const [a, b] = stops.map((s) => s.at);
+      for (const p of points) {
+        new Marker({ map, position: p.at, label: p.label, title: `Stop ${p.label}: ${p.kind === "pickup" ? "pickup" : "drop-off"}` });
+      }
+      if (points.length > 1) {
         map.fitBounds(
           {
-            north: Math.max(a.lat, b.lat),
-            south: Math.min(a.lat, b.lat),
-            east: Math.max(a.lng, b.lng),
-            west: Math.min(a.lng, b.lng),
+            north: Math.max(...points.map((p) => p.at.lat)),
+            south: Math.min(...points.map((p) => p.at.lat)),
+            east: Math.max(...points.map((p) => p.at.lng)),
+            west: Math.min(...points.map((p) => p.at.lng)),
           },
           48
         );
@@ -48,7 +49,7 @@ export function RouteMap({ pickup, dropoff }: { pickup: LatLng | null; dropoff: 
     return () => {
       cancelled = true;
     };
-    // `key` captures every coordinate in `stops`.
+    // `key` captures every pinned coordinate, so `pins` from the same render is current.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 

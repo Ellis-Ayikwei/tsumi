@@ -88,6 +88,32 @@ class Errand(Basemodel):
         return f"Errand {self.id} ({self.status})"
 
 
+class ErrandStop(Basemodel):
+    """One place the runner goes, in order: position 0 first. An errand has 1..N stops."""
+
+    class Kind(models.TextChoices):
+        PICKUP = "pickup", "Pickup"
+        DROPOFF = "dropoff", "Drop-off"
+
+    errand = models.ForeignKey(Errand, on_delete=models.CASCADE, related_name="stops")
+    position = models.PositiveSmallIntegerField()
+    kind = models.CharField(max_length=10, choices=Kind.choices)
+    address = models.CharField(max_length=500)
+    lat = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    lng = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    note = models.CharField(max_length=255, blank=True)
+
+    class Meta:
+        db_table = "errand_stops"
+        ordering = ["position"]
+        constraints = [
+            models.UniqueConstraint(fields=["errand", "position"], name="errand_stop_position_unique"),
+        ]
+
+    def __str__(self):
+        return f"Stop {self.position} of {self.errand_id} ({self.kind})"
+
+
 class ErrandEvent(Basemodel):
     """Audit trail: one row per status change."""
 

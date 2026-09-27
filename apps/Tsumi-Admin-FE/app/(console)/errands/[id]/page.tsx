@@ -111,8 +111,25 @@ export default function ErrandDetailPage({ params }: { params: Promise<{ id: str
             <CardTitle className="text-base">Where</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
-            <div><div className="text-muted-foreground">Pickup</div>{data.pickup_address || "-"}</div>
-            <div><div className="text-muted-foreground">Drop-off</div>{data.dropoff_address || "-"}</div>
+            {data.stops.length > 0 ? (
+              <ol className="space-y-2">
+                {data.stops.map((stop) => (
+                  <li key={stop.position}>
+                    <div className="text-muted-foreground">
+                      {stop.position + 1}. {stop.kind === "pickup" ? "Pickup" : "Drop-off"}
+                      {stop.lat && stop.lng && <span className="ml-2 font-mono text-xs">{stop.lat}, {stop.lng}</span>}
+                    </div>
+                    {stop.address}
+                    {stop.note && <div className="text-xs text-muted-foreground">{stop.note}</div>}
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <>
+                <div><div className="text-muted-foreground">Pickup</div>{data.pickup_address || "-"}</div>
+                <div><div className="text-muted-foreground">Drop-off</div>{data.dropoff_address || "-"}</div>
+              </>
+            )}
             {data.description && <div><div className="text-muted-foreground">Notes</div>{data.description}</div>}
           </CardContent>
         </Card>

@@ -45,6 +45,14 @@ class JobCard extends StatelessWidget {
           const SizedBox(height: 10),
           if (job.pickupAddress.isNotEmpty) _Stop(Icons.trip_origin_rounded, job.pickupAddress, c.mutedForeground),
           if (job.dropoffAddress.isNotEmpty) _Stop(Icons.place_rounded, job.dropoffAddress, c.brand),
+          if (job.stops.length > 2)
+            Padding(
+              padding: const EdgeInsets.only(left: 26),
+              child: Text(
+                '+${job.stops.length - 2} more ${job.stops.length - 2 == 1 ? 'stop' : 'stops'} on the way',
+                style: TextStyle(color: c.mutedForeground, fontSize: 12),
+              ),
+            ),
           const SizedBox(height: 6),
           Row(
             children: [
