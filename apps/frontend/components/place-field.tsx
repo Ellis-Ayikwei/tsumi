@@ -1,6 +1,6 @@
 "use client";
 
-import { Crosshair, Loader2, MapPin } from "lucide-react";
+import { Crosshair, Loader2, Map as MapIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import {
@@ -10,6 +10,8 @@ import {
   type PlacePrediction,
   reverseGeocode,
 } from "@tsumi/ui/lib/maps";
+
+import { MapPicker } from "./map-picker";
 
 interface Suggestion {
   id: string;
@@ -47,6 +49,7 @@ export function PlaceField({
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [locating, setLocating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [picking, setPicking] = useState(false);
   const sessionToken = useRef<object | null>(null);
   const seq = useRef(0);
   const text = value?.address ?? "";
@@ -132,7 +135,7 @@ export function PlaceField({
       </label>
       <input
         id={id}
-        className={`${inputClassName} pl-10 ${locate ? "pr-12" : ""}`}
+        className={`${inputClassName} pl-10 ${locate && !value?.coords ? "pr-24" : "pr-12"}`}
         placeholder={placeholder}
         value={text}
         autoComplete="off"
@@ -140,20 +143,40 @@ export function PlaceField({
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
-      {value?.coords && (
-        <MapPin aria-label="Pinned on the map" className="absolute right-4 top-7 h-4 w-4 -translate-y-1/2 opacity-60" />
-      )}
-      {locate && !value?.coords && (
+      <div className="absolute right-1.5 top-7 flex -translate-y-1/2 items-center">
+        {locate && !value?.coords && (
+          <button
+            type="button"
+            onClick={useMyLocation}
+            disabled={locating}
+            aria-label="Use my current location"
+            title="Use my current location"
+            className="flex h-11 w-11 items-center justify-center rounded-lg opacity-70 hover:opacity-100"
+          >
+            {locating ? <Loader2 className="h-5 w-5 animate-spin" /> : <Crosshair className="h-5 w-5" />}
+          </button>
+        )}
         <button
           type="button"
-          onClick={useMyLocation}
-          disabled={locating}
-          aria-label="Use my current location"
-          title="Use my current location"
-          className="absolute right-1.5 top-7 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg opacity-70 hover:opacity-100"
+          onClick={() => setPicking(true)}
+          aria-label={value?.coords ? `Adjust ${label.toLowerCase()} on the map` : `Choose ${label.toLowerCase()} on the map`}
+          title={value?.coords ? "Adjust on the map" : "Choose on the map"}
+          className={`flex h-11 w-11 items-center justify-center rounded-lg hover:opacity-100 ${value?.coords ? "opacity-100" : "opacity-70"}`}
         >
-          {locating ? <Loader2 className="h-5 w-5 animate-spin" /> : <Crosshair className="h-5 w-5" />}
+          <MapIcon className="h-5 w-5" />
         </button>
+      </div>
+      {picking && (
+        <MapPicker
+          title={value?.coords ? `Adjust ${label.toLowerCase()}` : `Choose ${label.toLowerCase()} on the map`}
+          initial={value}
+          onClose={() => setPicking(false)}
+          onPick={(place) => {
+            setPicking(false);
+            setError(null);
+            onChange(place);
+          }}
+        />
       )}
       {suggestions.length > 0 && (
         <ul
