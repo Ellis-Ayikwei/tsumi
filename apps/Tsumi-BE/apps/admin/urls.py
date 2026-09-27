@@ -1,5 +1,7 @@
 from django.urls import path
 
+from apps.geo import views as geo_views
+
 from . import views
 
 urlpatterns = [
@@ -26,4 +28,8 @@ urlpatterns = [
     path("ledger/", views.LedgerListView.as_view(), name="admin-ledger"),
     # Trust
     path("badges/", views.BadgeListView.as_view(), name="admin-badges"),
+    path("service-areas/", geo_views.service_areas, name="admin-service-areas"),
+    path("service-areas/import/", geo_views.service_area_import, name="admin-service-area-import"),
+    path("service-areas/check/", geo_views.service_area_check, name="admin-service-area-check"),
+    path("service-areas/<uuid:pk>/", geo_views.service_area_detail, name="admin-service-area-detail"),
 ]

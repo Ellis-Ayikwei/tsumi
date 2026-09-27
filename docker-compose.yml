@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:16-alpine
+    # PostGIS: service areas are stored and queried as geometries.
+    image: postgis/postgis:16-3.4
     container_name: tsumi-postgres
     environment:
       POSTGRES_DB: tsumi_db

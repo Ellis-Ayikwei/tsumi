@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.gis",
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     "apps.Authentication",
     "apps.wallet",
     "apps.errand",
+    "apps.geo",
     "apps.trust",
     "apps.dispute",
     "apps.notification",
@@ -85,6 +87,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "backend.wsgi.application"
 ASGI_APPLICATION = "backend.asgi.application"
 
+# PostGIS (GeoDjango) for service areas. The API host needs GDAL and GEOS
+# installed (the Dockerfile adds them); migrate creates the postgis extension.
 CONN_MAX_AGE = int(os.getenv("DB_CONN_MAX_AGE", 600))
 DB_OPTIONS = {"connect_timeout": int(os.getenv("DB_CONNECT_TIMEOUT", 5))}
 
@@ -92,6 +96,7 @@ if os.getenv("DATABASE_URL"):
     DATABASES = {
         "default": dj_database_url.config(
             default=os.getenv("DATABASE_URL"),
+            engine="django.contrib.gis.db.backends.postgis",
             conn_max_age=CONN_MAX_AGE,
             conn_health_checks=True,
         )
@@ -100,7 +105,7 @@ if os.getenv("DATABASE_URL"):
 else:
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql",
+            "ENGINE": "django.contrib.gis.db.backends.postgis",
             "NAME": os.getenv("DB_NAME", "tsumi_db"),
             "USER": os.getenv("DB_USER", "postgres"),
             "PASSWORD": os.getenv("DB_PASSWORD", ""),

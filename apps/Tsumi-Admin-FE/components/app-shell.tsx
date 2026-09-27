@@ -7,6 +7,7 @@ import {
   BookOpen,
   LayoutDashboard,
   LogOut,
+  Map as MapIcon,
   Package,
   ShieldCheck,
   Users,
@@ -29,6 +30,7 @@ const NAV: { href: string; label: string; Icon: typeof Users; count?: CountKey }
   { href: "/disputes", label: "Disputes", Icon: AlertTriangle, count: "disputes" },
   { href: "/withdrawals", label: "Withdrawals", Icon: Banknote, count: "withdrawals" },
   { href: "/users", label: "Users", Icon: Users },
+  { href: "/service-areas", label: "Service areas", Icon: MapIcon },
   { href: "/ledger", label: "Ledger", Icon: BookOpen },
 ];
 

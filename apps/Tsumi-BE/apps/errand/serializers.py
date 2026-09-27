@@ -1,6 +1,7 @@
 from django.conf import settings
 from rest_framework import serializers
 
+from apps.geo.services import coverage, refusal_message
 from apps.User.serializer import PublicUserSerializer
 
 from .models import Errand, ErrandEvent
@@ -122,6 +123,11 @@ class ErrandCreateSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     {f"{stop}_address": "Add an address for the pinned location."}
                 )
+            # Typed addresses have no pin, so only pinned stops can be checked against coverage.
+            if lat is not None:
+                served, blocking = coverage(lat, lng)
+                if not served:
+                    raise serializers.ValidationError({f"{stop}_lat": refusal_message(blocking)})
         return attrs
 
 
